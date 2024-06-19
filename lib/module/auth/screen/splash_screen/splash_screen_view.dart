@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/module/auth/screen/splash_screen/splash_screen_view_model.dart';
+import 'package:reimburse_rb/utility/authentication.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -8,12 +11,8 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SplashScreenViewModel>(
-      create: (context) {
-        return SplashScreenViewModel();
-      },
-      builder: (context, child) {
-        return const SplashScreenView();
-      },
+      create: (context) => SplashScreenViewModel(),
+      builder: (context, child) => const SplashScreenView(),
     );
   }
 }
@@ -28,7 +27,7 @@ class SplashScreenView extends StatefulWidget {
 class _SplashScreenViewState extends State<SplashScreenView> {
   @override
   void initState() {
-    // Authentication.checkAuth(context: context);
+    Authentication.checkAuth(context: context);
     super.initState();
   }
 
