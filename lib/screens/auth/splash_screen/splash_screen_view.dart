@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/module/auth/screen/splash_screen/splash_screen_view_model.dart';
+import 'package:reimburse_rb/screens/auth/splash_screen/splash_screen_view_model.dart';
 import 'package:reimburse_rb/utility/authentication.dart';
 
 class SplashScreen extends StatelessWidget {

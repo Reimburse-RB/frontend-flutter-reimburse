@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/component/button_general.dart';
-import 'package:reimburse_rb/component/button_text.dart';
-import 'package:reimburse_rb/component/custom_text_input.dart';
-import 'package:reimburse_rb/module/auth/screen/signup/signup_view_model.dart';
+import 'package:reimburse_rb/widgets/common/button_general.dart';
+import 'package:reimburse_rb/widgets/common/button_text.dart';
+import 'package:reimburse_rb/widgets/common/custom_text_input.dart';
+import 'package:reimburse_rb/screens/auth/signup/signup_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class SignUpScreen extends StatelessWidget {

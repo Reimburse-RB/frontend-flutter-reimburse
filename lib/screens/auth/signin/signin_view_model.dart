@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:reimburse_rb/module/auth/screen/signup/signup_view.dart';
+import 'package:reimburse_rb/screens/auth/signup/signup_view.dart';
+import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 
 class SignInViewModel extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
@@ -19,8 +20,8 @@ class SignInViewModel extends ChangeNotifier {
   }
 
   static void onCallBackLogin({required BuildContext context}) {
-    // Navigator.of(context).push(CupertinoPageRoute(
-    //   builder: (context) => const MainMenu(),
-    // ));
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const MainMenuScreen(),
+    ));
   }
 }

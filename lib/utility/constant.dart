@@ -10,6 +10,8 @@ class Constant {
   static const Color greenMoreLight = const Color.fromRGBO(190, 255, 224, 1);
   static const Color greenMoreVeryLight = Color(0xFFF6FFF5);
 
+  static const Color grey = Color(0xFFA8A8A8);
+
   static const Color waitingStatusColor = Color(0xFFFFC107);
   static const Color processStatusIconColor = Color(0xFF0021F5);
   static const Color processStatusTextColor = Color(0xFF020064);

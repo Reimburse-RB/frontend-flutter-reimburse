@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/component/button_general.dart';
-import 'package:reimburse_rb/module/auth/model/onboard_data.dart';
-import 'package:reimburse_rb/module/auth/screen/onboarding/onboarding_view_model.dart';
+import 'package:reimburse_rb/models/onboard_data.dart';
+import 'package:reimburse_rb/screens/auth/onboarding/onboarding_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/widgets/common/button_general.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});

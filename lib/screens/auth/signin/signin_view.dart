@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/component/button_general.dart';
-import 'package:reimburse_rb/component/button_text.dart';
-import 'package:reimburse_rb/component/custom_text_input.dart';
-import 'package:reimburse_rb/module/auth/screen/signin/signin_view_model.dart';
+import 'package:reimburse_rb/widgets/common/button_general.dart';
+import 'package:reimburse_rb/widgets/common/button_text.dart';
+import 'package:reimburse_rb/widgets/common/custom_text_input.dart';
+import 'package:reimburse_rb/screens/auth/signin/signin_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -102,7 +102,12 @@ class SignInView extends StatelessWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  ButtonGeneral(onTap: () {}, text: 'Masuk'),
+                  ButtonGeneral(
+                    onTap: () {
+                      SignInViewModel.onCallBackLogin(context: context);
+                    },
+                    text: 'Masuk',
+                  ),
                   const SizedBox(height: 64),
                 ],
               ),

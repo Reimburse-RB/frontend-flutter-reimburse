@@ -81,7 +81,11 @@ flutter:
   assets:
     - assets/
     - assets/apps_logo/
+    - assets/empty_state/
+    - assets/main_menu/
+    - assets/menu/
     - assets/onboarding/
+    - assets/status/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

@@ -3,30 +3,30 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/module/auth/model/onboard_data.dart';
-import 'package:reimburse_rb/module/auth/screen/signin/signin_view.dart';
+import 'package:reimburse_rb/models/onboard_data.dart';
+import 'package:reimburse_rb/screens/auth/signin/signin_view.dart';
 
 class OnboardingViewModel extends ChangeNotifier {
   bool statusClose = false;
   int currentPage = 0;
   final PageController pageBoardController = PageController(initialPage: 0);
   List<OnboardData> onboardDataList = [];
+  List tempData = [
+    {
+      'image': 'assets/onboarding/onboarding_1.png',
+      'desc': 'Selamat Datang di Reimbursa! Aplikasi Pengajuan Reimbursement RB Group'
+    },
+    {
+      'image': 'assets/onboarding/onboarding_2.png',
+      'desc': 'Lakukan Pengajuan Dimanapun dan Kapanpun dengan Mudah!'
+    },
+    {
+      'image': 'assets/onboarding/onboarding_3.png',
+      'desc': 'Pantau Status Keberhasilan Pengajuan Anda'
+    },
+  ];
 
   OnboardingViewModel() {
-    List tempData = [
-      {
-        'image': 'assets/onboarding/onboarding_1.png',
-        'desc': 'Selamat Datang di Reimbursa! Aplikasi Pengajuan Reimbursement RB Group'
-      },
-      {
-        'image': 'assets/onboarding/onboarding_2.png',
-        'desc': 'Lakukan Pengajuan Dimanapun dan Kapanpun dengan Mudah!'
-      },
-      {
-        'image': 'assets/onboarding/onboarding_3.png',
-        'desc': 'Pantau Status Keberhasilan Pengajuan Anda'
-      },
-    ];
     for (var i = 0; i < tempData.length; i++) {
       onboardDataList.add(OnboardData.fromJson(tempData[i]));
     }

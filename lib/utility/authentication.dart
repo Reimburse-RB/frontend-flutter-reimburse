@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../module/auth/screen/splash_screen/splash_screen_view_model.dart';
+import '../screens/auth/splash_screen/splash_screen_view_model.dart';
 
 class Authentication {
   // static String provider = '';
