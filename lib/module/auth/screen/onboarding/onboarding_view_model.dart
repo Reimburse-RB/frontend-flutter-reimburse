@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/module/auth/model/onboard_data.dart';
+import 'package:reimburse_rb/module/auth/screen/signin/signin_view.dart';
 
 class OnboardingViewModel extends ChangeNotifier {
   bool statusClose = false;
@@ -81,10 +82,11 @@ class OnboardingViewModel extends ChangeNotifier {
       );
     }
     if (currentPage == onboardDataList.length - 1) {
-      // Navigator.of(context).push(CupertinoPageRoute(
-      //   builder: (context) => const LoginScreen(),
-      // ));
+      Navigator.of(context).push(CupertinoPageRoute(
+        builder: (context) => const SignInScreen(),
+      ));
     }
+
     notifyListeners();
   }
 

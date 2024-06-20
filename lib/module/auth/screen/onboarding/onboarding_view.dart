@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/component/button_general.dart';
 import 'package:reimburse_rb/module/auth/model/onboard_data.dart';
 import 'package:reimburse_rb/module/auth/screen/onboarding/onboarding_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
@@ -77,41 +78,49 @@ class OnboardingBottomButton extends StatelessWidget {
                 (index) => AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   margin: const EdgeInsets.only(right: 5),
-                  height: viewModel.currentPage == index ? 12 : 8,
-                  width: viewModel.currentPage == index ? 12 : 8,
+                  height: viewModel.currentPage == index ? 10 : 8,
+                  width: viewModel.currentPage == index ? 10 : 8,
                   decoration: BoxDecoration(
                       color: viewModel.currentPage == index
-                          ? Colors.black
+                          ? Constant.greenDark
                           : Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(8)),
                 ),
               ),
             ),
           if (viewModel.currentPage == viewModel.onboardDataList.length - 1)
-            Container(
-              decoration: BoxDecoration(
-                color: Constant.greenDark,
-                borderRadius: BorderRadius.circular(32),
-              ),
-              clipBehavior: Clip.hardEdge,
-              child: InkWell(
-                onTap: () {
-                  viewModel.onTapNextPage(context: context);
-                },
-                borderRadius: BorderRadius.circular(32),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 36, vertical: 16),
-                  child: Text(
-                    "Mulai Sekarang",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
+            ButtonGeneral(
+              onTap: () {
+                viewModel.onTapNextPage(context: context);
+              },
+              text: 'Mulai Sekarang',
             ),
+
+          // if (viewModel.currentPage == viewModel.onboardDataList.length - 1)
+          //   Container(
+          //     decoration: BoxDecoration(
+          //       color: Constant.green,
+          //       borderRadius: BorderRadius.circular(32),
+          //     ),
+          //     clipBehavior: Clip.hardEdge,
+          //     child: InkWell(
+          //       onTap: () {
+          //         viewModel.onTapNextPage(context: context);
+          //       },
+          //       borderRadius: BorderRadius.circular(32),
+          //       child: const Padding(
+          //         padding: EdgeInsets.symmetric(horizontal: 36, vertical: 16),
+          //         child: Text(
+          //           "Mulai Sekarang",
+          //           style: TextStyle(
+          //             fontSize: 16,
+          //             color: Colors.white,
+          //             fontWeight: FontWeight.w600,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );
