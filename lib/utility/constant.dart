@@ -18,6 +18,7 @@ class Constant {
   static const Color acceptedStatusIconColor = Color(0xFF13EC00);
   static const Color acceptedStatusTextColor = Color(0xFF134A00);
   static const Color rejectedStatusColor = Color(0xFFEB3223);
+  static const Color limitColor = Colors.deepOrange;
 
   static const FontWeight extraBoldText = FontWeight.w800;
   static const FontWeight boldText = FontWeight.w700;

@@ -54,7 +54,7 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 4,
+      // elevation: 4,
       automaticallyImplyLeading: automaticallyImplyLeading,
       backgroundColor: backgroundColor,
       toolbarHeight: height,
@@ -85,7 +85,8 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
                   : Align(
                       alignment: Alignment.center,
                       child: SizedBox(
-                        width: imageWidth ?? (MediaQuery.of(context).size.width * 0.5),
+                        width: imageWidth ??
+                            (MediaQuery.of(context).size.width * 0.5),
                         child: lightenImage
                             ? ColorFiltered(
                                 colorFilter: ColorFilter.mode(

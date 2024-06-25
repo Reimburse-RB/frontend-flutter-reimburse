@@ -28,7 +28,7 @@ class ListHorizontalMenu extends StatelessWidget {
               fontWeight: Constant.semiBoldText,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 12),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
