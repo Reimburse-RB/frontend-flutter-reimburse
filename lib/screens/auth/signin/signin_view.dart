@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/button_text.dart';
-import 'package:reimburse_rb/widgets/common/custom_text_input.dart';
+import 'package:reimburse_rb/widgets/common/form_field_text.dart';
 import 'package:reimburse_rb/screens/auth/signin/signin_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
@@ -59,7 +59,7 @@ class SignInView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTextInput(
+                  FormFieldText(
                     controllerName: viewModel.emailController,
                     placeholder: "Email",
                     hintText: "Masukkan email",
@@ -68,7 +68,7 @@ class SignInView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  CustomTextInput(
+                  FormFieldText(
                     controllerName: viewModel.passwordController,
                     placeholder: "Password",
                     hintText: "Masukkan password",

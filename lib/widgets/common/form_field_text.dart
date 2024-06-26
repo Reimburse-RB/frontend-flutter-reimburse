@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
-class CustomTextInput extends StatefulWidget {
-  const CustomTextInput({
+class FormFieldText extends StatefulWidget {
+  const FormFieldText({
     Key? key,
     required this.controllerName,
     this.hintText = '',
@@ -36,10 +36,10 @@ class CustomTextInput extends StatefulWidget {
   final void Function()? onTap;
 
   @override
-  State<CustomTextInput> createState() => _CustomTextInputState();
+  State<FormFieldText> createState() => _FormFieldTextState();
 }
 
-class _CustomTextInputState extends State<CustomTextInput> {
+class _FormFieldTextState extends State<FormFieldText> {
   @override
   void dispose() {
     super.dispose();
@@ -56,11 +56,7 @@ class _CustomTextInputState extends State<CustomTextInput> {
             child: Text(
               widget.placeholder,
               textAlign: TextAlign.start,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: Constant.boldText,
-              ),
+              style: Constant.mainTitleStyle,
             ),
           ),
         const SizedBox(height: 12),

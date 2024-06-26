@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/models/menu_category_data.dart';
+import 'package:reimburse_rb/models/menu_data.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/list_horizontal_menu.dart';
@@ -96,7 +96,6 @@ class HomeView extends StatelessWidget {
           context: context,
           isHasCustomLeading: false,
           customImage: 'assets/apps_logo/logo-horizontal-white-reimburserb.png',
-          lightenImage: true,
         ),
         body: ListView(
           children: [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/button_text.dart';
-import 'package:reimburse_rb/widgets/common/custom_text_input.dart';
+import 'package:reimburse_rb/widgets/common/form_field_text.dart';
 import 'package:reimburse_rb/screens/auth/signup/signup_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
@@ -59,7 +59,7 @@ class SignUpView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTextInput(
+                  FormFieldText(
                     controllerName: viewModel.nameController,
                     placeholder: "Nama Lengkap",
                     hintText: "Masukkan nama lengkap",
@@ -68,7 +68,7 @@ class SignUpView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  CustomTextInput(
+                  FormFieldText(
                     controllerName: viewModel.nameController,
                     placeholder: "Nomor Induk Karyawan (NIK)",
                     hintText: "Masukkan nomor induk karyawan",
@@ -77,7 +77,7 @@ class SignUpView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  CustomTextInput(
+                  FormFieldText(
                     controllerName: viewModel.emailController,
                     placeholder: "Email",
                     hintText: "Masukkan email",
@@ -86,7 +86,7 @@ class SignUpView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  CustomTextInput(
+                  FormFieldText(
                     controllerName: viewModel.passwordController,
                     placeholder: "Password Baru",
                     hintText: "Masukkan password",
@@ -102,7 +102,7 @@ class SignUpView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  CustomTextInput(
+                  FormFieldText(
                     controllerName: viewModel.confirmPasswordController,
                     placeholder: "Konfirmasi Password",
                     hintText: "Masukkan password",

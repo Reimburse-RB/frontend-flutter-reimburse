@@ -27,4 +27,9 @@ class Constant {
   static const FontWeight normalWeightText = FontWeight.w400;
   static const FontWeight lightWeightText = FontWeight.w300;
   static const FontWeight extraLightWeightText = FontWeight.w200;
+
+  static const TextStyle mainTitleStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: boldText,
+  );
 }

@@ -10,10 +10,11 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String? customImage;
   final double? imageWidth;
+  final Alignment imageAligment;
+  final bool lightenImage;
   final double height;
   final double bottomBorderRadiusSize;
   final List<Widget> actions;
-  final bool lightenImage;
   final bool automaticallyImplyLeading;
   final bool isHasCustomLeading;
   final Color backgroundColor;
@@ -37,8 +38,9 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
     this.height = 95,
     this.customImage,
     this.imageWidth,
-    this.titleReplacementWidget,
     this.lightenImage = false,
+    this.imageAligment = Alignment.center,
+    this.titleReplacementWidget,
     this.bottomBorderRadiusSize = 24,
     this.leadingIcon = const Icon(
       Icons.arrow_back_ios_new_rounded,
@@ -70,10 +72,10 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
             gradient: appBarColor == null
                 ? LinearGradient(
                     begin: Alignment.bottomCenter,
-                    end: Alignment.topLeft,
+                    end: Alignment.topRight,
                     colors: [
                       Constant.greenDark,
-                      Constant.green.withOpacity(0.8),
+                      Constant.green.withOpacity(0.9),
                     ],
                   )
                 : null,
@@ -83,10 +85,10 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
               customImage == null || customImage == ''
                   ? Container()
                   : Align(
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: imageWidth ??
-                            (MediaQuery.of(context).size.width * 0.5),
+                      alignment: imageAligment,
+                      child: Container(
+                        margin: const EdgeInsets.all(20),
+                        width: imageWidth ?? (MediaQuery.of(context).size.width * 0.5),
                         child: lightenImage
                             ? ColorFiltered(
                                 colorFilter: ColorFilter.mode(
@@ -94,14 +96,16 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
                                   BlendMode.dstIn,
                                 ),
                                 child: Image.asset(
-                                  customImage ?? 'assets/images/appBar.png',
+                                  customImage ??
+                                      'assets/apps_logo/logo-horizontal-white-reimburserb.png',
                                   fit: BoxFit.cover,
                                   alignment: Alignment.bottomCenter,
                                   color: Colors.white,
                                 ),
                               )
                             : Image.asset(
-                                customImage ?? 'assets/images/appBar.png',
+                                customImage ??
+                                    'assets/apps_logo/logo-horizontal-white-reimburserb.png',
                                 fit: BoxFit.cover,
                                 alignment: Alignment.bottomCenter,
                               ),
@@ -119,16 +123,14 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
                         child: Row(
                           children: [
                             if (isHasCustomLeading)
-                              Container(
-                                margin: const EdgeInsets.only(right: 16),
-                                child: InkWell(
-                                  onTap: onBack ??
-                                      () {
-                                        Navigator.of(context).pop();
-                                      },
-                                  child: leadingIcon,
-                                ),
+                              InkWell(
+                                onTap: onBack ??
+                                    () {
+                                      Navigator.of(context).pop();
+                                    },
+                                child: leadingIcon,
                               ),
+                            const SizedBox(width: 16),
                             Flexible(
                               child: titleReplacementWidget ??
                                   InkWell(
@@ -137,9 +139,10 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
                                       title,
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
-                                          color: titleColor,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600),
+                                        color: titleColor,
+                                        fontSize: 20,
+                                        fontWeight: Constant.mediumWeightText,
+                                      ),
                                     ),
                                   ),
                             ),

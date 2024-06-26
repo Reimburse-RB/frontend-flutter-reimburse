@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/screens/employee/home/home_view.dart';
+import 'package:reimburse_rb/screens/employee/notification/notification_view.dart';
+import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'main_menu_view_model.dart';
 
@@ -36,8 +38,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     List<Widget> pages = [
       HomeScreen(moveToAnotherTab: viewModel.onItemTapped),
-      const Scaffold(),
-      const Scaffold(),
+      const SubmissionHomeScreen(),
+      const NotificationScreen(),
       const Scaffold(),
       // DetectionHomePage(moveToAnotherTab: viewModel.onItemTapped),
       // const MainProfileScreen(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/models/menu_category_data.dart';
-import 'package:reimburse_rb/models/menu_item_data.dart';
+import 'package:reimburse_rb/models/menu_data.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/widgets/common/card_menu_item.dart';
 
 class ListHorizontalMenu extends StatelessWidget {
   final EdgeInsets padding;
@@ -23,10 +23,7 @@ class ListHorizontalMenu extends StatelessWidget {
         children: [
           Text(
             menuCategory.categoryTitle,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: Constant.semiBoldText,
-            ),
+            style: Constant.mainTitleStyle,
           ),
           const SizedBox(height: 12),
           SingleChildScrollView(
@@ -38,7 +35,7 @@ class ListHorizontalMenu extends StatelessWidget {
                   .map(
                     (MenuItemData item) => Row(
                       children: [
-                        MenuItem(menuItemData: item),
+                        CardMenuItem(menuItemData: item),
                         const SizedBox(width: 16),
                       ],
                     ),
@@ -46,45 +43,6 @@ class ListHorizontalMenu extends StatelessWidget {
                   .toList(),
             ),
           )
-        ],
-      ),
-    );
-  }
-}
-
-class MenuItem extends StatelessWidget {
-  final MenuItemData menuItemData;
-
-  const MenuItem({Key? key, required this.menuItemData}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: Constant.greenMoreVeryLight,
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset(
-              menuItemData.assetImage,
-              width: 40,
-              height: 40,
-            ),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            width: 80,
-            child: Text(
-              menuItemData.title,
-              style: const TextStyle(fontSize: 10),
-              textAlign: TextAlign.center,
-            ),
-          ),
         ],
       ),
     );

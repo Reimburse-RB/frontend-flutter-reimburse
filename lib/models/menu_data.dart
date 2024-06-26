@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+
+class MenuCategoryData {
+  MenuCategoryData({
+    required this.categoryTitle,
+    required this.menuList,
+  });
+  late final String categoryTitle;
+  late final List<MenuItemData> menuList;
+}
+
+class MenuItemData {
+  MenuItemData({
+    required this.assetImage,
+    required this.title,
+    required this.page,
+  });
+  late final String assetImage;
+  late final String title;
+  late final Widget page;
+}

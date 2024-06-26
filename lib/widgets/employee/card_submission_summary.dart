@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
-class CardSubmissionSummary extends StatelessWidget {
+class CardSubmissionSummary extends StatefulWidget {
   const CardSubmissionSummary({
     super.key,
   });
 
+  @override
+  State<CardSubmissionSummary> createState() => _CardSubmissionSummaryState();
+}
+
+class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
   Widget summaryDetail({
     required String iconAsset,
     Icon? iconAlternative,
