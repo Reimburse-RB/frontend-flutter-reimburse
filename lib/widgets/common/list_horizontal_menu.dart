@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/models/menu_data.dart';
+import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/card_menu_item.dart';
 

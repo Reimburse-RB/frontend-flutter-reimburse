@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/models/menu_data.dart';
+import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/screens/employee/home/home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 

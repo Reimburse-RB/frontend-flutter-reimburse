@@ -3,6 +3,7 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/screens/employee/home/home_view.dart';
 import 'package:reimburse_rb/screens/employee/notification/notification_view.dart';
+import 'package:reimburse_rb/screens/employee/profile/profile_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'main_menu_view_model.dart';
@@ -40,7 +41,7 @@ class _MainMenuViewState extends State<MainMenuView> {
       HomeScreen(moveToAnotherTab: viewModel.onItemTapped),
       const SubmissionHomeScreen(),
       const NotificationScreen(),
-      const Scaffold(),
+      const ProfileScreen(),
       // DetectionHomePage(moveToAnotherTab: viewModel.onItemTapped),
       // const MainProfileScreen(),
     ];

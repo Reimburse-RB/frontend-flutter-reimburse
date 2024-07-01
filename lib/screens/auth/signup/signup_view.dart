@@ -69,7 +69,7 @@ class SignUpView extends StatelessWidget {
                     height: 16,
                   ),
                   FormFieldText(
-                    controllerName: viewModel.nameController,
+                    controllerName: viewModel.nikController,
                     placeholder: "Nomor Induk Karyawan (NIK)",
                     hintText: "Masukkan nomor induk karyawan",
                     keyboardType: TextInputType.name,

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 class SignUpViewModel extends ChangeNotifier {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController nikController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   bool isObscured1 = true;

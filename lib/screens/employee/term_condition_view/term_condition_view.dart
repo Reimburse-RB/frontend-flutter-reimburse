@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/models/term_condition_data.dart';
+import 'package:reimburse_rb/models/common/term_condition_data.dart';
 import 'package:reimburse_rb/screens/employee/term_condition_view/term_condition_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';

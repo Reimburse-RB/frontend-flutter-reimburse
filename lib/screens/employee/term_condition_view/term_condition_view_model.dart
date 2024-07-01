@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/models/term_condition_data.dart';
+import 'package:reimburse_rb/models/common/term_condition_data.dart';
 
 class TermConditionViewModel extends ChangeNotifier {
   List<TermConditionData> termConditionList = [];

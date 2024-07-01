@@ -10,6 +10,8 @@ class ButtonGeneral extends StatelessWidget {
   final EdgeInsets padding;
   final TextStyle textStyle;
   final bool isHasFlexibleWidth;
+  final bool isWhiteButton;
+  final Widget? prefixIcon;
 
   const ButtonGeneral({
     Key? key,
@@ -24,6 +26,8 @@ class ButtonGeneral extends StatelessWidget {
       fontWeight: Constant.boldText,
     ),
     this.isHasFlexibleWidth = true,
+    this.isWhiteButton = false,
+    this.prefixIcon,
   }) : super(key: key);
 
   @override
@@ -35,13 +39,32 @@ class ButtonGeneral extends StatelessWidget {
         alignment: Alignment.center,
         padding: padding,
         decoration: BoxDecoration(
-          color: color,
+          color: isWhiteButton ? Colors.white : color,
           borderRadius: BorderRadius.circular(borderRadius),
+          border: isWhiteButton
+              ? Border.all(
+                  width: 1.5,
+                  color: Constant.green,
+                )
+              : null,
         ),
         clipBehavior: Clip.hardEdge,
-        child: Text(
-          text,
-          style: textStyle.copyWith(color: textColor),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (prefixIcon != null)
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: prefixIcon,
+              ),
+            Text(
+              text,
+              style: textStyle.copyWith(
+                color: isWhiteButton ? Constant.green : textColor,
+                fontWeight: Constant.boldText,
+              ),
+            ),
+          ],
         ),
       ),
     );

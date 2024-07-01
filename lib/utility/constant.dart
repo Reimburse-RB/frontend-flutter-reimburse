@@ -32,4 +32,8 @@ class Constant {
     fontSize: 16,
     fontWeight: boldText,
   );
+  static const TextStyle secondTitleStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: boldText,
+  );
 }
