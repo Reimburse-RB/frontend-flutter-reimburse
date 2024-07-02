@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:reimburse_rb/screens/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/auth/signup/signup_view.dart';
 import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 
@@ -16,6 +17,12 @@ class SignInViewModel extends ChangeNotifier {
   void navigateToSignUpScreen({required BuildContext context}) {
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => const SignUpScreen(),
+    ));
+  }
+
+  void navigateToForgotPasswordScreen({required BuildContext context}) {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const ForgotPasswordScreen(),
     ));
   }
 

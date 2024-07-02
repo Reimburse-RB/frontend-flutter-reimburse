@@ -8,6 +8,7 @@ class ButtonText extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final double decorationThickness;
+  final bool isEnable;
 
   const ButtonText({
     Key? key,
@@ -18,19 +19,20 @@ class ButtonText extends StatelessWidget {
     this.fontSize = 13.0,
     this.fontWeight = FontWeight.w500, // Default medium weight
     this.decorationThickness = 1.5,
+    this.isEnable = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: isEnable ? onTap : null,
       child: Text(
         text,
         style: TextStyle(
-          decoration: TextDecoration.underline,
+          decoration: isEnable ? TextDecoration.underline : null,
           decorationColor: decorationColor,
           decorationThickness: decorationThickness,
-          color: textColor,
+          color: isEnable ? textColor : Colors.grey,
           fontSize: fontSize,
           fontWeight: fontWeight,
         ),

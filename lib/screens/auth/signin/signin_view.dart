@@ -81,8 +81,24 @@ class SignInView extends StatelessWidget {
                       child: Icon(viewModel.isObscured ? Icons.visibility : Icons.visibility_off),
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        "Lupa password? ",
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                      ),
+                      ButtonText(
+                        onTap: () {
+                          viewModel.navigateToForgotPasswordScreen(context: context);
+                        },
+                        text: 'Ubah Password',
+                      )
+                    ],
+                  ),
                   const SizedBox(
-                    height: 48,
+                    height: 64,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -99,9 +115,7 @@ class SignInView extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 8),
                   ButtonGeneral(
                     onTap: () {
                       SignInViewModel.onCallBackLogin(context: context);

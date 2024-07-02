@@ -64,7 +64,7 @@ class _ProfileDetailViewState extends State<ProfileDetailView> {
           ButtonGeneral(
             onTap: () {},
             text: 'Tambah Anggota Keluarga',
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.add_rounded,
               color: Colors.white,
             ),
@@ -165,7 +165,9 @@ class _ProfileDetailViewState extends State<ProfileDetailView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: ButtonGeneral(
-              onTap: () {},
+              onTap: () {
+                viewModel.navigateToForgotPasswordScreen();
+              },
               text: 'Ubah Password',
               prefixIcon: const Iconify(
                 Ph.password_bold,

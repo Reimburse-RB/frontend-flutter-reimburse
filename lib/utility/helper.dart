@@ -55,6 +55,27 @@ class Helper {
     ).show(context);
   }
 
+  SnackBar customSnackBar({required String content}) {
+    return SnackBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: Container(
+        margin: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.25, vertical: 10),
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(4)),
+        child: Text(
+          content,
+          style: const TextStyle(
+            color: Colors.red,
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
   // Future viewPhoto({required String source, required String heroTag}) async {
   //   SystemChrome.setPreferredOrientations([
   //     DeviceOrientation.landscapeRight,

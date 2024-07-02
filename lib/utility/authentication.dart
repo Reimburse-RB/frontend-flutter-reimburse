@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/screens/auth/signin/signin_view.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 import '../screens/auth/splash_screen/splash_screen_view_model.dart';
 
 class Authentication {
@@ -153,26 +155,25 @@ class Authentication {
   //   return user;
   // }
 
-  // static void signOut({required BuildContext context}) async {
-  //   try {
-  //     await FirebaseAuth.instance.signOut();
-  //     await GoogleSignIn().disconnect();
-  //     navigateToLoginScreen(context: context);
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       customSnackBar(
-  //         content: 'Error signing out. Try again.',
-  //         context: context,
-  //       ),
-  //     );
-  //   }
-  // }
+  static void signOut({required BuildContext context}) async {
+    try {
+      // await FirebaseAuth.instance.signOut();
+      // await GoogleSignIn().disconnect();
+      navigateToSignInScreen(context: context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        Helper(context: context).customSnackBar(
+          content: 'Error signing out. Try again.',
+        ),
+      );
+    }
+  }
 
-  // static void navigateToLoginScreen({required BuildContext context}) {
-  //   Navigator.of(context).pushReplacement(CupertinoPageRoute(
-  //     builder: (context) => const LoginScreen(),
-  //   ));
-  // }
+  static void navigateToSignInScreen({required BuildContext context}) {
+    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+      builder: (context) => const SignInScreen(),
+    ));
+  }
 
   // static void updateProfile({required BuildContext context}) async {
   //   final profileViewModel = context.read<MainProfileViewModel>();
@@ -202,26 +203,5 @@ class Authentication {
   //       profilePhoto = providerProfile.photoURL ?? '';
   //     }
   //   }
-  // }
-
-  // static SnackBar customSnackBar({required String content, required BuildContext context}) {
-  //   return SnackBar(
-  //     backgroundColor: Colors.transparent,
-  //     elevation: 0,
-  //     content: Container(
-  //       margin: EdgeInsets.symmetric(
-  //           horizontal: MediaQuery.of(context).size.width * 0.25, vertical: 10),
-  //       padding: const EdgeInsets.all(2),
-  //       decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(4)),
-  //       child: Text(
-  //         content,
-  //         style: TextStyle(
-  //           color: Colors.red,
-  //           fontSize: 16,
-  //         ),
-  //         textAlign: TextAlign.center,
-  //       ),
-  //     ),
-  //   );
   // }
 }

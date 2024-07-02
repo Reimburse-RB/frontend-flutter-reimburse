@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/models/employee/profile_data.dart';
+import 'package:reimburse_rb/screens/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
 
 class ProfileViewModel extends ChangeNotifier {
@@ -95,5 +96,11 @@ class ProfileViewModel extends ChangeNotifier {
 
   void navigateToProfileDetail() {
     Navigator.push(context, CupertinoPageRoute(builder: (context) => const ProfileDetailSceen()));
+  }
+
+  void navigateToForgotPasswordScreen() {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const ForgotPasswordScreen(),
+    ));
   }
 }
