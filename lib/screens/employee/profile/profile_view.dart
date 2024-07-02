@@ -43,7 +43,7 @@ class ProfileView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              !viewModel.isAdmin
+              viewModel.isAdmin
                   ? const FaIcon(
                       FontAwesomeIcons.userShield,
                       color: Constant.greenDark,
