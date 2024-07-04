@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:reimburse_rb/screens/auth/onboarding/onboarding_view.dart';
+import 'package:reimburse_rb/screens/common/auth/onboarding/onboarding_view.dart';
 
 class SplashScreenViewModel extends ChangeNotifier {
   SplashScreenViewModel() {}

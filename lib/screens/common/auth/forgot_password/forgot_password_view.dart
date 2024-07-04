@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/screens/auth/forgot_password/forgot_password_view_model.dart';
+import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';

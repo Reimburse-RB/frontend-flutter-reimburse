@@ -5,9 +5,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/screens/auth/signin/signin_view.dart';
+import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
-import '../screens/auth/splash_screen/splash_screen_view_model.dart';
+import '../screens/common/auth/splash_screen/splash_screen_view_model.dart';
 
 class Authentication {
   // static String provider = '';

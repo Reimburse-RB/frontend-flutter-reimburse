@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/models/common/onboard_data.dart';
-import 'package:reimburse_rb/screens/auth/signin/signin_view.dart';
+import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 
 class OnboardingViewModel extends ChangeNotifier {
   bool statusClose = false;

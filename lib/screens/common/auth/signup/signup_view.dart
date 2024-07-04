@@ -3,29 +3,29 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/button_text.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
-import 'package:reimburse_rb/screens/auth/signin/signin_view_model.dart';
+import 'package:reimburse_rb/screens/common/auth/signup/signup_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    return ChangeNotifierProvider<SignUpViewModel>(
       create: (context) {
-        return SignInViewModel();
+        return SignUpViewModel();
       },
-      builder: (context, child) => const SignInView(),
+      builder: (context, child) => const SignUpView(),
     );
   }
 }
 
-class SignInView extends StatelessWidget {
-  const SignInView({super.key});
+class SignUpView extends StatelessWidget {
+  const SignUpView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<SignInViewModel>();
+    final viewModel = context.watch<SignUpViewModel>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -46,7 +46,7 @@ class SignInView extends StatelessWidget {
               height: 48,
             ),
             const Text(
-              "Masuk Akun",
+              "Daftar Akun",
               style: TextStyle(
                 fontWeight: Constant.semiBoldText,
                 fontSize: 20,
@@ -60,6 +60,24 @@ class SignInView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FormFieldText(
+                    controllerName: viewModel.nameController,
+                    placeholder: "Nama Lengkap",
+                    hintText: "Masukkan nama lengkap",
+                    keyboardType: TextInputType.name,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  FormFieldText(
+                    controllerName: viewModel.nikController,
+                    placeholder: "Nomor Induk Karyawan (NIK)",
+                    hintText: "Masukkan nomor induk karyawan",
+                    keyboardType: TextInputType.name,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  FormFieldText(
                     controllerName: viewModel.emailController,
                     placeholder: "Email",
                     hintText: "Masukkan email",
@@ -70,32 +88,32 @@ class SignInView extends StatelessWidget {
                   ),
                   FormFieldText(
                     controllerName: viewModel.passwordController,
-                    placeholder: "Password",
+                    placeholder: "Password Baru",
                     hintText: "Masukkan password",
                     keyboardType: TextInputType.text,
-                    isObsecure: viewModel.isObscured,
+                    isObsecure: viewModel.isObscured1,
                     suffixIcon: InkWell(
                       onTap: () {
-                        viewModel.onChangeIsObscuredText();
+                        viewModel.onChangeIsObscuredText1();
                       },
-                      child: Icon(viewModel.isObscured ? Icons.visibility : Icons.visibility_off),
+                      child: Icon(viewModel.isObscured1 ? Icons.visibility : Icons.visibility_off),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Text(
-                        "Lupa password? ",
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-                      ),
-                      ButtonText(
-                        onTap: () {
-                          viewModel.navigateToForgotPasswordScreen(context: context);
-                        },
-                        text: 'Ubah Password',
-                      )
-                    ],
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  FormFieldText(
+                    controllerName: viewModel.confirmPasswordController,
+                    placeholder: "Konfirmasi Password",
+                    hintText: "Masukkan password",
+                    keyboardType: TextInputType.text,
+                    isObsecure: viewModel.isObscured2,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        viewModel.onChangeIsObscuredText2();
+                      },
+                      child: Icon(viewModel.isObscured2 ? Icons.visibility : Icons.visibility_off),
+                    ),
                   ),
                   const SizedBox(
                     height: 64,
@@ -104,24 +122,21 @@ class SignInView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Belum memiliki akun? ",
+                        "Sudah memiliki akun? ",
                         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
                       ),
                       ButtonText(
                         onTap: () {
-                          viewModel.navigateToSignUpScreen(context: context);
+                          viewModel.navigateToLoginScreen(context: context);
                         },
-                        text: 'Daftar Akun',
-                      )
+                        text: 'Masuk Akun',
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  ButtonGeneral(
-                    onTap: () {
-                      SignInViewModel.onCallBackLogin(context: context);
-                    },
-                    text: 'Masuk',
+                  const SizedBox(
+                    height: 8,
                   ),
+                  ButtonGeneral(onTap: () {}, text: 'Daftar'),
                   const SizedBox(height: 64),
                 ],
               ),

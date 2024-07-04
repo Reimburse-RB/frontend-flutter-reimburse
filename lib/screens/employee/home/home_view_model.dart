@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
-import 'package:reimburse_rb/screens/common/term_condition_view/term_condition_view.dart';
+import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_period_view.dart';
 
 class HomeViewModel extends ChangeNotifier {

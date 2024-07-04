@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/screens/auth/splash_screen/splash_screen_view.dart';
+import 'package:reimburse_rb/screens/common/auth/splash_screen/splash_screen_view.dart';
 import 'package:reimburse_rb/utility/theme.dart';
 
 void main() {

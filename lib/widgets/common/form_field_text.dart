@@ -4,9 +4,10 @@ import 'package:reimburse_rb/utility/constant.dart';
 class FormFieldText extends StatefulWidget {
   const FormFieldText({
     Key? key,
-    required this.controllerName,
+    this.controllerName,
     this.hintText = '',
     this.placeholder = '',
+    this.initialValue,
     this.readOnly = false,
     this.isObsecure = false,
     this.maxLines = 1,
@@ -17,11 +18,13 @@ class FormFieldText extends StatefulWidget {
     this.suffixIcon,
     this.borderColor = Colors.black,
     this.onTap,
+    this.onChanged,
   }) : super(key: key);
 
-  final TextEditingController controllerName;
+  final TextEditingController? controllerName;
   final String hintText;
   final String placeholder;
+  final String? initialValue;
   final bool readOnly;
   final bool isObsecure;
 
@@ -33,7 +36,9 @@ class FormFieldText extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final Color borderColor;
+
   final void Function()? onTap;
+  final void Function(String)? onChanged;
 
   @override
   State<FormFieldText> createState() => _FormFieldTextState();
@@ -52,17 +57,18 @@ class _FormFieldTextState extends State<FormFieldText> {
       children: [
         if (widget.placeholder != '')
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+            margin: const EdgeInsets.only(top: 4, bottom: 16),
             child: Text(
               widget.placeholder,
               textAlign: TextAlign.start,
               style: Constant.mainTitleStyle,
             ),
           ),
-        const SizedBox(height: 12),
         TextFormField(
+            initialValue: widget.initialValue,
             readOnly: widget.readOnly,
             controller: widget.controllerName,
+            onChanged: widget.onChanged,
             minLines: widget.minLines,
             keyboardType: widget.keyboardType,
             obscureText: widget.isObsecure,

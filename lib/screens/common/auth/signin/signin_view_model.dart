@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:reimburse_rb/screens/auth/forgot_password/forgot_password_view.dart';
-import 'package:reimburse_rb/screens/auth/signup/signup_view.dart';
+import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
+import 'package:reimburse_rb/screens/common/auth/signup/signup_view.dart';
 import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 
 class SignInViewModel extends ChangeNotifier {

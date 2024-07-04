@@ -43,14 +43,14 @@ class RecapitulationListView extends StatelessWidget {
       body: ListView(
         children: [
           ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             itemCount: 5,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return Container(
-                margin: EdgeInsets.only(bottom: 12),
-                child: CardRecapitulation(),
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const CardRecapitulation(),
               );
             },
           )

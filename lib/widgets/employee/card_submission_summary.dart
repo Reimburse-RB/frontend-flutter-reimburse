@@ -63,7 +63,7 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 20,
+          vertical: 24,
           horizontal: 20,
         ),
         child: Column(
