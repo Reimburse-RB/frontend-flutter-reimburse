@@ -31,9 +31,11 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
 
   @override
   void initState() {
-    final viewModel = Provider.of<SubmissionHomeViewModel>(context, listen: false);
+    final viewModel =
+        Provider.of<SubmissionHomeViewModel>(context, listen: false);
 
-    tabController = TabController(vsync: this, length: viewModel.listStatusTab.length);
+    tabController =
+        TabController(vsync: this, length: viewModel.listStatusTab.length);
 
     super.initState();
   }
@@ -85,7 +87,8 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
+        padding:
+            const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
         children: [
           Container(
             child: const ListSubmission(),

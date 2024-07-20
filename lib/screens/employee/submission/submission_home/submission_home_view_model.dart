@@ -1,14 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view.dart';
 
 class SubmissionHomeViewModel extends ChangeNotifier {
+  SubmissionHomeViewModel() {}
+
   List listStatusTab = [
     'Semua',
     'Menunggu Diproses',
     'Sedang Diproses',
     'Selesai',
   ];
-
-  SubmissionHomeViewModel() {}
 
   List listAllSubmission = [
     {
@@ -24,4 +26,10 @@ class SubmissionHomeViewModel extends ChangeNotifier {
   ];
 
   onTapTab() {}
+
+  void navigateToDetailReimbursement({required BuildContext context}) {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const DetailReimbursementScreen(),
+    ));
+  }
 }
