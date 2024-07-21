@@ -51,6 +51,7 @@ class Note {
   // category_reimbursement : 2 => Reimbursement Transportasi
 
   // ENDPOINT : edit-tnc-reimbursement ****************
+  // ROLE : ADMIN & HRD
   Map bodyEditTncReimbursemnet = {
     'list_category_tnc': [
       {
@@ -77,6 +78,7 @@ class Note {
   };
 
   // ENDPOINT : get-tnc-reimbursement ****************
+  // ROLE : ALL USER
   Map bodyGetTnchReimbursement = {};
   Map responseGetTncReimbursement = {
     'is_success': true,
@@ -103,11 +105,73 @@ class Note {
     ],
   };
 
+  //=========================== API FORM ================================
+
+  // category_reimbursement : 1 => Reimbursement Kesehatan
+  // category_reimbursement : 2 => Reimbursement Transportasi
+
+  // ENDPOINT : get-list-purpose-option ****************
+  // ROLE : EMPLOYEE
+  Map bodyGetListPurposeOption = {
+    'category_reimbursement': 1,
+  };
+  Map responseGetListPurposeOption = {
+    'is_success': true,
+    'msg': 'Berhasil',
+    'data': [
+      {
+        'purpose_id': 1,
+        'purpose_text': 'Flu Batuk',
+      },
+      {
+        'purpose_id': 2,
+        'purpose_text': 'Demam',
+      },
+      {
+        'purpose_id': 3,
+        'purpose_text': 'Masuk Angin',
+      },
+      {
+        'purpose_id': 4,
+        'purpose_text': 'Lainnya',
+      },
+    ],
+  };
+
+  // ENDPOINT : get-list-detail-title-option ****************
+  // ROLE : EMPLOYEE
+  Map bodyGetListDetailTitleOption = {
+    'category_reimbursement': 1,
+  };
+  Map responseGetListDetailTitleOption = {
+    'is_success': true,
+    'msg': 'Berhasil',
+    'data': [
+      {
+        'detail_title_id': 1,
+        'detail_title_text': 'Konsultasi Dokter',
+      },
+      {
+        'detail_title_id': 2,
+        'detail_title_text': 'Resep',
+      },
+      {
+        'detail_title_id': 3,
+        'detail_title_text': 'Obat-obatan',
+      },
+      {
+        'detail_title_id': 4,
+        'detail_title_text': 'Lainnya',
+      },
+    ],
+  };
+
   //=========================== API REIMBURSEMENT ================================
 
-  // ENDPOINT : get-summary-home ****************
-  Map bodyGetSummaryHome = {};
-  Map responseGetSummaryHome = {
+  // ENDPOINT : get-employee-summary ****************
+  // ROLE : EMPLOYEE
+  Map bodyGetEmployeeSummary = {};
+  Map responseGetEmployeeSummary = {
     'is_success': true,
     'msg': 'Berhasil',
     'data': {
@@ -116,6 +180,19 @@ class Note {
       'rejected': 2,
       'total_reimburse_this_year': 200000,
       'limit_reimburse': 5000000,
+    },
+  };
+
+  // ENDPOINT : get-current-active-request ****************
+  // ROLE : ADMIN & HRD
+  Map bodyGetCurrentActiveRequest = {};
+  Map responseGenCurrentActiveRequest = {
+    'is_success': true,
+    'msg': 'Berhasil',
+    'data': {
+      'waiting_and_onprocess': 4,
+      'healt_waiting_and_onprocess': 2,
+      'transport_waiting_and_onprocess': 2,
     },
   };
 
@@ -132,96 +209,10 @@ class Note {
   // family_status_id : 3 => Istri
   // family_status_id : 4 => Anak
 
-  // ENDPOINT : get-list-reimbursement ****************
-  Map bodyGetListReimbursement = {
-    'status_id': 1, //jika null mengembalikan semua data (tidak berdasarkan status)
-  };
-  Map responseGetListReimbursement = {
-    'is_success': true,
-    'msg': 'Berhasil',
-    'data': [
-      {
-        'id': 123,
-        'status_id': 1,
-        'status_text': 'Menunggu Diproses',
-        'category_reimbursement_id': 1,
-        'category_reimbursement_text': 'Reimbursement Kesehatan',
-        'date': '21/07/2024',
-      },
-      {
-        'id': 124,
-        'status_id': 2,
-        'status_text': 'Diproses',
-        'category_reimbursement_id': 1,
-        'category_reimbursement_text': 'Reimbursement Kesehatan',
-        'date': '21/07/2024',
-      },
-      {
-        'id': 125,
-        'status_id': 3,
-        'status_text': 'Disetujui',
-        'category_reimbursement_id': 1,
-        'category_reimbursement_text': 'Reimbursement Kesehatan',
-        'date': '21/07/2024',
-      },
-      {
-        'id': 126,
-        'status_id': 3,
-        'status_text': 'Ditolak',
-        'category_reimbursement_id': 1,
-        'category_reimbursement_text': 'Reimbursement Kesehatan',
-        'date': '21/07/2024',
-      },
-    ],
-  };
-
-  // ENDPOINT : get-detail-reimbursement ****************
-  Map responseGetDetailReimbursement = {
-    'is_success': true,
-    'msg': 'Berhasil',
-    'data': {
-      'id': 126,
-      'status_id': 1,
-      'status_text': 'Menunggu Diproses',
-      'name': 'Yudha Haryoputranto',
-      'category_reimbursement_id': 1,
-      'category_reimbursement_text': 'Reimbursement Kesehatan',
-      'date': '21/07/2024',
-      'purpose_id': 20,
-      'purpose_text': 'Flu Batuk',
-      'total_cost': 400000,
-      'list_attachment': [
-        'https://picsum.photos/200/300',
-        'https://picsum.photos/200/300',
-        'https://picsum.photos/200/300',
-        'https://picsum.photos/200/300',
-      ],
-      'list_detail': [
-        {
-          'detail_title_id': 1,
-          'detail_title_text': 'Konsultasi Dokter',
-          'detail_family_id': 3,
-          'detail_family_name': 'Freya Jayawardana',
-          'detail_date': '10/07/2024',
-          'detail_cost': 200000,
-          'detail_desc': 'lorem ipsum'
-        },
-        {
-          'detail_title_id': 1,
-          'detail_title_text': 'Konsultasi Dokter',
-          'detail_family_id': 1,
-          'detail_family_name': 'Yudha Haryoputranto',
-          'detail_date': '10/07/2024',
-          'detail_cost': 200000,
-          'detail_desc': 'lorem ipsum'
-        },
-      ],
-    },
-  };
-
   // ENDPOINT : post-submission ****************
+  // ROLE : EMPLOYEE
   Map bodyPostSubmission = {
-    'nik': '2010511068',
+    'nik': 2010511068,
     'category_reimbursement_id': 1,
     'purpose_id': 20,
     'purpose_other_text': 'Sakit Pinggang/ meeting', //hanya jika Diagnosis lainnya terisi
@@ -249,6 +240,158 @@ class Note {
   Map responsePostSubmission = {
     'is_success': true,
     'msg': 'Pengajuan reimbursement berhasil terkirim!',
+    'data': {
+      'id': 123,
+    }
+  };
+
+  // ENDPOINT : cancel-submission ****************
+  // ROLE : EMPLOYEE
+  Map bodyCancelSubmission = {
+    'id': 126,
+  };
+  Map responseCancelSubmission = {
+    'is_success': true,
+    'msg': 'Pengajuan reimbursement berhasil dibatalkan!',
+  };
+
+  // ENDPOINT : get-list-reimbursement ****************
+  // ROLE : ALL USER
+  Map bodyGetListReimbursement = {
+    'status_id': 1, //jika null mengembalikan semua data (tidak berdasarkan status)
+  };
+  Map responseGetListReimbursement = {
+    'is_success': true,
+    'msg': 'Berhasil',
+    'data': [
+      {
+        'id': 123,
+        'status_id': 1,
+        'status_text': 'Menunggu Diproses',
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
+      },
+      {
+        'id': 124,
+        'status_id': 2,
+        'status_text': 'Diproses',
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
+      },
+      {
+        'id': 125,
+        'status_id': 3,
+        'status_text': 'Disetujui',
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
+      },
+      {
+        'id': 126,
+        'status_id': 3,
+        'status_text': 'Ditolak',
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
+      },
+    ],
+  };
+
+  // ENDPOINT : get-detail-reimbursement ****************
+  // ROLE : ALL USER
+  Map bodyGetDetailReimbursement = {
+    'id': 126,
+  };
+  Map responseGetDetailReimbursement = {
+    'is_success': true,
+    'msg': 'Berhasil',
+    'data': {
+      'id': 126,
+      'status_id': 1,
+      'status_text': 'Menunggu Diproses',
+      'status_desc': 'Dokumen Tidak Valid', //HANYA JIKA statusnya DISETUJUI DAN DITOLAK
+      'nik': 2010511068,
+      'email': 'yudhah52@gmail.com',
+      'name': 'Yudha Haryoputranto',
+      'category_reimbursement_id': 1,
+      'category_reimbursement_text': 'Reimbursement Kesehatan',
+      'date': '21/07/2024',
+      'purpose_id': 20,
+      'purpose_text': 'Flu Batuk',
+      'total_cost': 400000,
+      'list_attachment': [
+        'https://picsum.photos/200/300',
+        'https://picsum.photos/200/300',
+        'https://picsum.photos/200/300',
+        'https://picsum.photos/200/300',
+      ],
+      'list_detail': [
+        {
+          'detail_id': 146,
+          'detail_title_id': 1,
+          'detail_title_text': 'Konsultasi Dokter',
+          'detail_family_id': 3,
+          'detail_family_name': 'Freya Jayawardana',
+          'detail_date': '10/07/2024',
+          'detail_cost': 200000,
+          'detail_desc': 'lorem ipsum'
+        },
+        {
+          'detail_id': 146,
+          'detail_title_id': 1,
+          'detail_title_text': 'Konsultasi Dokter',
+          'detail_family_id': 1,
+          'detail_family_name': 'Yudha Haryoputranto',
+          'detail_date': '10/07/2024',
+          'detail_cost': 200000,
+          'detail_desc': 'lorem ipsum'
+        },
+      ],
+    },
+  };
+
+  // ENDPOINT : proceed-reimbursement ****************
+  // ROLE : ADMIN & HRD
+  Map bodyProceedReimbursement = {'id': 126};
+  Map responseProceedReimbursement = {
+    'is_success': true,
+    'msg': 'Berhasil mengubah status menjadi Sedang Diproses',
+  };
+
+  // ENDPOINT : accept-reimbursement ****************
+  // ROLE : ADMIN & HRD
+  Map bodyAcceptReimbursement = {
+    'id': 126,
+    'status_desc': 'Pengajuan reimburse kesehatan Anda berhasil, silakan cek saldo rekening Anda',
+  };
+  Map responseAcceptReimbursement = {
+    'is_success': true,
+    'msg': 'Berhasil mengubah status menjadi Disetujui',
+  };
+
+  // ENDPOINT : reject-reimbursement ****************
+  // ROLE : ADMIN & HRD
+  Map bodyRejectReimbursement = {
+    'id': 126,
+    'status_desc': 'Dokumen pendukung tidak sesuai dengan rincian',
+  };
+  Map responseRejectReimbursement = {
+    'is_success': true,
+    'msg': 'Berhasil mengubah status menjadi Gagal',
   };
 
   //=========================== PROFILE ================================
@@ -263,14 +406,15 @@ class Note {
   // family_status_id : 4 => Anak
 
   // ENDPOINT : get-profile ****************
+  // ROLE : ALL USER
   Map bodyGetProfile = {};
   Map responseGetProfile = {
     'is_success': true,
     'msg': 'Berhasil',
     'data': {
+      'nik': 2010511068,
       'name': 'Yudha Haryoputranto',
       'email': 'yudhah52@gmail.com',
-      'nik': '2010511068',
       'img_url':
           'https://media.licdn.com/dms/image/C5603AQFOfZiG507GCg/profile-displayphoto-shrink_800_800/0/1644315854486?e=1725494400&v=beta&t=AEKapy2te-iNY6J4Qz4NpHgllXpQdQVWV26YBBOAaWM',
       'role_id': 1,
@@ -296,10 +440,11 @@ class Note {
   };
 
   // ENDPOINT : edit-profile ****************
+  // ROLE : ALL USER
   Map bodyEditProfile = {
+    'nik': 2010511068,
     'name': 'Yudha Haryoputranto',
     'email': 'yudhah52@gmail.com',
-    'nik': '2010511068',
     'image_base64': '',
     'family_member_data': [
       {'family_status_id': 1, 'family_status_text': 'Diri Sendiri', 'name': 'Yudha Haryoputranto'},
@@ -320,6 +465,70 @@ class Note {
     'msg': 'Berhasil edit profil',
   };
 
+  //=========================== ACCOUNT VERIFICATION ================================
+  // role_id : 1 => Karyawan
+  // role_id : 2 => Admin
+  // role_id : 3 => HRD
+
+  // account_verif_category_id : 1 => Akun Baru
+  // account_verif_category_id : 2 => Perubahan Akun
+
+  // family_status_id : 1 => Diri Sendiri
+  // family_status_id : 2 => Suami
+  // family_status_id : 3 => Istri
+  // family_status_id : 4 => Anak
+
+  // ENDPOINT : get-list-account-verification ****************
+  // ROLE : ADMIN & HRD
+  Map bodyGetListAccountVerification = {};
+  Map responseGetListAccountVerification = {
+    'is_success': true,
+    'msg': 'Berhasil',
+    'data': [
+      {
+        'nik': 2010511068,
+        'account_verif_category_id': 1,
+        'account_verif_category_text': 'Akun Baru',
+        'name': 'Yudha Haryoputranto',
+        'email': 'yudhah52@gmail.com',
+        'img_url':
+            'https://media.licdn.com/dms/image/C5603AQFOfZiG507GCg/profile-displayphoto-shrink_800_800/0/1644315854486?e=1725494400&v=beta&t=AEKapy2te-iNY6J4Qz4NpHgllXpQdQVWV26YBBOAaWM',
+        'role_id': 1,
+        'role_text': 'Karyawan',
+        'family_member_data': [
+          {
+            'family_status_id': 1,
+            'family_status_text': 'Diri Sendiri',
+            'name': 'Yudha Haryoputranto'
+          },
+          {
+            'family_status_id': 3,
+            'family_status_text': 'Istri',
+            'name': 'Freya Jayawardana',
+          },
+          {
+            'family_status_id': 4,
+            'family_status_text': 'Anak',
+            'name': 'Yhezra',
+          },
+        ],
+      }
+    ],
+  };
+
+  // ENDPOINT : confirm-account-verification ****************
+  // ROLE : ADMIN & HRD
+  Map bodyConfirmAccountVerification = {
+    'nik': 2010511068,
+    'account_verif_category_id': 1,
+    'is_accepted': false, // true diterima
+    'confirm_desc': 'Perubahan Tidak Valid',
+  };
+  Map responseConfirmAccountVerification = {
+    'is_success': true,
+    'msg': 'Berhasil mengonfirmasi verifikasi akun',
+  };
+
   //=========================== NOTIFICATION ================================
 
   // category_reimbursement : 1 => Reimbursement Kesehatan
@@ -331,12 +540,14 @@ class Note {
   // status_id = 4 => Ditolak
 
   // ENDPOINT : get-employee-notification ****************
+  // ROLE : EMPLOYEE
   Map bodyGetEmployeeNotification = {};
   Map responseGetEmployeeNotification = {
     'is_success': true,
     'msg': 'Berhasil!',
     'data': [
       {
+        'id': 126,
         'category_reimbursement_id': 1,
         'category_reimbursement_text': 'Reimbursement Kesehatan',
         'date': '21/07/2024',
@@ -345,6 +556,7 @@ class Note {
         'status_desc': 'Pengajuan reimburse Anda berhasil, silakan cek saldo rekening Anda',
       },
       {
+        'id': 126,
         'category_reimbursement': 2,
         'category_reimbursement_text': 'Reimbursement Transportasi',
         'date': '21/07/2024',
@@ -354,6 +566,7 @@ class Note {
             'Pengajuan reimburse Anda gagal, silakan cek kembali dokumen terlampir yang tidak valid',
       },
       {
+        'id': 126,
         'category_reimbursement': 1,
         'category_reimbursement_text': 'Reimbursement Kesehatan',
         'date': '21/07/2024',
@@ -374,9 +587,10 @@ class Note {
   // status_id = 3 => Disetujui
   // status_id = 4 => Ditolak
 
-  // ENDPOINT : get-employee-year-recap ****************
-  Map bodyGetEmployeeYearRecap = {};
-  Map responseGetEmployeeYearRecap = {
+  // ENDPOINT : get-year-recap ****************
+  // ROLE : ALL USER
+  Map bodyGetYearRecap = {};
+  Map responseGetYearRecap = {
     'is_success': true,
     'msg': 'Berhasil!',
     'data': [
@@ -385,11 +599,12 @@ class Note {
     ],
   };
 
-  // ENDPOINT : get-employee-month-recap ****************
-  Map bodyGetEmployeeMonthRecap = {
+  // ENDPOINT : get-month-recap ****************
+  // ROLE : ALL USER
+  Map bodyGetMonthRecap = {
     'year_id': 23,
   };
-  Map responseGetEmployeeMonthRecap = {
+  Map responseGetMonthRecap = {
     'is_success': true,
     'msg': 'Berhasil!',
     'data': [
@@ -401,7 +616,8 @@ class Note {
     ],
   };
 
-  // ENDPOINT : get-employee-list-recap ****************
+  // ENDPOINT : get-list-recap ****************
+  // ROLE : ALL USER
   Map bodyGetEmployeeListRecap = {
     'month_id': 523, // Dikosongkan jika ingin mengambil data pertahun
     'year_id': 23,
@@ -411,8 +627,12 @@ class Note {
     'msg': 'Berhasil!',
     'data': [
       {
+        'id': 126,
         'status_id': 1,
         'status_text': 'Menunggu Diproses',
+        'status_desc': 'Dokumen Tidak Valid', //HANYA JIKA statusnya DISETUJUI DAN DITOLAK
+        'nik': 2010511068,
+        'email': 'yudhah52@gmail.com',
         'name': 'Yudha Haryoputranto',
         'category_reimbursement_id': 1,
         'category_reimbursement_text': 'Reimbursement Kesehatan',
@@ -428,6 +648,7 @@ class Note {
         ],
         'list_detail': [
           {
+            'detail_id': 146,
             'detail_title_id': 1,
             'detail_title_text': 'Konsultasi Dokter',
             'detail_family_id': 3,
@@ -437,6 +658,7 @@ class Note {
             'detail_desc': 'lorem ipsum'
           },
           {
+            'detail_id': 146,
             'detail_title_id': 1,
             'detail_title_text': 'Konsultasi Dokter',
             'detail_family_id': 1,
@@ -448,8 +670,12 @@ class Note {
         ],
       },
       {
+        'id': 128,
         'status_id': 1,
         'status_text': 'Menunggu Diproses',
+        'status_desc': 'Dokumen Tidak Valid', //HANYA JIKA statusnya DISETUJUI DAN DITOLAK
+        'nik': 2010511068,
+        'email': 'yudhah52@gmail.com',
         'name': 'Yudha Haryoputranto',
         'category_reimbursement_id': 1,
         'category_reimbursement_text': 'Reimbursement Kesehatan',
@@ -465,6 +691,7 @@ class Note {
         ],
         'list_detail': [
           {
+            'detail_id': 146,
             'detail_title_id': 1,
             'detail_title_text': 'Konsultasi Dokter',
             'detail_family_id': 3,
@@ -474,6 +701,7 @@ class Note {
             'detail_desc': 'lorem ipsum'
           },
           {
+            'detail_id': 146,
             'detail_title_id': 1,
             'detail_title_text': 'Konsultasi Dokter',
             'detail_family_id': 1,
