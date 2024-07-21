@@ -364,34 +364,21 @@ class Note {
     },
   };
 
-  // ENDPOINT : proceed-reimbursement ****************
-  // ROLE : ADMIN & HRD
-  Map bodyProceedReimbursement = {'id': 126};
-  Map responseProceedReimbursement = {
-    'is_success': true,
-    'msg': 'Berhasil mengubah status menjadi Sedang Diproses',
-  };
+  // status_id = 1 => Menunggu diproses
+  // status_id = 2 => Diproses
+  // status_id = 3 => Disetujui
+  // status_id = 4 => Ditolak
 
-  // ENDPOINT : accept-reimbursement ****************
+  // ENDPOINT : change-status-reimbursement ****************
   // ROLE : ADMIN & HRD
-  Map bodyAcceptReimbursement = {
+  Map bodyChangeStatusReimbursement = {
     'id': 126,
-    'status_desc': 'Pengajuan reimburse kesehatan Anda berhasil, silakan cek saldo rekening Anda',
+    'change_status_id': 2,
+    'status_desc': 'Pengajuan Sedang Diproses',
   };
-  Map responseAcceptReimbursement = {
+  Map responseChangeStatusReimbursement = {
     'is_success': true,
-    'msg': 'Berhasil mengubah status menjadi Disetujui',
-  };
-
-  // ENDPOINT : reject-reimbursement ****************
-  // ROLE : ADMIN & HRD
-  Map bodyRejectReimbursement = {
-    'id': 126,
-    'status_desc': 'Dokumen pendukung tidak sesuai dengan rincian',
-  };
-  Map responseRejectReimbursement = {
-    'is_success': true,
-    'msg': 'Berhasil mengubah status menjadi Gagal',
+    'msg': 'Berhasil mengubah status',
   };
 
   //=========================== PROFILE ================================
@@ -521,7 +508,7 @@ class Note {
   Map bodyConfirmAccountVerification = {
     'nik': 2010511068,
     'account_verif_category_id': 1,
-    'is_accepted': false, // true diterima
+    'is_accept': false, // true diterima
     'confirm_desc': 'Perubahan Tidak Valid',
   };
   Map responseConfirmAccountVerification = {
@@ -573,6 +560,52 @@ class Note {
         'status_id': 3,
         'status_text': 'Pengajuan Berhasil!',
         'status_desc': 'Pengajuan reimburse Anda berhasil, silakan cek saldo rekening Anda',
+      },
+    ]
+  };
+
+  // ENDPOINT : get-admin-notification ****************
+  // ROLE : ADMIN & HRD
+  Map bodyGetAdminNotification = {};
+  Map responseGetAdminNotification = {
+    'is_success': true,
+    'msg': 'Berhasil!',
+    'data': [
+      {
+        'id': 123,
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
+      },
+      {
+        'id': 124,
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
+      },
+      {
+        'id': 125,
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
+      },
+      {
+        'id': 126,
+        'nik': 2010511068,
+        'name': 'Yudha Haryoputranto',
+        'category_reimbursement_id': 1,
+        'category_reimbursement_text': 'Reimbursement Kesehatan',
+        'date': '21/07/2024',
+        'total_cost': 400000,
       },
     ]
   };
