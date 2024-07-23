@@ -408,16 +408,19 @@ class Note {
       'role_text': 'Karyawan',
       'family_member_data': [
         {
+          'id': 23143,
           'family_status_id': 1,
           'family_status_text': 'Diri Sendiri',
           'name': 'Yudha Haryoputranto'
         },
         {
+          'id': 2132,
           'family_status_id': 3,
           'family_status_text': 'Istri',
           'name': 'Freya Jayawardana',
         },
         {
+          'id': 21343,
           'family_status_id': 4,
           'family_status_text': 'Anak',
           'name': 'Yhezra',
@@ -428,19 +431,27 @@ class Note {
 
   // ENDPOINT : edit-profile ****************
   // ROLE : ALL USER
+  // NOTE : Hanya memasukkan data yang berubah saja pada body, yg tidak berubah null
   Map bodyEditProfile = {
-    'nik': 2010511068,
+    'nik': 2010511068, // not editable
     'name': 'Yudha Haryoputranto',
     'email': 'yudhah52@gmail.com',
     'image_base64': '',
     'family_member_data': [
-      {'family_status_id': 1, 'family_status_text': 'Diri Sendiri', 'name': 'Yudha Haryoputranto'},
       {
+        'id': 23143,
+        'family_status_id': 1, // not editable
+        'family_status_text': 'Diri Sendiri', // not editable
+        'name': 'Yudha Haryoputranto', // not editable
+      },
+      {
+        'id': 2132,
         'family_status_id': 3,
         'family_status_text': 'Istri',
         'name': 'Freya Jayawardana',
       },
       {
+        'id': 21343,
         'family_status_id': 4,
         'family_status_text': 'Anak',
         'name': 'Yhezra',
@@ -484,16 +495,19 @@ class Note {
         'role_text': 'Karyawan',
         'family_member_data': [
           {
+            'id': 23143,
             'family_status_id': 1,
             'family_status_text': 'Diri Sendiri',
             'name': 'Yudha Haryoputranto'
           },
           {
+            'id': 2132,
             'family_status_id': 3,
             'family_status_text': 'Istri',
             'name': 'Freya Jayawardana',
           },
           {
+            'id': 21343,
             'family_status_id': 4,
             'family_status_text': 'Anak',
             'name': 'Yhezra',
