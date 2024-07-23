@@ -4,6 +4,7 @@ import 'package:reimburse_rb/utility/constant.dart';
 class FormFieldText extends StatefulWidget {
   const FormFieldText({
     Key? key,
+    this.isEnabled = true,
     this.controllerName,
     this.hintText = '',
     this.placeholder = '',
@@ -21,6 +22,7 @@ class FormFieldText extends StatefulWidget {
     this.onChanged,
   }) : super(key: key);
 
+  final bool isEnabled;
   final TextEditingController? controllerName;
   final String hintText;
   final String placeholder;
@@ -65,41 +67,49 @@ class _FormFieldTextState extends State<FormFieldText> {
             ),
           ),
         TextFormField(
-            initialValue: widget.initialValue,
-            readOnly: widget.readOnly,
-            controller: widget.controllerName,
-            onChanged: widget.onChanged,
-            minLines: widget.minLines,
-            keyboardType: widget.keyboardType,
-            obscureText: widget.isObsecure,
-            maxLines: widget.maxLines,
-            onTap: widget.onTap,
-            onTapOutside: (event) {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 4,
+          enabled: widget.isEnabled,
+          initialValue: widget.initialValue,
+          readOnly: widget.readOnly,
+          controller: widget.controllerName,
+          onChanged: widget.onChanged,
+          minLines: widget.minLines,
+          keyboardType: widget.keyboardType,
+          obscureText: widget.isObsecure,
+          maxLines: widget.maxLines,
+          onTap: widget.onTap,
+          onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 4,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Colors.black,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Constant.greenDark,
-                ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Constant.grey,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Constant.green,
-                ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Constant.greenMedium,
               ),
-              prefixIcon: widget.prefixIcon,
-              suffixIcon: widget.suffixIcon,
-              hintText: widget.hintText,
-            )),
+            ),
+            prefixIcon: widget.prefixIcon,
+            suffixIcon: widget.suffixIcon,
+            hintText: widget.hintText,
+          ),
+        ),
       ],
     );
   }

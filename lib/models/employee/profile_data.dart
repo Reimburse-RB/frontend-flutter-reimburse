@@ -68,12 +68,33 @@ class FamilyMemberData {
   }
 }
 
+// class FamilyMemberOption {
+//   FamilyMemberOption({
+//     required this.familyStatusId,
+//     required this.familyStatusText,
+//   });
+
+//   late final int familyStatusId;
+//   late final String familyStatusText;
+// }
+
 class FamilyMemberOption {
   FamilyMemberOption({
     required this.familyStatusId,
     required this.familyStatusText,
   });
 
-  late final int familyStatusId;
-  late final String familyStatusText;
+  final int familyStatusId;
+  final String familyStatusText;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FamilyMemberOption &&
+          runtimeType == other.runtimeType &&
+          familyStatusId == other.familyStatusId &&
+          familyStatusText == other.familyStatusText;
+
+  @override
+  int get hashCode => familyStatusId.hashCode ^ familyStatusText.hashCode;
 }

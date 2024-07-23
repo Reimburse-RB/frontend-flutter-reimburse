@@ -1,23 +1,26 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/models/employee/profile_data.dart';
+import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class CardFamilyMember extends StatelessWidget {
+  final ProfileViewModel viewModel;
   final int memberIndex;
-  final String status;
+  final FamilyMemberOption? status;
   final String name;
   final List<FamilyMemberOption> listStatusOption;
   final bool isActiveDeleteButton;
-  final VoidCallback onDelete;
 
   const CardFamilyMember({
     Key? key,
+    required this.viewModel,
     required this.memberIndex,
-    required this.status,
+    this.status,
     required this.name,
     required this.listStatusOption,
     this.isActiveDeleteButton = true,
-    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -36,17 +39,19 @@ class CardFamilyMember extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Anggota Keluarga $memberIndex',
+                  'Anggota Keluarga ${memberIndex + 1}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.green[900],
                   ),
                 ),
-                if (isActiveDeleteButton)
+                if (isActiveDeleteButton && viewModel.isEditing)
                   IconButton(
                     icon: Icon(Icons.delete, color: Colors.green[900]),
-                    onPressed: onDelete,
+                    onPressed: () {
+                      viewModel.removeFamilyMember(index: memberIndex);
+                    },
                   ),
               ],
             ),
@@ -59,13 +64,14 @@ class CardFamilyMember extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
+            DropdownButtonFormField<FamilyMemberOption>(
               value: status,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+                hintText: 'Pilih Status Keluarga',
               ),
               focusColor: Constant.greenDark,
               dropdownColor: Constant.greenMoreVeryLight,
@@ -73,16 +79,20 @@ class CardFamilyMember extends StatelessWidget {
                 Icons.arrow_drop_down_rounded,
                 color: Constant.green,
               ),
-              borderRadius: BorderRadius.circular(12),
               items: listStatusOption.map((FamilyMemberOption option) {
-                return DropdownMenuItem<String>(
-                  value: option.familyStatusText,
+                return DropdownMenuItem<FamilyMemberOption>(
+                  value: option,
                   child: Text(option.familyStatusText),
                 );
               }).toList(),
-              onChanged: (String? newValue) {
-                // Handle status change
-              },
+              onChanged: (viewModel.isEditing)
+                  ? (newValue) {
+                      if (newValue != null) {
+                        viewModel.changeFamilyStatus(index: memberIndex, newStatus: newValue);
+                      }
+                      log('current status $newValue ${newValue?.familyStatusId}${newValue?.familyStatusText}');
+                    }
+                  : null,
             ),
             const SizedBox(height: 16),
             const Text(
@@ -96,14 +106,19 @@ class CardFamilyMember extends StatelessWidget {
             const SizedBox(height: 8),
             TextFormField(
               initialValue: name,
+              enabled: viewModel.isEditing,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+                focusColor: Constant.greenDark,
+                hintText: 'Masukkan Nama',
               ),
               onChanged: (String? newValue) {
-                // Handle name change
+                if (newValue != null) {
+                  viewModel.changeFamilyName(index: memberIndex, newName: newValue);
+                }
               },
             ),
           ],

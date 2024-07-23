@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
+import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/employee/list_submission.dart';
 
 class SubmissionHomeScreen extends StatelessWidget {
@@ -31,11 +32,9 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
 
   @override
   void initState() {
-    final viewModel =
-        Provider.of<SubmissionHomeViewModel>(context, listen: false);
+    final viewModel = Provider.of<SubmissionHomeViewModel>(context, listen: false);
 
-    tabController =
-        TabController(vsync: this, length: viewModel.listStatusTab.length);
+    tabController = TabController(vsync: this, length: viewModel.listStatusTab.length);
 
     super.initState();
   }
@@ -71,24 +70,11 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
-        height: 64.0,
-        width: 64.0,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {},
-            child: const Icon(
-              Icons.add_rounded,
-              size: 32,
-            ),
-            backgroundColor: Constant.green,
-            elevation: 8.0,
-          ),
-        ),
+      floatingActionButton: FloatingActionButtonGeneral(
+        onPressed: () {},
       ),
       body: ListView(
-        padding:
-            const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
+        padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
         children: [
           Container(
             child: const ListSubmission(),
