@@ -1,5 +1,5 @@
 const { isNil, isNotEmpty, isNotNil, forEach } = require("ramda");
-const Reimburse = require("../models/reimburse");
+const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
 const ReimburseDetail = require("../models/Reimburse-Detail");
 require("dotenv").config();
