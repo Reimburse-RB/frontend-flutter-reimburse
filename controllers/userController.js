@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
 const path = require("path");
+const { isNil } = require("ramda");
+const UserFamily = require("../models/User-Family");
 require("dotenv").config();
 
 module.exports = {
@@ -75,7 +77,7 @@ module.exports = {
 
   editUser: async (req, res) => {
     try {
-      const { email, name, identity_number } = req.body;
+      const { email, name, identity_number, family_member_data } = req.body;
       const user = req.userAuth;
 
       if (req.fileName !== undefined) {
@@ -94,7 +96,40 @@ module.exports = {
       user.fullname = name;
       user.email = email;
       user.identity_number = identity_number;
-      user.token = token;
+
+      const family = await UserFamily.findAll({ where: { user_id: user.id } });
+      if (!isNil(family_member_data)) {
+        for (const itemFamily of family) {
+          const idExists = family_member_data.some(
+            (item) => item.id === itemFamily.id
+          );
+          if (!idExists) {
+            itemFamily.destroy();
+          }
+        }
+
+        const arrayFamilyCreate = [];
+        for (const item of family_member_data) {
+          const idExists = family.some((itemSome) => itemSome.id === item.id);
+
+          if (idExists) {
+            const familyDetail = await UserFamily.findOne({
+              where: { id: item.id },
+            });
+            familyDetail.status = item.family_status_id;
+            familyDetail.fullname = item.name;
+            familyDetail.save();
+          } else {
+            arrayFamilyCreate.push({
+              fullname: item.name,
+              status: item.family_status_id,
+              user_id: user.id,
+            });
+          }
+        }
+
+        const createFamily = await UserFamily.bulkCreate(arrayFamilyCreate);
+      }
 
       await user.save();
 
