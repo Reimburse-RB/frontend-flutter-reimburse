@@ -4,12 +4,12 @@ const sequelize = require("../config/database");
 const ReimburseDetail = sequelize.define(
   "reimburse_detail",
   {
-    medical_detail: {
+    title_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
-    travel_detail: {
-      type: DataTypes.INTEGER,
+    title_other: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
     intended_for: {
@@ -19,11 +19,6 @@ const ReimburseDetail = sequelize.define(
     price: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    role: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
     },
     receipt_date: {
       type: DataTypes.DATE,

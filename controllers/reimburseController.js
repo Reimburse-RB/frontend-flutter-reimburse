@@ -2,6 +2,8 @@ const { isNil, isNotEmpty, isNotNil, forEach } = require("ramda");
 const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
 const ReimburseDetail = require("../models/Reimburse-Detail");
+const allStatus = require("../utils/allStatus");
+const UserFamily = require("../models/User-Family");
 require("dotenv").config();
 
 module.exports = {
@@ -64,13 +66,12 @@ module.exports = {
             options
           ).format(date);
 
+          const cat = allStatus.listCategoryReimbursement.find(
+            (itemCat) => itemCat.category_reimbursement_id === item.category
+          );
+
           const dataCard = {
-            typeReimburse:
-              item.role == 1
-                ? "Reimbursement Kesehatan"
-                : item.role == 2
-                ? "Reimbursement Transportasi"
-                : "",
+            typeReimburse: cat ? cat.category_reimbursement_text : "",
             status:
               item.status == 1
                 ? "Menunggu Diproses"
@@ -133,8 +134,11 @@ module.exports = {
 
       if (reimburse) {
         const returnData = {
-          employeeName: user.fullname,
-          status:
+          name: user.fullname,
+          email: user.email,
+          nik: user.identity_number,
+          status_id: reimburse.status,
+          status_text:
             reimburse.status == 1
               ? "Menunggu Diproses"
               : reimburse.status == 2
@@ -144,13 +148,30 @@ module.exports = {
               : reimburse.status == 4
               ? "Ditolak"
               : "",
+          category_reimbursement_id: reimburse.category,
         };
 
-        if (reimburse.role == 1) {
-          returnData.diagnosiss = reimburse.diagnosiss;
-        } else if (reimburse.rple == 2) {
-          returnData.destination = reimburse.destination;
-        }
+        const cat = allStatus.listCategoryReimbursement.find(
+          (itemCat) => itemCat.category_reimbursement_id === reimburse.category
+        );
+        const purposeText = allStatus.purposeId.find(
+          (itemCat) => itemCat.purpose_id === reimburse.purpose_id
+        );
+
+        returnData.category_reimbursement_text = cat
+          ? cat.category_reimbursement_text
+          : "";
+        returnData.purpose_id = reimburse.purpose_id;
+        returnData.purpose_text = purposeText ? purposeText.purpose_text : "";
+
+        const date = new Date(reimburse.createdAt);
+
+        const day = date.getUTCDate().toString().padStart(2, "0");
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
+        const year = date.getUTCFullYear().toString().slice(-2);
+
+        const formattedDateCreatedAt = `${day}/${month}/${year}`;
+        returnData.date = formattedDateCreatedAt;
 
         const reimburseImage = await ImageReimburse.findAll({
           where: {
@@ -168,7 +189,7 @@ module.exports = {
           }
         }
 
-        returnData.ImageReimburse = imageFinal;
+        returnData.list_attachment = imageFinal;
 
         const reimburseDetail = await ReimburseDetail.findAll({
           where: {
@@ -190,13 +211,25 @@ module.exports = {
 
             const formattedDate = `${day}/${month}/${year}`;
 
+            const family = await UserFamily.findOne({
+              where: { id: detail.intended_for },
+            });
+
+            const detailTitleText = allStatus.titleId.find(
+              (itemTitle) => itemTitle.detail_title_id === detail.title_id
+            );
+
             const temp = {
-              medicalDetail: detail.medical_detail,
-              travelDetail: detail.travel_detail,
-              intendedFor: detail.intended_for,
-              price: detail.price,
-              receipt_date: formattedDate,
-              description: detail.description,
+              detail_id: detail.id,
+              detail_title_id: detail.title_id,
+              detail_title_text: detailTitleText
+                ? detailTitleText.detail_title_text
+                : "",
+              detail_family_id: detail.intended_for,
+              detail_family_name: family ? family.fullname : "",
+              detail_cost: detail.price,
+              detail_date: formattedDate,
+              detail_desc: detail.description,
             };
 
             filteredDetailReimburse.push(temp);
@@ -217,9 +250,9 @@ module.exports = {
     }
   },
 
-  getDateReimburse: async (req, res) => {
+  getMonthRecap: async (req, res) => {
     const user = req.userAuth;
-
+    const { year } = req.body;
     try {
       const reimburse = await Reimburse.findAll({
         where: {
@@ -229,6 +262,7 @@ module.exports = {
       });
 
       var uniqueMonths = [];
+      var returnValue = [];
       if (isNotNil(reimburse)) {
         const monthNames = [
           "Januari",
@@ -255,12 +289,56 @@ module.exports = {
         uniqueMonths = Array.from(
           new Set(reimburse.map((item) => formatDate(item.createdAt)))
         );
+
+        if (isNil(year)) {
+          returnValue = uniqueMonths;
+        } else {
+          for (const item of uniqueMonths) {
+            if (item.includes(year)) {
+              returnValue.push(item);
+            }
+          }
+        }
       }
 
       return res.json({
         success: true,
         msg: "success getting data",
-        data: uniqueMonths,
+        data: returnValue,
+      });
+    } catch (e) {
+      return res.json({ msg: e.message });
+    }
+  },
+
+  getYearRecap: async (req, res) => {
+    const user = req.userAuth;
+
+    try {
+      const reimburse = await Reimburse.findAll({
+        where: {
+          user_id: user.id,
+        },
+        order: [["createdAt", "asc"]],
+      });
+
+      var uniqueMonths = [];
+      if (isNotNil(reimburse)) {
+        const formatDate = (dateString) => {
+          const date = new Date(dateString);
+          const year = date.getUTCFullYear();
+          return `${year}`;
+        };
+
+        yearReturn = Array.from(
+          new Set(reimburse.map((item) => formatDate(item.createdAt)))
+        );
+      }
+
+      return res.json({
+        success: true,
+        msg: "success getting data",
+        data: yearReturn,
       });
     } catch (e) {
       return res.json({ msg: e.message });
@@ -268,11 +346,16 @@ module.exports = {
   },
 
   addReimburse: async (req, res) => {
-    const { diagnosiss, destination, detail_reimburse, role } = req.body;
+    const {
+      category_reimbursement_id,
+      purpose_id,
+      detail_reimburse,
+      purpose_other_text,
+    } = req.body;
     const user = req.userAuth;
 
     try {
-      if (isNil(diagnosiss) && isNil(destination)) {
+      if (isNil(purpose_id)) {
         return res.json({
           success: false,
           msg: "diagnosiss or destination must be filled",
@@ -280,10 +363,10 @@ module.exports = {
       }
 
       const reimburse = await Reimburse.create({
-        diagnosiss,
-        destination,
+        purpose_id: purpose_id,
+        purpose_other: purpose_other_text,
         user_id: user.id,
-        role: role,
+        category: category_reimbursement_id,
       });
 
       if (reimburse) {
@@ -298,18 +381,21 @@ module.exports = {
 
         if (isNotNil(detail_reimburse) && isNotEmpty(detail_reimburse)) {
           detail_reimburse.forEach(async (item) => {
+            const [day, month, year] = item.detail_date.split("/");
+
+            const date = new Date(`${year}-${month}-${day}`);
+            const formattedDate = date
+              .toISOString()
+              .slice(0, 19)
+              .replace("T", " ");
+
             const detailReimburse = await ReimburseDetail.create({
-              medical_detail: isNil(item.medical_detail)
-                ? null
-                : item.medical_detail,
-              travel_detail: isNil(item.travel_detail)
-                ? null
-                : item.travel_detail,
-              intended_for: isNil(item.intended_for) ? null : item.intended_for,
-              price: item.price,
-              receipt_date: item.receipt_date,
+              title_id: item.detail_title_id,
+              title_other: item.detail_title_other_text,
+              intended_for: item.detail_family_id,
+              price: item.detail_cost,
+              receipt_date: formattedDate,
               description: isNil(item.description) ? null : item.description,
-              role: role,
               reimburse_id: reimburse.id,
             });
           });

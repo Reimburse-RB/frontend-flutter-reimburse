@@ -4,12 +4,12 @@ const sequelize = require("../config/database");
 const Reimburse = sequelize.define(
   "reimburse",
   {
-    diagnosiss: {
-      type: DataTypes.TEXT,
-      allowNull: true,
+    purpose_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
-    destination: {
-      type: DataTypes.TEXT,
+    purpose_other: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
     status: {
@@ -17,7 +17,7 @@ const Reimburse = sequelize.define(
       allowNull: false,
       defaultValue: 1,
     },
-    role: {
+    category: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,

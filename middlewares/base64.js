@@ -33,7 +33,7 @@ const uploadImage = async (req, res, next) => {
 
       let fileName = Date.now() + randomNumber + extensionn;
 
-      const filePath = `public/images/${fileName}`;
+      const filePath = `public/images/upload/${fileName}`;
       const buffer = Buffer.from(req.body.image, "base64");
 
       fs.writeFileSync(path.join(filePath), buffer);
@@ -104,7 +104,7 @@ const uploadMultipleImage = async (req, res, next) => {
 
         let fileName = Date.now() + randomNumber + extensionn;
 
-        const filePath = `public/images/${fileName}`;
+        const filePath = `public/images/upload/${fileName}`;
         const buffer = Buffer.from(item, "base64");
 
         fs.writeFileSync(path.join(filePath), buffer);
