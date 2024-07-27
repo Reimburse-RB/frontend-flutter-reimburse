@@ -5,6 +5,7 @@ const { uploadImage } = require("../middlewares/base64");
 
 router.post("/register", userController.userRegister);
 router.post("/login", userController.userLogin);
+router.post("/get-profile", authLogin, userController.getProfile);
 router.post("/edit-profile", authLogin, uploadImage, userController.editUser);
 
 module.exports = router;

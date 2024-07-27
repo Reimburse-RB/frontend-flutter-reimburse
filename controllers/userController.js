@@ -6,6 +6,7 @@ const { where } = require("sequelize");
 const path = require("path");
 const { isNil } = require("ramda");
 const UserFamily = require("../models/User-Family");
+const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 
 module.exports = {
@@ -69,6 +70,56 @@ module.exports = {
         msg: "Anda Berhasil Login!!",
         token: user.token,
         user: user,
+      });
+    } catch (error) {
+      return res.json({ msg: error.message });
+    }
+  },
+
+  getProfile: async (req, res) => {
+    const user = req.userAuth;
+    try {
+      const roleUser = allStatus.role.find(
+        (itemRole) => itemRole.role_id === user.role
+      );
+
+      const returnData = {
+        nik: user.identity_number,
+        name: user.fullname,
+        email: user.email,
+        role_id: user.role,
+        role_text: roleUser ? roleUser.role_text : "",
+        img_url:
+          user.image_url != null ? `${process.env.URL}${user.image_url}` : null,
+      };
+
+      const userFamily = await UserFamily.findAll({
+        where: { user_id: user.id },
+      });
+      const detailFamily = [];
+      if (userFamily.length > 0) {
+        for (const item of userFamily) {
+          const familyStatus = allStatus.familyOption.find(
+            (itemFamStat) => itemFamStat.family_status_id === item.status
+          );
+
+          detailFamily.push({
+            id: item.id,
+            family_status_id: item.status,
+            family_status_text: familyStatus
+              ? familyStatus.family_status_text
+              : "",
+            name: item.fullname,
+          });
+        }
+      }
+
+      returnData.family_member_data = detailFamily;
+
+      return res.json({
+        success: true,
+        msg: "Success getting data profile!",
+        data: returnData,
       });
     } catch (error) {
       return res.json({ msg: error.message });
