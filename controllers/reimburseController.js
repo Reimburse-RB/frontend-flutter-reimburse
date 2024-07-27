@@ -4,11 +4,12 @@ const ImageReimburse = require("../models/Reimburse-Image");
 const ReimburseDetail = require("../models/Reimburse-Detail");
 const allStatus = require("../utils/allStatus");
 const UserFamily = require("../models/User-Family");
+const User = require("../models/User");
 require("dotenv").config();
 
 module.exports = {
   getUserReimburse: async (req, res) => {
-    const { dateReimburse, status } = req.body;
+    const { dateReimburse, status, isAdmin } = req.body;
     const user = req.userAuth;
 
     try {
@@ -84,6 +85,19 @@ module.exports = {
                 : "",
             createdDate: formattedDate,
           };
+
+          if (!isNil(isAdmin)) {
+            if (isAdmin == true) {
+              const userReimburse = await User.findOne({
+                where: { id: item.user_id },
+              });
+
+              if (userReimburse) {
+                dataCard.name = userReimburse.fullname;
+                dataCard.nik = userReimburse.identity_number;
+              }
+            }
+          }
 
           const reimburseDetail = await ReimburseDetail.findAll({
             where: {
@@ -411,6 +425,47 @@ module.exports = {
       return res.json({
         success: false,
         msg: "failed create data",
+      });
+    } catch (e) {
+      return res.json({ msg: e.message });
+    }
+  },
+
+  changeStatusReimburse: async (req, res) => {
+    const { id, change_status_id } = req.body;
+    const user = req.userAuth;
+
+    try {
+      if (isNil(id)) {
+        return res.json({
+          success: false,
+          msg: "please insert id of reimburse",
+        });
+      }
+
+      if (isNil(change_status_id)) {
+        return res.json({
+          success: false,
+          msg: "please insert status id of reimburse",
+        });
+      }
+
+      const reimburse = await Reimburse.findOne({ where: { id: id } });
+
+      if (reimburse) {
+        reimburse.status = change_status_id;
+        reimburse.save();
+
+        return res.json({
+          success: true,
+          msg: "success edit data",
+          data: reimburse,
+        });
+      }
+
+      return res.json({
+        success: false,
+        msg: "failed edit data",
       });
     } catch (e) {
       return res.json({ msg: e.message });

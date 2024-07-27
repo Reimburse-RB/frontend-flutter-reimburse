@@ -26,4 +26,10 @@ router.post("/get-month-recap", authLogin, reimburseController.getMonthRecap);
 
 router.post("/get-year-recap", authLogin, reimburseController.getYearRecap);
 
+router.post(
+  "/change-status-reimburse",
+  authLogin,
+  reimburseController.changeStatusReimburse
+);
+
 module.exports = router;
