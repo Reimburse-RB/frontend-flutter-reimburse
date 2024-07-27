@@ -81,4 +81,15 @@ module.exports = {
       detail_title_text: "Lainnya",
     },
   ],
+
+  tnc: [
+    {
+      tnc_id: 1,
+      tnc_text: "Kategori Kesehatan",
+    },
+    {
+      tnc_id: 2,
+      tnc_text: "Kategori Transportasi",
+    },
+  ],
 };

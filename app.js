@@ -12,6 +12,7 @@ var usersRouter = require("./routes/users");
 
 const userRouter = require("./routes/user");
 const reimburseRouter = require("./routes/reimburse");
+const tncRouter = require("./routes/tnc");
 
 var app = express();
 app.use(cors());
@@ -31,6 +32,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/user", userRouter);
 app.use("/reimburse", reimburseRouter);
+app.use("/tnc", tncRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
