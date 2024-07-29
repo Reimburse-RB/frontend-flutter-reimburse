@@ -10,7 +10,7 @@ const authLogin = async (req, res, next) => {
       message: "Access Denied !",
     });
 
-  const user = await User.findOne({ token: token });
+  const user = await User.findOne({ where: { token: token } });
   if (!user)
     return res.json({
       success: false,

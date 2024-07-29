@@ -471,4 +471,53 @@ module.exports = {
       return res.json({ msg: e.message });
     }
   },
+
+  getSummaryReimburse: async (req, res) => {
+    const user = req.userAuth;
+
+    try {
+      const reimburse = await Reimburse.findAll({
+        where: { user_id: user.id },
+      });
+
+      const returnData = {
+        onproceed: 0,
+        accepted: 0,
+        rejected: 0,
+        total_reimburse_this_year: 0,
+      };
+
+      for (const item of reimburse) {
+        if (item.status == 1 || item.status == 2) {
+          returnData.onproceed += 1;
+        } else if (item.status == 3) {
+          returnData.accepted += 1;
+        } else if (item.status == 4) {
+          returnData.rejected += 1;
+        }
+
+        const reimburseDetail = await ReimburseDetail.findAll({
+          where: {
+            reimburse_id: item.id,
+          },
+        });
+
+        var totalPrice = 0;
+        if (isNotNil(reimburseDetail)) {
+          reimburseDetail.forEach((detail) => {
+            totalPrice += detail.price;
+          });
+        }
+        returnData.total_reimburse_this_year += totalPrice;
+      }
+
+      return res.json({
+        success: true,
+        msg: "success getting data",
+        data: returnData,
+      });
+    } catch (e) {
+      return res.json({ msg: e.message });
+    }
+  },
 };
