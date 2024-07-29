@@ -28,8 +28,11 @@ class ProfileViewModel extends ChangeNotifier {
   late ProfileData _profile;
   ProfileData get profile => _profile;
 
-  late ProfileData _backupOriginalProfile;
-  ProfileData get backupOriginalProfile => _backupOriginalProfile;
+  Map _bodyEditProfile = {};
+  Map get bodyEditProfile => _bodyEditProfile;
+
+  // late ProfileData _backupOriginalProfile;
+  // ProfileData get backupOriginalProfile => _backupOriginalProfile;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -108,7 +111,7 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future startEdit() {
     _isEditing = true;
-    _backupOriginalProfile = profile;
+    // _backupOriginalProfile = profile;
     notifyListeners();
 
     return Future.value(true);
@@ -116,7 +119,7 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future cancelEdit() {
     _isEditing = false;
-    _profile = backupOriginalProfile;
+    // _profile = backupOriginalProfile;
     notifyListeners();
 
     return Future.value(true);
@@ -124,6 +127,8 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future saveEdit() {
     _isEditing = false;
+    _bodyEditProfile['nik'] = profile.nik;
+
     // post data profile
     notifyListeners();
 
@@ -131,14 +136,17 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future changeUserFullName({required String newFullName}) {
-    _profile.name = newFullName;
+    // _profile.name = newFullName;
+    _bodyEditProfile['name'] = newFullName;
     notifyListeners();
 
     return Future.value(true);
   }
 
   Future changeUserEmail({required String newEmail}) {
-    _profile.email = newEmail;
+    // _profile.email = newEmail;
+    _bodyEditProfile['email'] = newEmail;
+
     notifyListeners();
 
     return Future.value(true);
