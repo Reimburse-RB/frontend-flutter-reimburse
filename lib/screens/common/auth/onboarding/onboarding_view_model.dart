@@ -82,7 +82,7 @@ class OnboardingViewModel extends ChangeNotifier {
       );
     }
     if (currentPage == onboardDataList.length - 1) {
-      Navigator.of(context).push(CupertinoPageRoute(
+      Navigator.of(context).pushReplacement(CupertinoPageRoute(
         builder: (context) => const SignInScreen(),
       ));
     }

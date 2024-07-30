@@ -65,6 +65,7 @@ class CardFamilyMember extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<FamilyMemberOption>(
+              borderRadius: BorderRadius.circular(24),
               value: status,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

@@ -35,8 +35,9 @@ class Helper {
   // }
 
   void showToast({
+    bool isSuccess = true,
     required String message,
-    Color backgroundColor = Constant.greenMedium,
+    Color backgroundColor = Constant.acceptedStatusIconColor,
     Color messageColor = Colors.white,
     Color borderColor = Colors.white,
     Widget? icon,
@@ -45,13 +46,13 @@ class Helper {
       icon: icon,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       margin: const EdgeInsets.fromLTRB(24, 24, 24, 72),
-      flushbarPosition: FlushbarPosition.BOTTOM,
+      flushbarPosition: FlushbarPosition.TOP,
       borderColor: borderColor,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(20),
       message: message,
       messageColor: messageColor,
       duration: const Duration(seconds: 3),
-      backgroundColor: backgroundColor,
+      backgroundColor: isSuccess ? backgroundColor : Constant.rejectedStatusColor,
     ).show(context);
   }
 

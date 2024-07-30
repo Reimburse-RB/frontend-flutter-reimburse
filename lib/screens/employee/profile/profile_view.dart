@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
-import 'package:reimburse_rb/utility/authentication.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
@@ -105,7 +104,7 @@ class ProfileView extends StatelessWidget {
           const SizedBox(height: 96),
           ButtonGeneral(
             onTap: () {
-              Authentication.signOut(context: context);
+              viewModel.signOut();
             },
             isWhiteButton: true,
             prefixIcon: const Icon(

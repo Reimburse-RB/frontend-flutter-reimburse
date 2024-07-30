@@ -36,4 +36,13 @@ class Constant {
     fontSize: 16,
     fontWeight: boldText,
   );
+
+  static const TextStyle unselectedDropdownItemStyle = TextStyle(
+    fontSize: 16,
+    color: grey,
+    fontWeight: lightWeightText,
+  );
+  static const TextStyle selectedDropdownItemStyle = TextStyle(
+    fontSize: 16,
+  );
 }

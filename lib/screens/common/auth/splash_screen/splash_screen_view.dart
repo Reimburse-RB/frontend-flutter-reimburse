@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/screens/common/auth/splash_screen/splash_screen_view_model.dart';
-import 'package:reimburse_rb/utility/authentication.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -25,7 +24,8 @@ class SplashScreenView extends StatefulWidget {
 class _SplashScreenViewState extends State<SplashScreenView> {
   @override
   void initState() {
-    Authentication.checkAuth(context: context);
+    final viewModel = Provider.of<SplashScreenViewModel>(context, listen: false);
+    viewModel.checkAuth(context: context);
     super.initState();
   }
 

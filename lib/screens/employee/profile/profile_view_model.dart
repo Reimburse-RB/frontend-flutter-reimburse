@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:reimburse_rb/models/employee/profile_data.dart';
 import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
+import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
 
 class ProfileViewModel extends ChangeNotifier {
@@ -16,6 +18,8 @@ class ProfileViewModel extends ChangeNotifier {
       setProfileFormData();
     }
   }
+  final LocalStorage localStorage = LocalStorage('reimburse_rb');
+
   BuildContext context;
   bool isProfileDetail = false;
 
@@ -202,5 +206,14 @@ class ProfileViewModel extends ChangeNotifier {
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => const ForgotPasswordScreen(),
     ));
+  }
+
+  Future signOut() {
+    localStorage.clear();
+
+    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+      builder: (context) => const SignInScreen(),
+    ));
+    return Future.value(true);
   }
 }

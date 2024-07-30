@@ -20,6 +20,13 @@ class FormFieldText extends StatefulWidget {
     this.borderColor = Colors.black,
     this.onTap,
     this.onChanged,
+    this.prefixIconNote,
+    this.note = '',
+    this.noteStyle = const TextStyle(
+      color: Constant.rejectedStatusColor,
+      fontWeight: Constant.lightWeightText,
+      fontSize: 12,
+    ),
   }) : super(key: key);
 
   final bool isEnabled;
@@ -38,6 +45,10 @@ class FormFieldText extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final Color borderColor;
+
+  final Widget? prefixIconNote;
+  final String note;
+  final TextStyle noteStyle;
 
   final void Function()? onTap;
   final void Function(String)? onChanged;
@@ -88,19 +99,19 @@ class _FormFieldTextState extends State<FormFieldText> {
               vertical: 4,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               borderSide: const BorderSide(
                 color: Colors.black,
               ),
             ),
             disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               borderSide: const BorderSide(
                 color: Constant.grey,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               borderSide: const BorderSide(
                 color: Constant.greenMedium,
               ),
@@ -110,6 +121,23 @@ class _FormFieldTextState extends State<FormFieldText> {
             hintText: widget.hintText,
           ),
         ),
+        if (widget.note.isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: Row(
+              children: [
+                if (widget.prefixIconNote != null)
+                  Container(
+                    margin: const EdgeInsets.only(right: 12),
+                    child: widget.prefixIconNote,
+                  ),
+                Text(
+                  widget.note,
+                  style: widget.noteStyle,
+                ),
+              ],
+            ),
+          )
       ],
     );
   }

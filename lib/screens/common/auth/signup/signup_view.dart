@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/button_text.dart';
+import 'package:reimburse_rb/widgets/common/form_dropdown_map.dart';
+import 'package:reimburse_rb/widgets/common/form_dropdown_role.dart';
+import 'package:reimburse_rb/widgets/common/form_dropdown_string.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
 import 'package:reimburse_rb/screens/common/auth/signup/signup_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
@@ -86,6 +89,71 @@ class SignUpView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
+                  FormDropdownRole(
+                    hintText: 'Pilih Role',
+                    placeholder: 'Role',
+                    items: viewModel.listRole,
+                    value: viewModel.selectedRole,
+                    onChanged: (newSelectedRole) {
+                      viewModel.changeRole(newSelectedRole!);
+                    },
+                  ),
+                  // FormDropdownString(
+                  //   hintText: 'Pilih Role',
+                  //   items: ['Karyawan', 'Admin'],
+                  //   placeholder: 'Role',
+                  // ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  // DropdownButtonFormField<String>(
+                  //   borderRadius: BorderRadius.circular(24),
+                  //   value: null,
+                  //   decoration: InputDecoration(
+                  //     fillColor: Colors.white,
+                  //     filled: true,
+                  //     contentPadding: const EdgeInsets.symmetric(
+                  //       horizontal: 16,
+                  //       vertical: 4,
+                  //     ),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(16),
+                  //       borderSide: const BorderSide(
+                  //         color: Colors.black,
+                  //       ),
+                  //     ),
+                  //     disabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(16),
+                  //       borderSide: const BorderSide(
+                  //         color: Constant.grey,
+                  //       ),
+                  //     ),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(16),
+                  //       borderSide: const BorderSide(
+                  //         color: Constant.greenMedium,
+                  //       ),
+                  //     ),
+                  //     hintText: 'Pilih Role',
+                  //   ),
+                  //   focusColor: Constant.greenDark,
+                  //   dropdownColor: Constant.greenMoreVeryLight,
+                  //   icon: const Icon(
+                  //     Icons.arrow_drop_down_rounded,
+                  //     color: Constant.green,
+                  //   ),
+                  //   items: ['Admin', 'Karyawan'].map((option) {
+                  //     return DropdownMenuItem<String>(
+                  //       value: option,
+                  //       child: Text(
+                  //         option,
+                  //       ),
+                  //     );
+                  //   }).toList(),
+                  //   onChanged: (newValue) {
+                  //     // Handle value change
+                  //   },
+                  // ),
                   FormFieldText(
                     controllerName: viewModel.passwordController,
                     placeholder: "Password Baru",
@@ -98,6 +166,10 @@ class SignUpView extends StatelessWidget {
                       },
                       child: Icon(viewModel.isObscured1 ? Icons.visibility : Icons.visibility_off),
                     ),
+                    onChanged: (newPassword) {
+                      viewModel.checkIsPasswordMatch();
+                    },
+                    note: viewModel.isPasswordMatch ? '' : 'Password tidak cocok',
                   ),
                   const SizedBox(
                     height: 16,
@@ -114,6 +186,10 @@ class SignUpView extends StatelessWidget {
                       },
                       child: Icon(viewModel.isObscured2 ? Icons.visibility : Icons.visibility_off),
                     ),
+                    onChanged: (confirmPassword) {
+                      viewModel.checkIsPasswordMatch();
+                    },
+                    note: viewModel.isPasswordMatch ? '' : 'Password tidak cocok',
                   ),
                   const SizedBox(
                     height: 64,
@@ -136,7 +212,11 @@ class SignUpView extends StatelessWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  ButtonGeneral(onTap: () {}, text: 'Daftar'),
+                  ButtonGeneral(
+                      onTap: () {
+                        viewModel.submitRegister();
+                      },
+                      text: 'Daftar'),
                   const SizedBox(height: 64),
                 ],
               ),

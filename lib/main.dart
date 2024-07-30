@@ -32,7 +32,6 @@ class _MyAppState extends State<MyApp> {
 
   Map<String, Widget Function(BuildContext)> routes = {
     '/splashScreen': (BuildContext context) => const SplashScreen(),
-    // '/mainMenu': (BuildContext context) => const MainMenu(),
   };
 
   // This widget is the root of your application.
