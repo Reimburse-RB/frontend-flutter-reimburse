@@ -131,58 +131,59 @@ class Helper {
   //   );
   // }
 
-  // alertClose({
-  //   required String title,
-  //   required String message,
-  //   required BuildContext context,
-  //   String firstButtonLabel = 'Lanjutkan',
-  //   String secondButtonLabel = 'Batal',
-  //   required Function() firstButtonOnTap,
-  //   required Function() secondButtonOnTap,
-  // }) {
-  //   Alert(
-  //     context: context,
-  //     // type: AlertType.info,
-  //     style: AlertStyle(
-  //       isCloseButton: false,
-  //       titleStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-  //       titlePadding: EdgeInsets.only(bottom: 8, top: 10),
-  //     ),
-  //     title: title,
-  //     content: Text(
-  //       message,
-  //       style: TextStyle(fontSize: 14),
-  //     ),
-  //     buttons: [
-  //       DialogButton(
-  //         radius: BorderRadius.circular(16),
-  //         child: Text(
-  //           firstButtonLabel,
-  //           style: TextStyle(
-  //             color: Colors.white,
-  //           ),
-  //         ),
-  //         onPressed: firstButtonOnTap,
-  //         color: Constant.greenDark,
-  //       ),
-  //       DialogButton(
-  //         radius: BorderRadius.circular(16),
-  //         child: Text(
-  //           secondButtonLabel,
-  //           style: TextStyle(
-  //             color: Constant.greenDark,
-  //           ),
-  //         ),
-  //         onPressed: secondButtonOnTap,
-  //         color: Colors.white,
-  //         border: Border.all(
-  //           width: 1,
-  //           color: Constant.greenDark,
-  //         ),
-  //       ),
-  //     ],
-  //   ).show();
-  // }
+  alertClose({
+    required String title,
+    required String message,
+    required BuildContext context,
+    String firstButtonLabel = 'Lanjutkan',
+    String secondButtonLabel = 'Batal',
+    AlertType? alertType,
+    required Function() firstButtonOnTap,
+    required Function() secondButtonOnTap,
+  }) {
+    Alert(
+      context: context,
+      type: alertType,
+      style: const AlertStyle(
+        isCloseButton: false,
+        titleStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        titlePadding: EdgeInsets.only(bottom: 8, top: 10),
+      ),
+      title: title,
+      content: Text(
+        message,
+        style: const TextStyle(fontSize: 14),
+      ),
+      buttons: [
+        DialogButton(
+          radius: BorderRadius.circular(16),
+          child: Text(
+            firstButtonLabel,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          onPressed: firstButtonOnTap,
+          color: Constant.greenDark,
+        ),
+        DialogButton(
+          radius: BorderRadius.circular(16),
+          child: Text(
+            secondButtonLabel,
+            style: const TextStyle(
+              color: Constant.greenDark,
+            ),
+          ),
+          onPressed: secondButtonOnTap,
+          color: Colors.white,
+          border: Border.all(
+            width: 1,
+            color: Constant.greenDark,
+          ),
+        ),
+      ],
+    ).show();
+  }
 
   // ImageProvider _getImageProvider(String source) {
   //   if (source.startsWith('http')) {

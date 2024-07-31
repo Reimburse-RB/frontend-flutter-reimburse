@@ -1,7 +1,8 @@
 class Note {
   // cache key name in local storage
-  // authToken => auth-token
-  // role => role
+  // auth-token => token user
+  // role => role user
+  // is-admin-or-hrd => apakah admin?
 
   // NOTE: admin dan hrd menggunakan halaman yg sama, yg berbeda hanya data yang diterima/ akses
   List listRole = [

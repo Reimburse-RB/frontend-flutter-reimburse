@@ -67,6 +67,9 @@ class SignInView extends StatelessWidget {
                       placeholder: "Email",
                       hintText: "Masukkan email",
                       keyboardType: TextInputType.emailAddress,
+                      onChanged: (newValue) {
+                        viewModel.checkAllField();
+                      },
                     ),
                     const SizedBox(
                       height: 16,
@@ -79,10 +82,13 @@ class SignInView extends StatelessWidget {
                       isObsecure: viewModel.isObscured,
                       suffixIcon: InkWell(
                         onTap: () {
-                          viewModel.onChangeIsObscuredText();
+                          viewModel.changeIsObscuredText();
                         },
                         child: Icon(viewModel.isObscured ? Icons.visibility : Icons.visibility_off),
                       ),
+                      onChanged: (newValue) {
+                        viewModel.checkAllField();
+                      },
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -124,6 +130,7 @@ class SignInView extends StatelessWidget {
                         viewModel.submitSignIn();
                       },
                       text: 'Masuk',
+                      isButtonActive: viewModel.isReadyToSubmit,
                     ),
                     const SizedBox(height: 64),
                   ],

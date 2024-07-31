@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
@@ -16,6 +17,9 @@ class SplashScreenViewModel extends ChangeNotifier {
     Timer(duration, () {
       String token = localStorage.getItem('auth-token') ?? '';
       int? role = localStorage.getItem('role');
+      bool isAdmin = localStorage.getItem('is-admin-or-hrd') ?? false;
+
+      log('===> check auth \n===> token : $token\n===> role : $role\n===> isAdmin : $isAdmin');
 
       if (token.isNotEmpty) {
         if (role != null) {
@@ -23,6 +27,7 @@ class SplashScreenViewModel extends ChangeNotifier {
               ? SignInViewModel(context: context).navigateToEmployeeMainMenu()
               : (role == 2 || role == 3)
                   ? SignInViewModel(context: context).navigateToEmployeeMainMenu()
+                  // ? SignInViewModel(context: context).navigateToAdminMainMenu()
                   : Helper(context: context).showToast(
                       message: 'Role tidak valid',
                       isSuccess: false,

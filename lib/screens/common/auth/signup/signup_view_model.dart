@@ -1,12 +1,21 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:reimburse_rb/models/common/auth_response.dart';
 import 'package:reimburse_rb/models/common/role_data.dart';
+import 'package:reimburse_rb/screens/common/auth/signin/signin_view_model.dart';
+import 'package:reimburse_rb/utility/helper.dart';
+import 'package:reimburse_rb/utility/http_service.dart';
 
 class SignUpViewModel extends ChangeNotifier {
-  SignUpViewModel() {
-    // _selectedRole = listRole[0];
-  }
+  SignUpViewModel({
+    required this.context,
+  }) {}
+
+  final LocalStorage localStorage = LocalStorage('reimburse_rb');
+  HttpService http = HttpService();
+  late BuildContext context;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -28,6 +37,26 @@ class SignUpViewModel extends ChangeNotifier {
   bool _isPasswordMatch = true;
   bool get isPasswordMatch => _isPasswordMatch;
 
+  bool _isReadyToSubmit = false;
+  bool get isReadyToSubmit => _isReadyToSubmit;
+
+  // loading page
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  void startLoading() => _isLoading = true;
+  void stopLoading() => _isLoading = false;
+
+  void checkAllField() {
+    _isReadyToSubmit = nameController.text.isNotEmpty &&
+        emailController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        selectedRole != null &&
+        nikController.text.isNotEmpty &&
+        isPasswordMatch;
+
+    notifyListeners();
+  }
+
   void changeRole(RoleData newSelectedRole) {
     _selectedRole = newSelectedRole;
     notifyListeners();
@@ -38,12 +67,12 @@ class SignUpViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onChangeIsObscuredText1() {
+  void changeIsObscuredText1() {
     isObscured1 = !isObscured1;
     notifyListeners();
   }
 
-  void onChangeIsObscuredText2() {
+  void changeIsObscuredText2() {
     isObscured2 = !isObscured2;
     notifyListeners();
   }
@@ -52,13 +81,57 @@ class SignUpViewModel extends ChangeNotifier {
     Navigator.of(context).pop();
   }
 
-  Future submitRegister() {
+  Future submitSignUp() async {
     log('=== register form test name ${nameController.text}');
     log('=== register form test email ${emailController.text}');
     log('=== register form test nik ${nikController.text}');
     log('=== register form test pass ${passwordController.text}');
     log('=== register form test confirm pass ${confirmPasswordController.text}');
     log('=== register form test selectedroleid ${selectedRole?.roleId ?? 0}');
+
+    startLoading();
+    notifyListeners();
+
+    String endpoint = 'user/register';
+    Map body = {
+      'name': nameController.text,
+      'email': emailController.text,
+      'password': passwordController.text,
+      'role': selectedRole?.roleId,
+      'identity_number': nikController.text,
+    };
+
+    await http.post(endpoint: endpoint, body: body).then((res) {
+      SignUpResponse response = SignUpResponse.fromJson(res);
+      if (response.success) {
+        Helper(context: context).showToast(message: response.msg);
+        localStorage.setItem('auth-token', response.data?.token);
+        localStorage.setItem('role', response.data?.role);
+        localStorage.setItem(
+          'is-admin-or-hrd',
+          response.data?.role == 2 || response.data?.role == 3,
+        );
+
+        notifyListeners();
+
+        if (response.data?.role == 1) {
+          SignInViewModel(context: context).navigateToEmployeeMainMenu();
+        } else if (response.data?.role == 2 && response.data?.role == 3) {
+          SignInViewModel(context: context).navigateToAdminMainMenu();
+        }
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
     return Future.value(true);
   }
 }

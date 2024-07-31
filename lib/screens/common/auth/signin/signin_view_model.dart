@@ -10,15 +10,21 @@ import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
 class SignInViewModel extends ChangeNotifier {
+  SignInViewModel({
+    required this.context,
+  }) {}
+
   HttpService http = HttpService();
-
   final LocalStorage localStorage = LocalStorage('reimburse_rb');
-
   late BuildContext context;
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   bool isObscured = true;
+
+  bool _isReadyToSubmit = false;
+  bool get isReadyToSubmit => _isReadyToSubmit;
 
   // loading page
   bool _isLoading = false;
@@ -26,11 +32,13 @@ class SignInViewModel extends ChangeNotifier {
   void startLoading() => _isLoading = true;
   void stopLoading() => _isLoading = false;
 
-  SignInViewModel({
-    required this.context,
-  }) {}
+  void checkAllField() {
+    _isReadyToSubmit = emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
 
-  void onChangeIsObscuredText() {
+    notifyListeners();
+  }
+
+  void changeIsObscuredText() {
     isObscured = !isObscured;
     notifyListeners();
   }
@@ -79,6 +87,10 @@ class SignInViewModel extends ChangeNotifier {
         Helper(context: context).showToast(message: response.msg);
         localStorage.setItem('auth-token', response.token);
         localStorage.setItem('role', response.user?.role);
+        localStorage.setItem(
+          'is-admin-or-hrd',
+          response.user?.role == 2 || response.user?.role == 3,
+        );
 
         notifyListeners();
 
