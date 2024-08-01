@@ -4,6 +4,7 @@ import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/list_horizontal_menu.dart';
+import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 import 'package:reimburse_rb/widgets/employee/card_submission_summary.dart';
 import 'package:reimburse_rb/widgets/employee/list_submission.dart';
 import 'home_view_model.dart';
@@ -16,7 +17,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeViewModel>(
-      create: (_) => HomeViewModel(moveToAnotherTab: moveToAnotherTab),
+      create: (_) => HomeViewModel(
+        context: context,
+        moveToAnotherTab: moveToAnotherTab,
+      ),
       child: const HomeView(),
     );
   }
@@ -90,21 +94,24 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBarGeneral(
-          context: context,
-          isHasCustomLeading: false,
-          customImage: 'assets/apps_logo/logo-horizontal-white-reimburserb.png',
-        ),
-        body: ListView(
-          children: [
-            const SizedBox(height: 24),
-            buildSubmissionSummary(),
-            buildHorizontalMenu(viewModel),
-            buildActiveSubmissionList(viewModel),
-            const SizedBox(height: 24),
-          ],
+      child: LoadingFallback(
+        isLoading: viewModel.isLoading,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBarGeneral(
+            context: context,
+            isHasCustomLeading: false,
+            customImage: 'assets/apps_logo/logo-horizontal-white-reimburserb.png',
+          ),
+          body: ListView(
+            children: [
+              const SizedBox(height: 24),
+              buildSubmissionSummary(),
+              buildHorizontalMenu(viewModel),
+              buildActiveSubmissionList(viewModel),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );

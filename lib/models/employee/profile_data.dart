@@ -68,16 +68,6 @@ class FamilyMemberData {
   }
 }
 
-// class FamilyMemberOption {
-//   FamilyMemberOption({
-//     required this.familyStatusId,
-//     required this.familyStatusText,
-//   });
-
-//   late final int familyStatusId;
-//   late final String familyStatusText;
-// }
-
 class FamilyMemberOption {
   FamilyMemberOption({
     required this.familyStatusId,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/employee_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class CardSubmissionSummary extends StatefulWidget {
@@ -55,6 +57,7 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<EmployeeProvider>();
     return Card(
       elevation: 4,
       margin: EdgeInsets.zero,
@@ -68,28 +71,29 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
         ),
         child: Column(
           children: [
-            summaryDetail(
-              iconAsset: 'assets/status/icon-status-waiting.png',
-              detailTitle: 'Reimburse Menunggu Diproses',
-              detailValue: '1',
-            ),
-            const SizedBox(height: 8),
+            // summaryDetail(
+            //   iconAsset: 'assets/status/icon-status-waiting.png',
+            //   detailTitle: 'Reimburse Menunggu Diproses',
+            //   detailValue: '1',
+            // ),
+            // const SizedBox(height: 8),
+
             summaryDetail(
               iconAsset: 'assets/status/icon-status-process.png',
               detailTitle: 'Reimburse Diproses',
-              detailValue: '1',
+              detailValue: viewModel.employeeSummaryData?.onproceed.toString() ?? '0',
             ),
             const SizedBox(height: 8),
             summaryDetail(
               iconAsset: 'assets/status/icon-status-succeed.png',
               detailTitle: 'Reimburse Disetujui',
-              detailValue: '6',
+              detailValue: viewModel.employeeSummaryData?.accepted.toString() ?? '0',
             ),
             const SizedBox(height: 8),
             summaryDetail(
               iconAsset: 'assets/status/icon-status-failed.png',
               detailTitle: 'Reimburse Ditolak',
-              detailValue: '2',
+              detailValue: viewModel.employeeSummaryData?.rejected.toString() ?? '0',
             ),
             const SizedBox(height: 8),
             summaryDetail(
@@ -100,7 +104,8 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
                 color: Constant.limitColor,
               ),
               detailTitle: 'Total Tahun Ini',
-              detailValue: 'Rp 1.500.000,00',
+              detailValue: viewModel.formatCurrency(
+                  viewModel.employeeSummaryData?.total_reimburse_this_year.toDouble() ?? 0),
             ),
             const SizedBox(height: 8),
             Container(

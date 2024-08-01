@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/models/common/term_condition_data.dart';
+import 'package:reimburse_rb/models/common/term_condition_response.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
+import 'package:reimburse_rb/widgets/common/bottom_appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
+import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
+import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 
 class TermConditionScreen extends StatelessWidget {
   const TermConditionScreen({super.key});
@@ -27,10 +30,10 @@ class TermConditionView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: ListView.builder(
-        itemCount: viewModel.termConditionList.length,
+        itemCount: viewModel.termConditionCategoryList.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          TermConditionData termCategory = viewModel.termConditionList[index];
+          TermConditionCategoryData termCategory = viewModel.termConditionCategoryList[index];
           return Column(
             key: ValueKey(termCategory.title),
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,9 +45,9 @@ class TermConditionView extends StatelessWidget {
               const SizedBox(height: 16),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: termCategory.listTnc.length,
+                itemCount: termCategory.list_tnc.length,
                 itemBuilder: (context, index) {
-                  String term = termCategory.listTnc[index];
+                  String term = termCategory.list_tnc[index].tnc;
                   return Container(
                     key: ValueKey(term),
                     margin: const EdgeInsets.only(bottom: 8),
@@ -76,11 +79,12 @@ class TermConditionView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: ListView.builder(
-        itemCount: viewModel.termConditionList.length,
+        itemCount: viewModel.termConditionCategoryList.length,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, categoryIndex) {
-          TermConditionData termCategory = viewModel.termConditionList[categoryIndex];
+          TermConditionCategoryData termCategory =
+              viewModel.termConditionCategoryList[categoryIndex];
           return Column(
             key: ValueKey(termCategory.title),
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,9 +97,9 @@ class TermConditionView extends StatelessWidget {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: termCategory.listTnc.length,
+                itemCount: termCategory.list_tnc.length,
                 itemBuilder: (context, conditionIndex) {
-                  String term = termCategory.listTnc[conditionIndex];
+                  String term = termCategory.list_tnc[conditionIndex].tnc;
                   return Container(
                     key: ValueKey(term),
                     margin: const EdgeInsets.only(bottom: 12),
@@ -135,13 +139,13 @@ class TermConditionView extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               ButtonGeneral(
                 onTap: () {
                   viewModel.addCondition(categoryIndex: categoryIndex, condition: '');
                 },
                 isWhiteButton: true,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.add_rounded,
                   color: Constant.green,
                 ),
@@ -164,27 +168,54 @@ class TermConditionView extends StatelessWidget {
         context: context,
         title: 'Syarat & Ketentuan',
       ),
-      floatingActionButton: SizedBox(
-        height: 64.0,
-        width: 64.0,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {
-              viewModel.setChangeIsEditingValue();
-            },
-            child: const Icon(Icons.edit),
-            backgroundColor: Constant.green,
-            elevation: 8.0,
-          ),
+      bottomNavigationBar: (viewModel.isEditing)
+          ? BottomAppBarGeneral(
+              child: Row(
+                children: [
+                  Flexible(
+                    child: ButtonGeneral(
+                      onTap: () {
+                        viewModel.cancelEdit();
+                      },
+                      text: 'Batalkan',
+                      isWhiteButton: true,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: ButtonGeneral(
+                      onTap: () {
+                        viewModel.postEditTnc();
+                      },
+                      text: 'Simpan',
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
+      floatingActionButton: (!viewModel.isEditing)
+          ? FloatingActionButtonGeneral(
+              onPressed: () {
+                viewModel.setChangeIsEditingValue();
+              },
+              icon: const Icon(
+                Icons.edit_rounded,
+                size: 32,
+              ),
+            )
+          : null,
+      body: LoadingFallback(
+        isLoading: viewModel.isLoading,
+        child: ListView(
+          children: [
+            const SizedBox(height: 24),
+            viewModel.isEditing
+                ? buildEditingTermConditionCategory(viewModel)
+                : buildTermConditionCategory(viewModel),
+            const SizedBox(height: 32),
+          ],
         ),
-      ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 24),
-          viewModel.isEditing
-              ? buildEditingTermConditionCategory(viewModel)
-              : buildTermConditionCategory(viewModel),
-        ],
       ),
     );
   }

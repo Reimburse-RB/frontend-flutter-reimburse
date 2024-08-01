@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
@@ -10,11 +11,9 @@ class CardSubmissionEmployee extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel =
-        Provider.of<SubmissionHomeViewModel>(context, listen: false);
     return InkWell(
       onTap: () {
-        viewModel.navigateToDetailReimbursement(context: context);
+        context.read<NavigationProvider>().navigateToDetailReimbursement(context: context);
       },
       child: Card(
         elevation: 4.0,

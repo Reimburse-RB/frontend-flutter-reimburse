@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/employee_provider.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/splash_screen/splash_screen_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/theme.dart';
 
 void main() {
-  // runApp(const MyApp());
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
         create: (context) => ThemeNotifier(),
       ),
       ChangeNotifierProvider(
-        create: (context) => SubmissionHomeViewModel(),
+        create: (context) => EmployeeProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => NavigationProvider(),
       ),
     ],
     child: const MyApp(),

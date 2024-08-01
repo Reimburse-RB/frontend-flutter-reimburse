@@ -1,13 +1,34 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
+import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
+import 'package:reimburse_rb/provider/employee_provider.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_period_view.dart';
+import 'package:reimburse_rb/utility/helper.dart';
+import 'package:reimburse_rb/utility/http_service.dart';
 
 class HomeViewModel extends ChangeNotifier {
+  HomeViewModel({
+    required this.context,
+    this.moveToAnotherTab,
+  }) {
+    getEmployeeSummary();
+  }
+
   final Function(int)? moveToAnotherTab;
 
-  HomeViewModel({this.moveToAnotherTab});
+  HttpService http = HttpService();
+  late BuildContext context;
+
+  // loading page
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  void startLoading() => _isLoading = true;
+  void stopLoading() => _isLoading = false;
 
   List<MenuCategoryData> listMenuCategory = [
     MenuCategoryData(
@@ -60,5 +81,34 @@ class HomeViewModel extends ChangeNotifier {
       context,
       CupertinoPageRoute(builder: (context) => page),
     );
+  }
+
+  Future getEmployeeSummary() async {
+    startLoading();
+    notifyListeners();
+
+    String endpoint = 'reimburse/get-summary-reimburse';
+
+    await http.post(endpoint: endpoint).then((res) {
+      EmployeeSummaryResponse response = EmployeeSummaryResponse.fromJson(res);
+      if (response.success) {
+        final provider = context.read<EmployeeProvider>();
+        provider.setEmployeeSummaryData(response.data);
+
+        notifyListeners();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
+    return Future.value(true);
   }
 }
