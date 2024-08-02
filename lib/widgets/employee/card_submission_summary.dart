@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/provider/employee_provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 
 class CardSubmissionSummary extends StatefulWidget {
   const CardSubmissionSummary({
@@ -57,7 +58,7 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<EmployeeProvider>();
+    final viewModel = context.watch<UserProvider>();
     return Card(
       elevation: 4,
       margin: EdgeInsets.zero,
@@ -104,7 +105,7 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
                 color: Constant.limitColor,
               ),
               detailTitle: 'Total Tahun Ini',
-              detailValue: viewModel.formatCurrency(
+              detailValue: Helper(context: context).formatCurrency(
                   viewModel.employeeSummaryData?.total_reimburse_this_year.toDouble() ?? 0),
             ),
             const SizedBox(height: 8),

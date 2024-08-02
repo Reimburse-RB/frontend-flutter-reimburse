@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
+import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/list_horizontal_menu.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 import 'package:reimburse_rb/widgets/employee/card_submission_summary.dart';
@@ -109,6 +110,7 @@ class HomeView extends StatelessWidget {
               buildSubmissionSummary(),
               buildHorizontalMenu(viewModel),
               buildActiveSubmissionList(viewModel),
+              EmptyStateGeneral(),
               const SizedBox(height: 24),
             ],
           ),

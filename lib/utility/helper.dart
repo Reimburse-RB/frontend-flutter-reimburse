@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:reimburse_rb/models/common/modal_data.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -131,6 +133,26 @@ class Helper {
   //   );
   // }
 
+  Future<bool> handleWillPop(BuildContext context, bool isEditing) async {
+    if (isEditing) {
+      await Helper(context: context).alertClose(
+        title: 'Konfirmasi',
+        message: 'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
+        context: context,
+        firstButtonOnTap: () {
+          Navigator.pop(context);
+        },
+        secondButtonOnTap: () {
+          Navigator.pop(context);
+        },
+      );
+      return false; // return false if alertClose is shown
+    } else {
+      Navigator.pop(context);
+      return true; // return true if not editing
+    }
+  }
+
   alertClose({
     required String title,
     required String message,
@@ -156,7 +178,7 @@ class Helper {
       ),
       buttons: [
         DialogButton(
-          radius: BorderRadius.circular(16),
+          radius: BorderRadius.circular(20),
           child: Text(
             firstButtonLabel,
             style: const TextStyle(
@@ -164,21 +186,21 @@ class Helper {
             ),
           ),
           onPressed: firstButtonOnTap,
-          color: Constant.greenDark,
+          color: Constant.green,
         ),
         DialogButton(
-          radius: BorderRadius.circular(16),
+          radius: BorderRadius.circular(20),
           child: Text(
             secondButtonLabel,
             style: const TextStyle(
-              color: Constant.greenDark,
+              color: Constant.green,
             ),
           ),
           onPressed: secondButtonOnTap,
           color: Colors.white,
           border: Border.all(
             width: 1,
-            color: Constant.greenDark,
+            color: Constant.green,
           ),
         ),
       ],
@@ -192,4 +214,83 @@ class Helper {
   //     return MemoryImage(base64Decode(source));
   //   }
   // }
+
+  String formatCurrency(double amount) {
+    final formatCurrency = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ');
+    return formatCurrency.format(amount);
+  }
+
+  void showModalReimbursement({
+    required BuildContext context,
+    required String title,
+    required List<ModalRegularData> listOptions,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 32),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight:
+                  MediaQuery.of(context).size.height * 0.8, // max height 80% of screen height
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: listOptions.length,
+                    itemBuilder: (context, index) {
+                      final option = listOptions[index];
+                      return GestureDetector(
+                        onTap: option.onTap,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            option.text,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

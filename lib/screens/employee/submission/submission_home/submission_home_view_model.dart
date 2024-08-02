@@ -1,9 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view.dart';
+import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/common/modal_data.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 
 class SubmissionHomeViewModel extends ChangeNotifier {
-  SubmissionHomeViewModel() {}
+  SubmissionHomeViewModel({
+    required this.context,
+  }) {
+    modalOptionList = [
+      ModalRegularData(
+        text: 'Reimburse Kesehatan',
+        onTap: () {
+          context.read<NavigationProvider>().navigateToFormReimbursement(context: context);
+        },
+      ),
+      ModalRegularData(
+        text: 'Reimburse Transportasi',
+        onTap: () {
+          context.read<NavigationProvider>().navigateToFormReimbursement(context: context);
+        },
+      ),
+    ];
+  }
+
+  BuildContext context;
+
+  String modalTitle = 'Jenis Pengajuan';
+  List<ModalRegularData> modalOptionList = [];
 
   List listStatusTab = [
     'Semua',
@@ -26,10 +50,4 @@ class SubmissionHomeViewModel extends ChangeNotifier {
   ];
 
   onTapTab() {}
-
-  void navigateToDetailReimbursement({required BuildContext context}) {
-    Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) => const DetailReimbursementScreen(),
-    ));
-  }
 }

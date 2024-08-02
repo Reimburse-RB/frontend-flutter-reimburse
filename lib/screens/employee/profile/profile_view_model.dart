@@ -3,21 +3,26 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:reimburse_rb/models/employee/profile_data.dart';
+import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/common/profile_response.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
+import 'package:reimburse_rb/utility/helper.dart';
+import 'package:reimburse_rb/utility/http_service.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   ProfileViewModel({
     required this.context,
     this.isProfileDetail = false,
   }) {
+    final provider = context.read<UserProvider>();
+    _isAdmin = provider.isAdmin;
+
     getProfile();
-    if (isProfileDetail) {
-      setProfileFormData();
-    }
   }
+  HttpService http = HttpService();
   final LocalStorage localStorage = LocalStorage('reimburse_rb');
 
   BuildContext context;
@@ -29,11 +34,22 @@ class ProfileViewModel extends ChangeNotifier {
   bool _isAdmin = false;
   bool get isAdmin => _isAdmin;
 
-  late ProfileData _profile;
-  ProfileData get profile => _profile;
+  ProfileData? _profile;
+  ProfileData? get profile => _profile;
 
+  // loading page
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  void startLoading() => _isLoading = true;
+  void stopLoading() => _isLoading = false;
+
+  // edit profile
   Map _bodyEditProfile = {};
   Map get bodyEditProfile => _bodyEditProfile;
+  List _listEditFamilyMemberData = [];
+  List get listEditFamilyMemberData => _listEditFamilyMemberData;
+  String? _newImageBase64;
+  String? get newImageBase64 => _newImageBase64;
 
   // late ProfileData _backupOriginalProfile;
   // ProfileData get backupOriginalProfile => _backupOriginalProfile;
@@ -42,72 +58,89 @@ class ProfileViewModel extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   TextEditingController nikController = TextEditingController();
 
-  List<FamilyMemberOption> listFamilyStatusOption = [
-    FamilyMemberOption(familyStatusId: 1, familyStatusText: 'Diri Sendiri'),
-    FamilyMemberOption(familyStatusId: 2, familyStatusText: 'Suami'),
-    FamilyMemberOption(familyStatusId: 3, familyStatusText: 'Istri'),
-    FamilyMemberOption(familyStatusId: 4, familyStatusText: 'Anak'),
-  ];
-
-  // List listFamilyStatusOption = [
-  //   {
-  //     'family_status_id': 1,
-  //     'family_status_text': 'Diri sendiri',
-  //   },
-  //   {
-  //     'family_status_id': 2,
-  //     'family_status_text': 'Suami',
-  //   },
-  //   {
-  //     'family_status_id': 3,
-  //     'family_status_text': 'Istri',
-  //   },
-  //   {
-  //     'family_status_id': 4,
-  //     'family_status_text': 'Anak',
-  //   },
+  // List<FamilyMemberOption> listFamilyStatusOption = [
+  //   FamilyMemberOption(family_status_id: 1, family_status_text: "Diri Sendiri"),
+  //   FamilyMemberOption(family_status_id: 2, family_status_text: "Suami"),
+  //   FamilyMemberOption(family_status_id: 3, family_status_text: "Istri"),
+  //   FamilyMemberOption(family_status_id: 4, family_status_text: "Anak"),
   // ];
 
-  Map<String, dynamic> tempProfile = {
-    'name': 'Yudha Haryoputranto',
-    'email': 'yudhah52@gmail.com',
-    'nik': '2010511068',
-    'img_url':
-        'https://media.licdn.com/dms/image/C5603AQFOfZiG507GCg/profile-displayphoto-shrink_800_800/0/1644315854486?e=1725494400&v=beta&t=AEKapy2te-iNY6J4Qz4NpHgllXpQdQVWV26YBBOAaWM',
-    'role_id': 1,
-    'role_text': 'Karyawan',
-    'family_member_data': [
-      {
-        'family_status_id': 1,
-        'family_status_text': 'Diri Sendiri',
-        'name': 'Yudha Haryoputranto',
-      },
-      {
-        'family_status_id': 3,
-        'family_status_text': 'Istri',
-        'name': 'Freya Jayawardana',
-      },
-      {
-        'family_status_id': 4,
-        'family_status_text': 'Anak',
-        'name': 'Yhezra',
-      },
-    ]
-  };
+  List<Map<String, dynamic>> listFamilyStatusOptionMap = [
+    {'id': 1, 'text': 'Diri Sendiri'},
+    {'id': 2, 'text': 'Suami'},
+    {'id': 3, 'text': 'Istri'},
+    {'id': 4, 'text': 'Anak'},
+  ];
 
-  Future getProfile() {
-    _profile = ProfileData.fromJson(tempProfile);
-    _isAdmin = _profile.roleId != 1;
-
+  Future getProfile() async {
+    startLoading();
     notifyListeners();
 
+    String endpoint = 'user/get-profile';
+
+    await http.post(endpoint: endpoint).then((res) {
+      ProfileResponse response = ProfileResponse.fromJson(res);
+      if (response.success) {
+        final provider = context.read<UserProvider>();
+        provider.setProfileData(response.data);
+
+        _profile = response.data;
+
+        if (isProfileDetail) {
+          setProfileFormData();
+          _listEditFamilyMemberData = res['data']['family_member_data'];
+        }
+
+        notifyListeners();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
+    return Future.value(true);
+  }
+
+  Future postEditProfile() async {
+    startLoading();
+    notifyListeners();
+
+    String endpoint = 'user/edit-profile';
+    Map body = bodyEditProfile;
+
+    await http.post(endpoint: endpoint, body: body).then((res) {
+      EditProfileResponse response = EditProfileResponse.fromJson(res);
+      if (response.success) {
+        _isEditing = false;
+        Helper(context: context).showToast(message: response.msg, isSuccess: true);
+        getProfile();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
     return Future.value(true);
   }
 
   Future setProfileFormData() {
-    nameController.text = profile.name;
-    emailController.text = profile.email;
-    nikController.text = profile.nik;
+    nameController.text = profile?.name ?? '';
+    emailController.text = profile?.email ?? '';
+    nikController.text = profile?.nik ?? '';
     notifyListeners();
 
     return Future.value(true);
@@ -115,7 +148,8 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future startEdit() {
     _isEditing = true;
-    // _backupOriginalProfile = profile;
+    setInitialBodyEditProfile();
+
     notifyListeners();
 
     return Future.value(true);
@@ -123,33 +157,35 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future cancelEdit() {
     _isEditing = false;
-    // _profile = backupOriginalProfile;
+    getProfile();
+
+    notifyListeners();
+
+    return Future.value(true);
+  }
+
+  Future setInitialBodyEditProfile() {
+    _bodyEditProfile['identity_number'] = profile?.nik;
+    _bodyEditProfile['name'] = profile?.name;
+    _bodyEditProfile['email'] = profile?.email;
+    _bodyEditProfile['family_member_data'] = listEditFamilyMemberData;
+
+    log('===> initial body edit profile ${bodyEditProfile}');
     notifyListeners();
 
     return Future.value(true);
   }
 
   Future saveEdit() {
-    _isEditing = false;
-    _bodyEditProfile['nik'] = profile.nik;
+    _bodyEditProfile['name'] = nameController.text;
+    _bodyEditProfile['identity_number'] = nikController.text;
+    _bodyEditProfile['email'] = emailController.text;
+    _bodyEditProfile['image'] = newImageBase64;
+    _bodyEditProfile['family_member_data'] = listEditFamilyMemberData;
 
-    // post data profile
-    notifyListeners();
+    log('===> save body edit profile ${bodyEditProfile}');
 
-    return Future.value(true);
-  }
-
-  Future changeUserFullName({required String newFullName}) {
-    // _profile.name = newFullName;
-    _bodyEditProfile['name'] = newFullName;
-    notifyListeners();
-
-    return Future.value(true);
-  }
-
-  Future changeUserEmail({required String newEmail}) {
-    // _profile.email = newEmail;
-    _bodyEditProfile['email'] = newEmail;
+    postEditProfile();
 
     notifyListeners();
 
@@ -157,12 +193,20 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future addFamilyMember() {
-    _profile.listFamilyMember.add(
+    _profile?.family_member_data.add(
       FamilyMemberData(
-        familyStatusId: 4,
-        familyStatusText: 'Anak',
+        family_status_id: 4,
+        family_status_text: 'Anak',
         name: 'Member Baru',
       ),
+    );
+    _listEditFamilyMemberData.add(
+      {
+        'id': null,
+        'family_status_id': '4',
+        'family_status_text': 'Anak',
+        'name': 'Member Baru',
+      },
     );
     notifyListeners();
 
@@ -170,7 +214,8 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future removeFamilyMember({required int index}) {
-    _profile.listFamilyMember.removeAt(index);
+    _profile?.family_member_data.removeAt(index);
+    _listEditFamilyMemberData.removeAt(index);
     notifyListeners();
 
     return Future.value(true);
@@ -180,8 +225,7 @@ class ProfileViewModel extends ChangeNotifier {
     required int index,
     required String newName,
   }) {
-    _profile.listFamilyMember[index].name = newName;
-
+    listEditFamilyMemberData[index]['name'] = newName;
     notifyListeners();
 
     return Future.value(true);
@@ -189,17 +233,19 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future changeFamilyStatus({
     required int index,
-    required FamilyMemberOption newStatus,
+    required Map<String, dynamic> newStatus,
   }) {
-    _profile.listFamilyMember[index].familyStatusId = newStatus.familyStatusId;
-    _profile.listFamilyMember[index].familyStatusText = newStatus.familyStatusText;
+    log('===> change body family status profile $index ${newStatus}');
+
+    listEditFamilyMemberData[index]['family_status_id'] = newStatus['id'].toString();
     notifyListeners();
 
     return Future.value(true);
   }
 
   void navigateToProfileDetail() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => const ProfileDetailSceen()));
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => const ProfileDetailSceen()))
+        .then((value) => getProfile());
   }
 
   void navigateToForgotPasswordScreen() {

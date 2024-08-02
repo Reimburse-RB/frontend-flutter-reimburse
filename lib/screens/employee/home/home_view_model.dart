@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
-import 'package:reimburse_rb/provider/employee_provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_period_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -92,7 +92,7 @@ class HomeViewModel extends ChangeNotifier {
     await http.post(endpoint: endpoint).then((res) {
       EmployeeSummaryResponse response = EmployeeSummaryResponse.fromJson(res);
       if (response.success) {
-        final provider = context.read<EmployeeProvider>();
+        final provider = context.read<UserProvider>();
         provider.setEmployeeSummaryData(response.data);
 
         notifyListeners();

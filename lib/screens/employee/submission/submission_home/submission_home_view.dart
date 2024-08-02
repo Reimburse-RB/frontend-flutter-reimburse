@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/employee/list_submission.dart';
@@ -13,7 +14,7 @@ class SubmissionHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SubmissionHomeViewModel>(
-      create: (_) => SubmissionHomeViewModel(),
+      create: (_) => SubmissionHomeViewModel(context: context),
       child: const SubmissionHomeView(),
     );
   }
@@ -71,7 +72,13 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
         ),
       ),
       floatingActionButton: FloatingActionButtonGeneral(
-        onPressed: () {},
+        onPressed: () {
+          Helper(context: context).showModalReimbursement(
+            context: context,
+            title: viewModel.modalTitle,
+            listOptions: viewModel.modalOptionList,
+          );
+        },
       ),
       body: ListView(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),

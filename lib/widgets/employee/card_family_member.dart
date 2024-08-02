@@ -1,16 +1,17 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/models/employee/profile_data.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/widgets/common/form_dropdown_map.dart';
+import 'package:reimburse_rb/widgets/common/form_field_text.dart';
 
 class CardFamilyMember extends StatelessWidget {
   final ProfileViewModel viewModel;
   final int memberIndex;
-  final FamilyMemberOption? status;
+  final Map<String, dynamic>? status;
   final String name;
-  final List<FamilyMemberOption> listStatusOption;
+  final List<Map<String, dynamic>> listStatusOption;
   final bool isActiveDeleteButton;
 
   const CardFamilyMember({
@@ -64,34 +65,16 @@ class CardFamilyMember extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            DropdownButtonFormField<FamilyMemberOption>(
-              borderRadius: BorderRadius.circular(24),
+            FormDropdownMap(
+              hintText: 'Pilih Status Keluarga',
+              items: listStatusOption,
               value: status,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                hintText: 'Pilih Status Keluarga',
-              ),
-              focusColor: Constant.greenDark,
-              dropdownColor: Constant.greenMoreVeryLight,
-              icon: const Icon(
-                Icons.arrow_drop_down_rounded,
-                color: Constant.green,
-              ),
-              items: listStatusOption.map((FamilyMemberOption option) {
-                return DropdownMenuItem<FamilyMemberOption>(
-                  value: option,
-                  child: Text(option.familyStatusText),
-                );
-              }).toList(),
               onChanged: (viewModel.isEditing)
                   ? (newValue) {
                       if (newValue != null) {
                         viewModel.changeFamilyStatus(index: memberIndex, newStatus: newValue);
+                        log('current status $newValue ${newValue['id']}${newValue['text']}');
                       }
-                      log('current status $newValue ${newValue?.familyStatusId}${newValue?.familyStatusText}');
                     }
                   : null,
             ),
@@ -105,17 +88,10 @@ class CardFamilyMember extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            TextFormField(
+            FormFieldText(
+              hintText: 'Masukkan Nama',
+              isEnabled: viewModel.isEditing,
               initialValue: name,
-              enabled: viewModel.isEditing,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusColor: Constant.greenDark,
-                hintText: 'Masukkan Nama',
-              ),
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   viewModel.changeFamilyName(index: memberIndex, newName: newValue);

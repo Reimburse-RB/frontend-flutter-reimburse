@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/onboarding/onboarding_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view_model.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -19,13 +21,16 @@ class SplashScreenViewModel extends ChangeNotifier {
       int? role = localStorage.getItem('role');
       bool isAdmin = localStorage.getItem('is-admin-or-hrd') ?? false;
 
+      final provider = context.read<UserProvider>();
+      provider.setIsAdmin(isAdmin);
+
       log('===> check auth \n===> token : $token\n===> role : $role\n===> isAdmin : $isAdmin');
 
       if (token.isNotEmpty) {
         if (role != null) {
-          (role == 1)
+          (role == 1) // Karyawan
               ? SignInViewModel(context: context).navigateToEmployeeMainMenu()
-              : (role == 2 || role == 3)
+              : (role == 2 || role == 3) // Admin & HRD
                   ? SignInViewModel(context: context).navigateToEmployeeMainMenu()
                   // ? SignInViewModel(context: context).navigateToAdminMainMenu()
                   : Helper(context: context).showToast(

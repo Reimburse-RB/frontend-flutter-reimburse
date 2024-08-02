@@ -67,24 +67,3 @@ class FamilyMemberData {
     return data;
   }
 }
-
-class FamilyMemberOption {
-  FamilyMemberOption({
-    required this.familyStatusId,
-    required this.familyStatusText,
-  });
-
-  final int familyStatusId;
-  final String familyStatusText;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is FamilyMemberOption &&
-          runtimeType == other.runtimeType &&
-          familyStatusId == other.familyStatusId &&
-          familyStatusText == other.familyStatusText;
-
-  @override
-  int get hashCode => familyStatusId.hashCode ^ familyStatusText.hashCode;
-}

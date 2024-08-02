@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class CardReceiptImage extends StatelessWidget {
@@ -32,8 +33,16 @@ class CardReceiptImage extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: imageUrl,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
+                  placeholder: (context, url) => Center(
+                    child: SpinKitWaveSpinner(
+                      color: Constant.greenDark,
+                      duration: Duration(
+                        milliseconds: 2000,
+                      ),
+                      curve: Curves.linear,
+                      waveColor: Constant.greenMedium,
+                    ),
+                  ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
