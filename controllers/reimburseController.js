@@ -520,4 +520,36 @@ module.exports = {
       return res.json({ msg: e.message });
     }
   },
+
+  getListPurpose: async (req, res) => {
+    const user = req.userAuth;
+
+    try {
+      const allPurpose = allStatus.purposeId;
+
+      return res.json({
+        success: true,
+        msg: "success getting data",
+        data: allPurpose,
+      });
+    } catch (e) {
+      return res.json({ msg: e.message });
+    }
+  },
+
+  getListDetailTitle: async (req, res) => {
+    const user = req.userAuth;
+
+    try {
+      const allTitle = allStatus.titleId;
+
+      return res.json({
+        success: true,
+        msg: "success getting data",
+        data: allTitle,
+      });
+    } catch (e) {
+      return res.json({ msg: e.message });
+    }
+  },
 };

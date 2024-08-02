@@ -33,6 +33,18 @@ router.post(
 );
 
 router.post(
+  "/get-list-purpose-option",
+  authLogin,
+  reimburseController.getListPurpose
+);
+
+router.post(
+  "/get-list-detail-title-option",
+  authLogin,
+  reimburseController.getListDetailTitle
+);
+
+router.post(
   "/change-status-reimburse",
   authLogin,
   reimburseController.changeStatusReimburse
