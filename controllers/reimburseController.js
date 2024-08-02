@@ -72,6 +72,7 @@ module.exports = {
           );
 
           const dataCard = {
+            id: item.id,
             typeReimburse: cat ? cat.category_reimbursement_text : "",
             status:
               item.status == 1
