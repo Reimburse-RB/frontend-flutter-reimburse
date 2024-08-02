@@ -389,7 +389,7 @@ module.exports = {
           for (let i = 0; i < req.fileName.length; i++) {
             const imageSave = await ImageReimburse.create({
               reimburse_id: reimburse.id,
-              image: `images/${req.fileName[i]}`,
+              image: `images/upload/${req.fileName[i]}`,
             });
           }
         }

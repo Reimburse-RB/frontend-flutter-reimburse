@@ -137,9 +137,9 @@ module.exports = {
           user.image_url == null ||
           user.image_url == ""
         ) {
-          user.image_url = `images/${req.fileName}`;
+          user.image_url = `images/upload/${req.fileName}`;
         } else {
-          await fs.unlink(path.join(`public/images/${user.imageUrl}`));
+          await fs.unlink(path.join(`public/images/upload/${user.imageUrl}`));
           user.image_url = `images/${req.fileName}`;
         }
       }
