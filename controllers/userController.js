@@ -133,14 +133,14 @@ module.exports = {
 
       if (req.fileName !== undefined) {
         if (
-          user.imageUrl == undefined ||
-          user.imageUrl == null ||
-          user.imageUrl == ""
+          user.image_url == undefined ||
+          user.image_url == null ||
+          user.image_url == ""
         ) {
-          user.imageUrl = `images/${req.fileName}`;
+          user.image_url = `images/${req.fileName}`;
         } else {
           await fs.unlink(path.join(`public/images/${user.imageUrl}`));
-          user.imageUrl = `images/${req.fileName}`;
+          user.image_url = `images/${req.fileName}`;
         }
       }
 
