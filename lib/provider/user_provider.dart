@@ -10,7 +10,11 @@ class UserProvider extends ChangeNotifier {
 
   ProfileData? _profileData;
   ProfileData? get profileData => _profileData;
-  void setProfileData(ProfileData? value) => _profileData = value;
+  void setProfileData(ProfileData? value) {
+    _profileData = value;
+    notifyListeners();
+  }
+
   void clearProfileData() => _profileData = null;
 
   EmployeeSummaryData? _employeeSummaryData;
