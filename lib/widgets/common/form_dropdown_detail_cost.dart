@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
-class FormDropdownPurpose extends StatelessWidget {
-  final PurposeOptionData? value;
+class FormDropdownDetailCost extends StatelessWidget {
+  final DetailCostOptionData? value;
   final String hintText;
-  final List<PurposeOptionData> items;
+  final List<DetailCostOptionData> items;
   final String placeholder;
-  final Function(PurposeOptionData?)? onChanged;
+  final Function(DetailCostOptionData?)? onChanged;
 
-  const FormDropdownPurpose({
+  const FormDropdownDetailCost({
     Key? key,
     this.value,
     required this.hintText,
@@ -32,7 +32,7 @@ class FormDropdownPurpose extends StatelessWidget {
               style: Constant.mainTitleStyle,
             ),
           ),
-        DropdownButtonFormField<PurposeOptionData>(
+        DropdownButtonFormField<DetailCostOptionData>(
           borderRadius: BorderRadius.circular(24),
           value: value,
           decoration: InputDecoration(
@@ -70,10 +70,10 @@ class FormDropdownPurpose extends StatelessWidget {
           ),
           items: items.map((option) {
             bool isSelected = value != null && value == option;
-            return DropdownMenuItem<PurposeOptionData>(
+            return DropdownMenuItem<DetailCostOptionData>(
               value: option,
               child: Text(
-                option.purpose_text ?? '',
+                option.detail_title_text ?? '',
                 style: isSelected
                     ? Constant.selectedDropdownItemStyle
                     : Constant.unselectedDropdownItemStyle,

@@ -44,34 +44,35 @@ class PurposeOptionData {
 }
 
 @JsonSerializable()
-class DetailOptionResponse {
+class DetailCostOptionResponse {
   final bool success;
   final String msg;
-  List<DetailOptionData> data;
+  List<DetailCostOptionData> data;
 
-  DetailOptionResponse({
+  DetailCostOptionResponse({
     this.success = false,
     this.msg = '',
     this.data = const [],
   });
 
-  factory DetailOptionResponse.fromJson(Map<String, dynamic> json) =>
-      _$DetailOptionResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$DetailOptionResponseToJson(this);
+  factory DetailCostOptionResponse.fromJson(Map<String, dynamic> json) =>
+      _$DetailCostOptionResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$DetailCostOptionResponseToJson(this);
 }
 
 @JsonSerializable()
-class DetailOptionData {
+class DetailCostOptionData {
   final int? detail_title_id;
   final String? detail_title_text;
 
-  DetailOptionData({
+  DetailCostOptionData({
     this.detail_title_id,
     this.detail_title_text,
   });
 
-  factory DetailOptionData.fromJson(Map<String, dynamic> json) => _$DetailOptionDataFromJson(json);
-  Map<String, dynamic> toJson() => _$DetailOptionDataToJson(this);
+  factory DetailCostOptionData.fromJson(Map<String, dynamic> json) =>
+      _$DetailCostOptionDataFromJson(json);
+  Map<String, dynamic> toJson() => _$DetailCostOptionDataToJson(this);
 }
 
 @JsonSerializable()

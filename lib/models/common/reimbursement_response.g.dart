@@ -38,32 +38,35 @@ Map<String, dynamic> _$PurposeOptionDataToJson(PurposeOptionData instance) =>
       'purpose_text': instance.purpose_text,
     };
 
-DetailOptionResponse _$DetailOptionResponseFromJson(
+DetailCostOptionResponse _$DetailCostOptionResponseFromJson(
         Map<String, dynamic> json) =>
-    DetailOptionResponse(
+    DetailCostOptionResponse(
       success: json['success'] as bool? ?? false,
       msg: json['msg'] as String? ?? '',
       data: (json['data'] as List<dynamic>?)
-              ?.map((e) => DetailOptionData.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  DetailCostOptionData.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
 
-Map<String, dynamic> _$DetailOptionResponseToJson(
-        DetailOptionResponse instance) =>
+Map<String, dynamic> _$DetailCostOptionResponseToJson(
+        DetailCostOptionResponse instance) =>
     <String, dynamic>{
       'success': instance.success,
       'msg': instance.msg,
       'data': instance.data,
     };
 
-DetailOptionData _$DetailOptionDataFromJson(Map<String, dynamic> json) =>
-    DetailOptionData(
+DetailCostOptionData _$DetailCostOptionDataFromJson(
+        Map<String, dynamic> json) =>
+    DetailCostOptionData(
       detail_title_id: (json['detail_title_id'] as num?)?.toInt(),
       detail_title_text: json['detail_title_text'] as String?,
     );
 
-Map<String, dynamic> _$DetailOptionDataToJson(DetailOptionData instance) =>
+Map<String, dynamic> _$DetailCostOptionDataToJson(
+        DetailCostOptionData instance) =>
     <String, dynamic>{
       'detail_title_id': instance.detail_title_id,
       'detail_title_text': instance.detail_title_text,

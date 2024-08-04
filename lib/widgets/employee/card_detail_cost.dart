@@ -1,31 +1,28 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
+import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
+import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
-import 'package:reimburse_rb/widgets/common/form_dropdown_map.dart';
+import 'package:reimburse_rb/widgets/common/form_dropdown_detail_cost.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
 
-class CardFamilyMember extends StatelessWidget {
-  final ProfileViewModel viewModel;
-  final int memberIndex;
+class CardDetailCost extends StatelessWidget {
+  final SubmissionFormViewModel viewModel;
+  final int detailCostIndex;
   final Map<String, dynamic>? status;
-  final String name;
   final List<Map<String, dynamic>> listStatusOption;
-  final bool isActiveDeleteButton;
 
-  const CardFamilyMember({
+  const CardDetailCost({
     Key? key,
     required this.viewModel,
-    required this.memberIndex,
+    required this.detailCostIndex,
     this.status,
-    required this.name,
     required this.listStatusOption,
-    this.isActiveDeleteButton = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.read<UserProvider>();
     return Card(
       elevation: 4.0,
       shape: RoundedRectangleBorder(
@@ -47,19 +44,22 @@ class CardFamilyMember extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Anggota Keluarga ${memberIndex + 1}',
+                  'Rincian ${detailCostIndex + 1}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.white,
                   ),
                 ),
-                if (isActiveDeleteButton && viewModel.isEditing)
+                if (viewModel.listBodyDetailCost.length > 1)
                   InkWell(
                     onTap: () {
-                      viewModel.removeFamilyMember(index: memberIndex);
+                      viewModel.removeDetailCost(index: detailCostIndex);
                     },
-                    child: const Icon(Icons.delete, color: Colors.white),
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
                   ),
               ],
             ),
@@ -69,30 +69,26 @@ class CardFamilyMember extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Status',
-                  style: TextStyle(
+                Text(
+                  userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                      ? 'Rincian Perawatan'
+                      : 'Rincian Perjalanan',
+                  style: const TextStyle(
                     fontWeight: Constant.boldText,
                     fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 8),
-                FormDropdownMap(
-                  hintText: 'Pilih Status Keluarga',
-                  items: listStatusOption,
-                  value: status,
-                  onChanged: (viewModel.isEditing)
-                      ? (newValue) {
-                          if (newValue != null) {
-                            viewModel.changeFamilyStatus(index: memberIndex, newStatus: newValue);
-                            log('current status $newValue ${newValue['id']}${newValue['text']}');
-                          }
-                        }
-                      : null,
+                FormDropdownDetailCost(
+                  hintText: userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                      ? 'Pilih Rincian Perawatan'
+                      : 'Pilih Rincian Perjalanan',
+                  items: viewModel.listDetailOption ?? [],
+                  onChanged: (newValue) {},
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'Nama',
+                  'Keterangan',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -101,14 +97,27 @@ class CardFamilyMember extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 FormFieldText(
-                  hintText: 'Masukkan Nama',
-                  isEnabled: viewModel.isEditing,
-                  initialValue: name,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      viewModel.changeFamilyName(index: memberIndex, newName: newValue);
-                    }
-                  },
+                  hintText: 'Masukkan biaya',
+                  isCost: true,
+                  keyboardType: TextInputType.number,
+                  onChanged: (String? newValue) {},
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Keterangan',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FormFieldText(
+                  controllerName: TextEditingController(),
+                  hintText: 'Masukkan keterangan lain',
+                  minLines: 5,
+                  maxLines: 5,
+                  onChanged: (String? newValue) {},
                 ),
               ],
             ),

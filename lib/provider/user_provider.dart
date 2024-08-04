@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -7,6 +8,17 @@ class UserProvider extends ChangeNotifier {
   bool get isAdmin => _isAdmin;
   void setIsAdmin(bool value) => _isAdmin = value;
   void clearIsAdmin() => _isAdmin = false;
+
+  List<ReimbursementCategoryData> listReimbursementCategory = [
+    ReimbursementCategoryData(
+      categoryReimbursementId: 1,
+      categoryReimbursementText: 'Kesehatan',
+    ),
+    ReimbursementCategoryData(
+      categoryReimbursementId: 2,
+      categoryReimbursementText: 'Transportasi',
+    ),
+  ];
 
   ProfileData? _profileData;
   ProfileData? get profileData => _profileData;
@@ -28,4 +40,10 @@ class UserProvider extends ChangeNotifier {
     _employeeSummaryData = null;
     notifyListeners();
   }
+
+  ReimbursementCategoryData? _selectedReimbursementCategory;
+  ReimbursementCategoryData? get selectedReimbursementCategory => _selectedReimbursementCategory;
+  void setSelectedReimbursementCategoryId(ReimbursementCategoryData value) =>
+      _selectedReimbursementCategory = value;
+  void clearSelectedReimbursementCategoryId() => _selectedReimbursementCategory = null;
 }

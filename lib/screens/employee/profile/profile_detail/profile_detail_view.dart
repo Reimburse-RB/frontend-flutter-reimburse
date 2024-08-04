@@ -59,18 +59,9 @@ class _ProfileDetailViewState extends State<ProfileDetailView> {
                 child: CardFamilyMember(
                   viewModel: viewModel,
                   memberIndex: index,
-                  // status: {
-                  //   'id': familyMemberItemData?.family_status_id,
-                  //   'text': familyMemberItemData?.family_status_text,
-                  // },
                   status: viewModel.listFamilyStatusOptionMap.firstWhere(
                       (element) => element['id'] == familyMemberItemData?.family_status_id),
                   listStatusOption: viewModel.listFamilyStatusOptionMap,
-                  // status: FamilyMemberOption(
-                  //   familyStatusId: 1,
-                  //   familyStatusText: familyMemberItemData?.family_status_text,
-                  // ),
-                  // listStatusOption: viewModel.listFamilyStatusOption,
                   name: familyMemberItemData?.name ?? '',
                   isActiveDeleteButton: !(familyMemberItemData?.family_status_id == 1),
                 ),

@@ -9,8 +9,8 @@ class FormFieldText extends StatefulWidget {
     this.hintText = '',
     this.placeholder = '',
     this.initialValue,
-    this.readOnly = false,
     this.isObsecure = false,
+    this.isCost = false,
     this.maxLines = 1,
     this.minLines = 1,
     this.keyboardType = TextInputType.text,
@@ -22,11 +22,7 @@ class FormFieldText extends StatefulWidget {
     this.onChanged,
     this.prefixIconNote,
     this.note = '',
-    this.noteStyle = const TextStyle(
-      color: Constant.rejectedStatusColor,
-      fontWeight: Constant.lightWeightText,
-      fontSize: 12,
-    ),
+    this.noteStyle = Constant.regularNoteStyle,
   }) : super(key: key);
 
   final bool isEnabled;
@@ -34,8 +30,8 @@ class FormFieldText extends StatefulWidget {
   final String hintText;
   final String placeholder;
   final String? initialValue;
-  final bool readOnly;
   final bool isObsecure;
+  final bool isCost;
 
   final int maxLines;
   final int minLines;
@@ -70,56 +66,81 @@ class _FormFieldTextState extends State<FormFieldText> {
       children: [
         if (widget.placeholder != '')
           Container(
-            margin: const EdgeInsets.only(top: 4, bottom: 16),
+            margin: const EdgeInsets.only(top: 4, bottom: 12),
             child: Text(
               widget.placeholder,
               textAlign: TextAlign.start,
               style: Constant.mainTitleStyle,
             ),
           ),
-        TextFormField(
-          enabled: widget.isEnabled,
-          initialValue: widget.initialValue,
-          readOnly: widget.readOnly,
-          controller: widget.controllerName,
-          onChanged: widget.onChanged,
-          minLines: widget.minLines,
-          keyboardType: widget.keyboardType,
-          obscureText: widget.isObsecure,
-          maxLines: widget.maxLines,
-          onTap: widget.onTap,
-          onTapOutside: (event) {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          decoration: InputDecoration(
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 4,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: Colors.black,
+        Row(
+          children: [
+            if (widget.isCost)
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: widget.isEnabled ? Colors.black : Constant.grey,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Text(
+                  'Rp',
+                  style: TextStyle(
+                    fontWeight: Constant.boldText,
+                  ),
+                ),
+              ),
+            Flexible(
+              child: TextFormField(
+                enabled: widget.isEnabled,
+                initialValue: widget.initialValue,
+                controller: widget.controllerName,
+                onChanged: widget.onChanged,
+                minLines: widget.minLines,
+                keyboardType: widget.keyboardType,
+                obscureText: widget.isObsecure,
+                maxLines: widget.maxLines,
+                onTap: widget.onTap,
+                onTapOutside: (event) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                      color: Constant.grey,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                      color: Constant.greenMedium,
+                    ),
+                  ),
+                  prefixIcon: widget.prefixIcon,
+                  suffixIcon: widget.suffixIcon,
+                  hintText: widget.hintText,
+                ),
               ),
             ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: Constant.grey,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: Constant.greenMedium,
-              ),
-            ),
-            prefixIcon: widget.prefixIcon,
-            suffixIcon: widget.suffixIcon,
-            hintText: widget.hintText,
-          ),
+          ],
         ),
         if (widget.note.isNotEmpty)
           Container(

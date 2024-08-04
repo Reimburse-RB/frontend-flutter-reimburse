@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
-import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
@@ -12,17 +11,27 @@ class SubmissionFormViewModel extends ChangeNotifier {
   }) {
     getListPurposeOption();
     getListDetailOption();
-    ProfileViewModel(context: context).getProfile();
+    addDetailCost();
   }
 
   HttpService http = HttpService();
   BuildContext context;
-
   List<PurposeOptionData>? _listPurposeOption;
   List<PurposeOptionData>? get listPurposeOption => _listPurposeOption;
 
-  List<DetailOptionData>? _listDetailOption;
-  List<DetailOptionData>? get listDetailOption => _listDetailOption;
+  List<DetailCostOptionData>? _listDetailOption;
+  List<DetailCostOptionData>? get listDetailOption => _listDetailOption;
+
+  List<Map> _listBodyDetailCost = [];
+  List<Map> get listBodyDetailCost => _listBodyDetailCost;
+
+  PurposeOptionData? _selectedPurpose;
+  PurposeOptionData? get selectedPurpose => _selectedPurpose;
+
+  TextEditingController totalCostController = TextEditingController();
+
+  double _totalCost = 0;
+  double get totalCost => _totalCost;
 
   Map _bodySubmission = {};
   Map get bodySubmission => _bodySubmission;
@@ -68,7 +77,7 @@ class SubmissionFormViewModel extends ChangeNotifier {
     String endpoint = 'reimburse/get-list-detail-title-option';
 
     await http.post(endpoint: endpoint).then((res) {
-      DetailOptionResponse response = DetailOptionResponse.fromJson(res);
+      DetailCostOptionResponse response = DetailCostOptionResponse.fromJson(res);
       if (response.success) {
         _listDetailOption = response.data;
 
@@ -90,9 +99,31 @@ class SubmissionFormViewModel extends ChangeNotifier {
   }
 
   Future changePurpose({
-    PurposeOptionData? selectedPurpose,
+    PurposeOptionData? newSelectedPurpose,
   }) {
-    bodySubmission['purpose_id'] = selectedPurpose?.purpose_id;
+    _selectedPurpose = newSelectedPurpose;
+    _bodySubmission['purpose_id'] = selectedPurpose?.purpose_id;
+    notifyListeners();
+
+    return Future.value(true);
+  }
+
+  Future addDetailCost() {
+    _listBodyDetailCost.add({
+      "detail_title_id": null,
+      "detail_title_other_text": null,
+      "detail_family_id": null,
+      "detail_cost": 0,
+      "detail_date": null,
+      "description": null
+    });
+    notifyListeners();
+
+    return Future.value(true);
+  }
+
+  Future removeDetailCost({required int index}) {
+    _listBodyDetailCost.removeAt(index);
     notifyListeners();
 
     return Future.value(true);

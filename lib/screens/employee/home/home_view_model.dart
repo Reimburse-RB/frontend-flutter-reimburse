@@ -68,21 +68,6 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void navigateToMenuPage({
-    required BuildContext context,
-    required Widget page,
-    bool isSubmissionPage = false,
-    int categorySubmission = 1, //1 kesehatan 2 transportasi
-  }) {
-    // final provider = context.read<DetectionProvider>();
-
-    // provider.setCurrentDetectionTypeSelected(index);
-    Navigator.push(
-      context,
-      CupertinoPageRoute(builder: (context) => page),
-    );
-  }
-
   Future getEmployeeSummary() async {
     startLoading();
     notifyListeners();

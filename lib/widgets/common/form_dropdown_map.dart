@@ -24,7 +24,7 @@ class FormDropdownMap extends StatelessWidget {
       children: [
         if (placeholder.isNotEmpty)
           Container(
-            margin: const EdgeInsets.only(top: 4, bottom: 16),
+            margin: const EdgeInsets.only(top: 4, bottom: 12),
             child: Text(
               placeholder,
               textAlign: TextAlign.start,

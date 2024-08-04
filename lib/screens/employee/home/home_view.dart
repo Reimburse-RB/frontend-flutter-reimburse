@@ -95,16 +95,16 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
     return SafeArea(
-      child: LoadingFallback(
-        isLoading: viewModel.isLoading,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBarGeneral(
-            context: context,
-            isHasCustomLeading: false,
-            customImage: 'assets/apps_logo/logo-horizontal-white-reimburserb.png',
-          ),
-          body: ListView(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBarGeneral(
+          context: context,
+          isHasCustomLeading: false,
+          customImage: 'assets/apps_logo/logo-horizontal-white-reimburserb.png',
+        ),
+        body: LoadingFallback(
+          isLoading: viewModel.isLoading,
+          child: ListView(
             children: [
               const SizedBox(height: 24),
               buildSubmissionSummary(),

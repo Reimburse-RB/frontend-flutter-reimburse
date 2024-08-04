@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
-import 'package:reimburse_rb/screens/employee/home/home_view_model.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class CardMenuItem extends StatelessWidget {
@@ -11,12 +11,12 @@ class CardMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<HomeViewModel>(context, listen: false);
+    final navigationProvider = context.read<NavigationProvider>();
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        viewModel.navigateToMenuPage(context: context, page: menuItemData.page);
+        navigationProvider.navigateToMenuPage(context: context, page: menuItemData.page);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/button_text.dart';
 import 'package:reimburse_rb/widgets/common/form_dropdown_role.dart';
@@ -130,7 +129,8 @@ class SignUpView extends StatelessWidget {
                         viewModel.checkIsPasswordMatch();
                         viewModel.checkAllField();
                       },
-                      note: viewModel.isPasswordMatch ? '' : 'Password tidak cocok',
+                      note: viewModel.isPasswordMatch ? '' : Constant.warningPasswordMatchString,
+                      noteStyle: Constant.warningNoteStyle,
                     ),
                     const SizedBox(
                       height: 16,
@@ -152,7 +152,8 @@ class SignUpView extends StatelessWidget {
                         viewModel.checkIsPasswordMatch();
                         viewModel.checkAllField();
                       },
-                      note: viewModel.isPasswordMatch ? '' : 'Password tidak cocok',
+                      note: viewModel.isPasswordMatch ? '' : Constant.warningPasswordMatchString,
+                      noteStyle: Constant.warningNoteStyle,
                     ),
                     const SizedBox(
                       height: 64,

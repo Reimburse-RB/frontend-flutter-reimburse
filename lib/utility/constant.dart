@@ -28,6 +28,21 @@ class Constant {
   static const FontWeight lightWeightText = FontWeight.w300;
   static const FontWeight extraLightWeightText = FontWeight.w200;
 
+  static const String warningPasswordMatchString = 'Password tidak cocok';
+
+  static const TextStyle regularNoteStyle = TextStyle(
+    color: greenDark,
+    fontWeight: lightWeightText,
+    fontSize: 12,
+    fontStyle: FontStyle.italic,
+  );
+  static const TextStyle warningNoteStyle = TextStyle(
+    color: rejectedStatusColor,
+    fontWeight: lightWeightText,
+    fontSize: 12,
+    fontStyle: FontStyle.italic,
+  );
+
   static const TextStyle mainTitleStyle = TextStyle(
     fontSize: 16,
     fontWeight: boldText,
