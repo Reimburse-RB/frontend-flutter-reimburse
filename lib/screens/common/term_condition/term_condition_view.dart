@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/term_condition_response.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/bottom_appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
@@ -162,59 +163,93 @@ class TermConditionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<TermConditionViewModel>();
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBarGeneral(
-        context: context,
-        title: 'Syarat & Ketentuan',
-      ),
-      bottomNavigationBar: (viewModel.isEditing)
-          ? BottomAppBarGeneral(
-              child: Row(
-                children: [
-                  Flexible(
-                    child: ButtonGeneral(
-                      onTap: () {
-                        viewModel.cancelEdit();
-                      },
-                      text: 'Batalkan',
-                      isWhiteButton: true,
+    return WillPopScope(
+      onWillPop: () async {
+        if (viewModel.isEditing) {
+          await Helper(context: context).alertClose(
+            title: 'Konfirmasi',
+            message:
+                'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
+            context: context,
+            firstButtonOnTap: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            secondButtonOnTap: () {
+              Navigator.pop(context);
+            },
+          );
+          return false; // return false if alertClose is shown
+        } else {
+          Navigator.pop(context);
+          return true; // return true if not editing
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBarGeneral(
+          context: context,
+          title: 'Syarat & Ketentuan',
+        ),
+        bottomNavigationBar: (viewModel.isEditing)
+            ? BottomAppBarGeneral(
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: ButtonGeneral(
+                        onTap: () {
+                          Helper(context: context).alertClose(
+                            title: 'Konfirmasi',
+                            message: Constant.confirmUnsavedAlertClose,
+                            context: context,
+                            firstButtonOnTap: () {
+                              Navigator.of(context).pop();
+                              viewModel.cancelEdit();
+                            },
+                            secondButtonOnTap: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        },
+                        text: 'Batalkan',
+                        isWhiteButton: true,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: ButtonGeneral(
-                      onTap: () {
-                        viewModel.postEditTnc();
-                      },
-                      text: 'Simpan',
+                    const SizedBox(width: 12),
+                    Flexible(
+                      child: ButtonGeneral(
+                        onTap: () {
+                          viewModel.postEditTnc();
+                        },
+                        text: 'Simpan',
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          : null,
-      floatingActionButton: (!viewModel.isEditing)
-          ? FloatingActionButtonGeneral(
-              onPressed: () {
-                viewModel.setChangeIsEditingValue();
-              },
-              icon: const Icon(
-                Icons.edit_rounded,
-                size: 32,
-              ),
-            )
-          : null,
-      body: LoadingFallback(
-        isLoading: viewModel.isLoading,
-        child: ListView(
-          children: [
-            const SizedBox(height: 24),
-            viewModel.isEditing
-                ? buildEditingTermConditionCategory(viewModel)
-                : buildTermConditionCategory(viewModel),
-            const SizedBox(height: 32),
-          ],
+                  ],
+                ),
+              )
+            : null,
+        floatingActionButton: (!viewModel.isEditing)
+            ? FloatingActionButtonGeneral(
+                onPressed: () {
+                  viewModel.setChangeIsEditingValue();
+                },
+                icon: const Icon(
+                  Icons.edit_rounded,
+                  size: 32,
+                ),
+              )
+            : null,
+        body: LoadingFallback(
+          isLoading: viewModel.isLoading,
+          child: ListView(
+            children: [
+              const SizedBox(height: 24),
+              viewModel.isEditing
+                  ? buildEditingTermConditionCategory(viewModel)
+                  : buildTermConditionCategory(viewModel),
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
       ),
     );

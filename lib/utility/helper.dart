@@ -153,6 +153,21 @@ class Helper {
     }
   }
 
+  generalAlertClose() {
+    alertClose(
+      title: 'Konfirmasi',
+      message: Constant.confirmUnsavedAlertClose,
+      context: context,
+      firstButtonOnTap: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+      secondButtonOnTap: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
   alertClose({
     required String title,
     required String message,

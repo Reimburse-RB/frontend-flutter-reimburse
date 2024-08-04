@@ -139,7 +139,18 @@ class _ProfileDetailViewState extends State<ProfileDetailView> {
                     Flexible(
                       child: ButtonGeneral(
                         onTap: () {
-                          viewModel.cancelEdit();
+                          Helper(context: context).alertClose(
+                            title: 'Konfirmasi',
+                            message: Constant.confirmUnsavedAlertClose,
+                            context: context,
+                            firstButtonOnTap: () {
+                              Navigator.of(context).pop();
+                              viewModel.cancelEdit();
+                            },
+                            secondButtonOnTap: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
                         },
                         text: 'Batalkan',
                         isWhiteButton: true,
