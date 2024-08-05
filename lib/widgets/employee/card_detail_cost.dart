@@ -184,6 +184,9 @@ class CardDetailCost extends StatelessWidget {
                   onEditingComplete: () {
                     viewModel.onEditingCompleteCost(index: detailCostIndex);
                   },
+                  onFocusLost: () {
+                    viewModel.onEditingCompleteCost(index: detailCostIndex);
+                  },
                 ),
                 const SizedBox(height: 16),
                 const Text(

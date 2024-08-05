@@ -22,6 +22,7 @@ class FormFieldText extends StatefulWidget {
     this.onTap,
     this.onChanged,
     this.onEditingComplete,
+    this.onFocusLost,
     this.prefixIconNote,
     this.note = '',
     this.noteStyle = Constant.regularNoteStyle,
@@ -51,14 +52,33 @@ class FormFieldText extends StatefulWidget {
   final void Function()? onTap;
   final void Function(String)? onChanged;
   final void Function()? onEditingComplete;
+  final void Function()? onFocusLost; // Tambahkan ini
 
   @override
   State<FormFieldText> createState() => _FormFieldTextState();
 }
 
 class _FormFieldTextState extends State<FormFieldText> {
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (!_focusNode.hasFocus) {
+      if (widget.onFocusLost != null) {
+        widget.onFocusLost!();
+      }
+    }
+  }
+
   @override
   void dispose() {
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -100,6 +120,7 @@ class _FormFieldTextState extends State<FormFieldText> {
               ),
             Flexible(
               child: TextFormField(
+                focusNode: _focusNode, // Tambahkan ini
                 enabled: widget.isEnabled,
                 initialValue: widget.initialValue,
                 controller: widget.controllerName,

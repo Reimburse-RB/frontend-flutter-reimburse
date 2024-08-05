@@ -66,7 +66,7 @@ class SubmissionFormView extends StatelessWidget {
                               ? 'Diagnosis'
                               : 'Tujuan',
                       onChanged: (newValue) {
-                        viewModel.changePurpose(newSelectedPurpose: newValue);
+                        viewModel.onChangePurpose(newSelectedPurpose: newValue);
                       },
                     ),
                     const SizedBox(height: 16),

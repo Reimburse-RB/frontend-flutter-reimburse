@@ -142,7 +142,7 @@ class SubmissionFormViewModel extends ChangeNotifier {
     return Future.value(true);
   }
 
-  Future changePurpose({
+  Future onChangePurpose({
     PurposeOptionData? newSelectedPurpose,
   }) {
     _selectedPurpose = newSelectedPurpose;
@@ -237,8 +237,7 @@ class SubmissionFormViewModel extends ChangeNotifier {
   Future onEditingCompleteCost({required int index}) {
     _totalCost = 0;
     listControllerDetailCost.forEach((element) {
-      _totalCost +=
-          double.tryParse((listControllerDetailCost[index].costController?.text) ?? '0') ?? 0;
+      _totalCost = totalCost + (double.tryParse((element.costController?.text) ?? '0') ?? 0);
     });
 
     totalCostController.text = Helper(context: context).formatCurrency(
