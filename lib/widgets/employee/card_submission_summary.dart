@@ -106,7 +106,8 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
               ),
               detailTitle: 'Total Tahun Ini',
               detailValue: Helper(context: context).formatCurrency(
-                  viewModel.employeeSummaryData?.total_reimburse_this_year.toDouble() ?? 0),
+                amount: viewModel.employeeSummaryData?.total_reimburse_this_year.toDouble() ?? 0,
+              ),
             ),
             const SizedBox(height: 8),
             Container(

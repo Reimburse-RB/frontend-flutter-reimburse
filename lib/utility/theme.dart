@@ -37,17 +37,31 @@ class ThemeNotifier with ChangeNotifier {
         titleMedium: GoogleFonts.poppins(),
       ),
       colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.red,
+              primarySwatch: Colors.green,
               accentColor: Constant.greenDark,
               brightness: Brightness.light)
           .copyWith(
         background: Colors.white,
         brightness: Brightness.light,
       ),
+      datePickerTheme: const DatePickerThemeData(
+        backgroundColor: Constant.greenMoreVeryLight,
+        headerBackgroundColor: Constant.greenDark,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        // headerTextStyle: TextStyle(color: Colors.white),
+        // dayStyle: TextStyle(color: Constant.greenDark),
+        // selectedDayStyle: TextStyle(color: Colors.white),
+        // selectedDayBackgroundColor: Constant.greenMedium,
+        // weekendStyle: TextStyle(color: Constant.greenLight),
+      ),
     ),
     ThemeData(
       brightness: Brightness.dark,
-      primarySwatch: Colors.red,
+      primarySwatch: Colors.green,
       fontFamily: GoogleFonts.poppins().fontFamily,
       textTheme: TextTheme(
         bodyLarge: GoogleFonts.poppins(),
@@ -67,7 +81,7 @@ class ThemeNotifier with ChangeNotifier {
         titleMedium: GoogleFonts.poppins(),
       ),
       colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.red,
+              primarySwatch: Colors.green,
               accentColor: Constant.greenMedium,
               brightness: Brightness.dark)
           .copyWith(background: Colors.black),
@@ -77,9 +91,8 @@ class ThemeNotifier with ChangeNotifier {
   MyTheme _current = MyTheme.light;
   ThemeData _currentTheme = themes[0];
 
-  void switchTheme() => currentTheme == MyTheme.light
-      ? currentTheme = MyTheme.dark
-      : currentTheme = MyTheme.light;
+  void switchTheme() =>
+      currentTheme == MyTheme.light ? currentTheme = MyTheme.dark : currentTheme = MyTheme.light;
 
   set currentTheme(theme) {
     if (theme != null) {

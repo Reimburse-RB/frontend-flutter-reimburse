@@ -33,6 +33,10 @@ class Constant {
   static const String warningPasswordMatchString = 'Password tidak cocok';
   static const String infoFormDetailCost =
       'Mohon inputkan biaya penggantian sesuai dengan detail perawatan yang tertera pada kuitansi.';
+  static const String noteFormDetailTitle =
+      'Catatan : Masukkan rincian perjalanan lainnya hanya jika tidak terdapat di dalam opsi.';
+  static const String noteFormDateDetailTitle =
+      'Catatan : Kuitansi harus bertanggal tidak lebih dari satu bulan yang lalu.';
 
   static const TextStyle regularNoteStyle = TextStyle(
     color: greenDark,

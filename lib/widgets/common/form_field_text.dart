@@ -21,6 +21,7 @@ class FormFieldText extends StatefulWidget {
     this.borderColor = Colors.black,
     this.onTap,
     this.onChanged,
+    this.onEditingComplete,
     this.prefixIconNote,
     this.note = '',
     this.noteStyle = Constant.regularNoteStyle,
@@ -49,6 +50,7 @@ class FormFieldText extends StatefulWidget {
 
   final void Function()? onTap;
   final void Function(String)? onChanged;
+  final void Function()? onEditingComplete;
 
   @override
   State<FormFieldText> createState() => _FormFieldTextState();
@@ -107,6 +109,7 @@ class _FormFieldTextState extends State<FormFieldText> {
                 obscureText: widget.isObsecure,
                 maxLines: widget.maxLines,
                 onTap: widget.onTap,
+                onEditingComplete: widget.onEditingComplete,
                 onTapOutside: (event) {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },

@@ -36,7 +36,7 @@ class Helper {
   //   }
   // }
 
-  void showToast({
+  showToast({
     bool isSuccess = true,
     required String message,
     Color backgroundColor = Constant.acceptedStatusIconColor,
@@ -153,7 +153,7 @@ class Helper {
     }
   }
 
-  generalAlertClose() {
+  alertCloseGeneral() {
     alertClose(
       title: 'Konfirmasi',
       message: Constant.confirmUnsavedAlertClose,
@@ -230,8 +230,14 @@ class Helper {
   //   }
   // }
 
-  String formatCurrency(double amount) {
-    final formatCurrency = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ');
+  String formatCurrency({
+    required double amount,
+    String symbol = 'Rp ',
+  }) {
+    final formatCurrency = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: symbol,
+    );
     return formatCurrency.format(amount);
   }
 

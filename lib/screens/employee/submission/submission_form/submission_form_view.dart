@@ -47,7 +47,8 @@ class SubmissionFormView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const FormFieldText(
+                    FormFieldText(
+                      controllerName: viewModel.nameController,
                       placeholder: "Nama Karyawan",
                       hintText: "Masukkan Nama Karyawan",
                       isEnabled: false,
@@ -99,7 +100,6 @@ class SubmissionFormView extends StatelessWidget {
                   child: CardDetailCost(
                     viewModel: viewModel,
                     detailCostIndex: index,
-                    listStatusOption: [],
                   ),
                 );
               },

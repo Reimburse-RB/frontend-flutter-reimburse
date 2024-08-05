@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/form_date_picker.dart';
 import 'package:reimburse_rb/widgets/common/form_dropdown_detail_cost.dart';
+import 'package:reimburse_rb/widgets/common/form_dropdown_family_member.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
 import 'package:reimburse_rb/widgets/common/form_small_note.dart';
 
 class CardDetailCost extends StatelessWidget {
   final SubmissionFormViewModel viewModel;
   final int detailCostIndex;
-  final Map<String, dynamic>? status;
-  final List<Map<String, dynamic>> listStatusOption;
+  final Map<String, dynamic>? detailTitleValue;
 
   const CardDetailCost({
     Key? key,
     required this.viewModel,
     required this.detailCostIndex,
-    this.status,
-    required this.listStatusOption,
+    this.detailTitleValue,
   }) : super(key: key);
 
   @override
@@ -73,7 +71,7 @@ class CardDetailCost extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FormSmallNote(
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.info_rounded,
                     color: Constant.waitingStatusColor,
                   ),
@@ -97,11 +95,56 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 FormDropdownDetailCost(
+                  value: viewModel.listControllerDetailCost[detailCostIndex].selectedDetailTitle,
                   hintText: userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
                       ? 'Pilih Rincian Perawatan'
                       : 'Pilih Rincian Perjalanan',
                   items: viewModel.listDetailOption ?? [],
-                  onChanged: (newValue) {},
+                  onChanged: (newValue) {
+                    if (newValue != null) {
+                      viewModel.onChangeDetailTitle(index: detailCostIndex, newValue: newValue);
+                    }
+                  },
+                ),
+                const SizedBox(height: 8),
+                FormFieldText(
+                  controllerName: viewModel
+                      .listControllerDetailCost[detailCostIndex].otherDetailTitleController,
+                  hintText: userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                      ? 'Lainnya'
+                      : 'Lainnya',
+                  note: Constant.noteFormDetailTitle,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      viewModel.onChangeOtherDetailTitle(
+                          index: detailCostIndex, newValue: newValue);
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                if (userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1)
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Diperuntukkan Untuk',
+                        style: TextStyle(
+                          fontWeight: Constant.boldText,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 8),
+                FormDropdownFamilyMember(
+                  value: viewModel.listControllerDetailCost[detailCostIndex].selectedFamilyMember,
+                  hintText: 'Pilih Anggota Keluarga',
+                  items: viewModel.profile?.family_member_data ?? [],
+                  onChanged: (newValue) {
+                    if (newValue != null) {
+                      viewModel.onChangeFamilyMember(index: detailCostIndex, newValue: newValue);
+                    }
+                  },
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -115,6 +158,11 @@ class CardDetailCost extends StatelessWidget {
                 const SizedBox(height: 8),
                 FormDatePicker(
                   hintText: 'Tanggal kuitansi',
+                  controller: viewModel.listControllerDetailCost[detailCostIndex].dateController,
+                  onTap: () {
+                    viewModel.onChangeDate(index: detailCostIndex);
+                  },
+                  note: Constant.noteFormDateDetailTitle,
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -127,10 +175,15 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 FormFieldText(
+                  controllerName:
+                      viewModel.listControllerDetailCost[detailCostIndex].costController,
                   hintText: 'Masukkan biaya',
                   isCost: true,
                   keyboardType: TextInputType.number,
                   onChanged: (String? newValue) {},
+                  onEditingComplete: () {
+                    viewModel.onEditingCompleteCost(index: detailCostIndex);
+                  },
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -143,11 +196,16 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 FormFieldText(
-                  controllerName: TextEditingController(),
+                  controllerName:
+                      viewModel.listControllerDetailCost[detailCostIndex].descriptionController,
                   hintText: 'Masukkan keterangan lain',
                   minLines: 5,
                   maxLines: 5,
-                  onChanged: (String? newValue) {},
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      viewModel.onChangeDescription(index: detailCostIndex, newValue: newValue);
+                    }
+                  },
                 ),
               ],
             ),
