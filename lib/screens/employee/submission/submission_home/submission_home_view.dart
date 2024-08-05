@@ -5,6 +5,7 @@ import 'package:reimburse_rb/screens/employee/submission/submission_home/submiss
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
+import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/employee/list_submission.dart';
 
@@ -80,7 +81,15 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           );
         },
       ),
-      body: ListView(
+      body:
+          // const Column(
+          //   children: [
+          //     Spacer(),
+          //     EmptyStateGeneral(),
+          //     Spacer(),
+          //   ],
+          // )
+          ListView(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
         children: [
           const ListSubmission(),

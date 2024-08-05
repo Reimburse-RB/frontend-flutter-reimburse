@@ -31,6 +31,8 @@ class Constant {
   static const String confirmUnsavedAlertClose =
       'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.';
   static const String warningPasswordMatchString = 'Password tidak cocok';
+  static const String infoFormDetailCost =
+      'Mohon inputkan biaya penggantian sesuai dengan detail perawatan yang tertera pada kuitansi.';
 
   static const TextStyle regularNoteStyle = TextStyle(
     color: greenDark,

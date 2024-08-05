@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/widgets/common/form_date_picker.dart';
 import 'package:reimburse_rb/widgets/common/form_dropdown_detail_cost.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
+import 'package:reimburse_rb/widgets/common/form_small_note.dart';
 
 class CardDetailCost extends StatelessWidget {
   final SubmissionFormViewModel viewModel;
@@ -69,6 +72,20 @@ class CardDetailCost extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                FormSmallNote(
+                  prefixIcon: Icon(
+                    Icons.info_rounded,
+                    color: Constant.waitingStatusColor,
+                  ),
+                  note: Constant.infoFormDetailCost,
+                  noteTextStyle: TextStyle(
+                    color: Constant.waitingStatusColor,
+                    fontWeight: Constant.regularNoteStyle.fontWeight,
+                    fontSize: Constant.regularNoteStyle.fontSize,
+                    fontStyle: Constant.regularNoteStyle.fontStyle,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 Text(
                   userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
                       ? 'Rincian Perawatan'
@@ -88,7 +105,20 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'Keterangan',
+                  'Tanggal Kuitansi',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FormDatePicker(
+                  hintText: 'Tanggal kuitansi',
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Biaya',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,

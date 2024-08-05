@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/form_small_note.dart';
 
-class FormFieldText extends StatefulWidget {
-  const FormFieldText({
+class FormDatePicker extends StatefulWidget {
+  const FormDatePicker({
     Key? key,
     this.isEnabled = true,
     this.controllerName,
@@ -11,7 +11,6 @@ class FormFieldText extends StatefulWidget {
     this.placeholder = '',
     this.initialValue,
     this.isObsecure = false,
-    this.isCost = false,
     this.maxLines = 1,
     this.minLines = 1,
     this.keyboardType = TextInputType.text,
@@ -32,7 +31,6 @@ class FormFieldText extends StatefulWidget {
   final String placeholder;
   final String? initialValue;
   final bool isObsecure;
-  final bool isCost;
 
   final int maxLines;
   final int minLines;
@@ -51,10 +49,10 @@ class FormFieldText extends StatefulWidget {
   final void Function(String)? onChanged;
 
   @override
-  State<FormFieldText> createState() => _FormFieldTextState();
+  State<FormDatePicker> createState() => _FormDatePickerState();
 }
 
-class _FormFieldTextState extends State<FormFieldText> {
+class _FormDatePickerState extends State<FormDatePicker> {
   @override
   void dispose() {
     super.dispose();
@@ -76,26 +74,6 @@ class _FormFieldTextState extends State<FormFieldText> {
           ),
         Row(
           children: [
-            if (widget.isCost)
-              Container(
-                margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: widget.isEnabled ? Colors.black : Constant.grey,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Text(
-                  'Rp',
-                  style: TextStyle(
-                    fontWeight: Constant.boldText,
-                  ),
-                ),
-              ),
             Flexible(
               child: TextFormField(
                 enabled: widget.isEnabled,
@@ -138,6 +116,29 @@ class _FormFieldTextState extends State<FormFieldText> {
                   prefixIcon: widget.prefixIcon,
                   suffixIcon: widget.suffixIcon,
                   hintText: widget.hintText,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            InkWell(
+              onTap: () {
+                // DATE PICKER
+              },
+              customBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: widget.isEnabled ? Constant.green : Constant.grey,
+                ),
+                child: const Icon(
+                  Icons.calendar_month_outlined,
+                  color: Colors.white,
                 ),
               ),
             ),

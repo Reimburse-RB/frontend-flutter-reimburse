@@ -76,7 +76,7 @@ class SubmissionFormView extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       controllerName: viewModel.totalCostController,
                       isCost: true,
-                      note: "Catatan: Totay Biaya akan terisi otomatis oleh sistem",
+                      note: "Catatan: Total Biaya akan terisi otomatis oleh sistem",
                       noteStyle: Constant.regularNoteStyle,
                     ),
                     const SizedBox(height: 16),
