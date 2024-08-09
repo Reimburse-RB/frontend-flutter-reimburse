@@ -23,8 +23,31 @@ class SubmissionFormScreen extends StatelessWidget {
   }
 }
 
-class SubmissionFormView extends StatelessWidget {
+class SubmissionFormView extends StatefulWidget {
   const SubmissionFormView({super.key});
+
+  @override
+  State<SubmissionFormView> createState() => _SubmissionFormViewState();
+}
+
+class _SubmissionFormViewState extends State<SubmissionFormView>
+    with TickerProviderStateMixin {
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +57,8 @@ class SubmissionFormView extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
         context: context,
-        title: 'Reimburse ${userProvider.selectedReimbursementCategory?.categoryReimbursementText}',
+        title:
+            'Reimburse ${userProvider.selectedReimbursementCategory?.categoryReimbursementText}',
       ),
       body: LoadingFallback(
         isLoading: viewModel.isLoading,
@@ -55,16 +79,18 @@ class SubmissionFormView extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     FormDropdownPurpose(
-                      hintText:
-                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
-                              ? 'Pilih Diagnosis'
-                              : 'Pilih Tujuan',
+                      hintText: userProvider.selectedReimbursementCategory
+                                  ?.categoryReimbursementId ==
+                              1
+                          ? 'Pilih Diagnosis'
+                          : 'Pilih Tujuan',
                       value: viewModel.selectedPurpose,
                       items: viewModel.listPurposeOption ?? [],
-                      placeholder:
-                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
-                              ? 'Diagnosis'
-                              : 'Tujuan',
+                      placeholder: userProvider.selectedReimbursementCategory
+                                  ?.categoryReimbursementId ==
+                              1
+                          ? 'Diagnosis'
+                          : 'Tujuan',
                       onChanged: (newValue) {
                         viewModel.onChangePurpose(newSelectedPurpose: newValue);
                       },
@@ -77,7 +103,8 @@ class SubmissionFormView extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       controllerName: viewModel.totalCostController,
                       isCost: true,
-                      note: "Catatan: Total Biaya akan terisi otomatis oleh sistem",
+                      note:
+                          "Catatan: Total Biaya akan terisi otomatis oleh sistem",
                       noteStyle: Constant.regularNoteStyle,
                     ),
                     const SizedBox(height: 16),
@@ -85,8 +112,13 @@ class SubmissionFormView extends StatelessWidget {
                 ),
               ),
             ),
-            const FormImageAttachment(
+            FormImageAttachment(
               title: 'Lampiran Bukti',
+              viewModel: viewModel,
+              onTapAddImage: () {
+                viewModel.onTapAddImage(
+                    animationController: animationController);
+              },
             ),
             const SizedBox(height: 24),
             ListView.builder(

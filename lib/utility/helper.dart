@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,8 @@ class Helper {
       message: message,
       messageColor: messageColor,
       duration: const Duration(seconds: 3),
-      backgroundColor: isSuccess ? backgroundColor : Constant.rejectedStatusColor,
+      backgroundColor:
+          isSuccess ? backgroundColor : Constant.rejectedStatusColor,
     ).show(context);
   }
 
@@ -66,7 +68,8 @@ class Helper {
         margin: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.25, vertical: 10),
         padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(4)),
+        decoration: BoxDecoration(
+            color: Colors.black45, borderRadius: BorderRadius.circular(4)),
         child: Text(
           content,
           style: const TextStyle(
@@ -79,65 +82,75 @@ class Helper {
     );
   }
 
-  // Future viewPhoto({required String source, required String heroTag}) async {
-  //   SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.landscapeRight,
-  //     DeviceOrientation.landscapeLeft,
-  //     DeviceOrientation.portraitDown,
-  //     DeviceOrientation.portraitUp,
-  //   ]);
+  Future viewPhoto({
+    required source,
+    String heroTag = '',
+    bool isImageFile = false,
+  }) async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
 
-  //   return Navigator.of(context).push(
-  //     MaterialPageRoute(
-  //       builder: (ctx) => Scaffold(
-  //         appBar: AppBar(
-  //           backgroundColor: Colors.black,
-  //           leading: IconButton(
-  //             icon: const Icon(
-  //               Icons.chevron_left,
-  //               size: 36,
-  //               color: Colors.white,
-  //             ),
-  //             onPressed: () => Navigator.of(context).pop(),
-  //           ),
-  //         ),
-  //         body: Hero(
-  //           tag: heroTag,
-  //           child: Container(
-  //             constraints: BoxConstraints.expand(
-  //               height: MediaQuery.of(context).size.height,
-  //             ),
-  //             child: PhotoView(
-  //               imageProvider: _getImageProvider(
-  //                   source), // Gunakan fungsi untuk memilih imageProvider
-  //               loadingBuilder: (context, event) {
-  //                 if (event == null) {
-  //                   return const Center(
-  //                     child: Text("Loading"),
-  //                   );
-  //                 }
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.chevron_left,
+                size: 36,
+                color: Colors.white,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          body: Hero(
+            tag: heroTag,
+            child: Container(
+              constraints: BoxConstraints.expand(
+                height: MediaQuery.of(context).size.height,
+              ),
+              child: PhotoView(
+                imageProvider: _getImageProvider(
+                  source: source,
+                  isImageFile: isImageFile,
+                ),
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(Constant.imageErrorAsset);
+                },
+                loadingBuilder: (context, event) {
+                  if (event == null) {
+                    return const Center(
+                      child: Text("Loading"),
+                    );
+                  }
 
-  //                 final value = event.cumulativeBytesLoaded /
-  //                     (event.expectedTotalBytes ?? event.cumulativeBytesLoaded);
+                  final value = event.cumulativeBytesLoaded /
+                      (event.expectedTotalBytes ?? event.cumulativeBytesLoaded);
 
-  //                 final percentage = (100 * value).floor();
-  //                 return Center(
-  //                   child: Text("$percentage%"),
-  //                 );
-  //               },
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+                  final percentage = (100 * value).floor();
+                  return Center(
+                    child: Text("$percentage%"),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Future<bool> handleWillPop(BuildContext context, bool isEditing) async {
     if (isEditing) {
       await Helper(context: context).alertClose(
         title: 'Konfirmasi',
-        message: 'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
+        message:
+            'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
         context: context,
         firstButtonOnTap: () {
           Navigator.pop(context);
@@ -222,13 +235,15 @@ class Helper {
     ).show();
   }
 
-  // ImageProvider _getImageProvider(String source) {
-  //   if (source.startsWith('http')) {
-  //     return NetworkImage(source);
-  //   } else {
-  //     return MemoryImage(base64Decode(source));
-  //   }
-  // }
+  ImageProvider _getImageProvider({required source, bool isImageFile = false}) {
+    if (isImageFile && source is File) {
+      return FileImage(source);
+    } else if (source is String && source.startsWith('http')) {
+      return NetworkImage(source);
+    } else {
+      return AssetImage(Constant.imageErrorAsset);
+    }
+  }
 
   String formatCurrency({
     required double amount,
@@ -255,11 +270,12 @@ class Helper {
       ),
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 32),
+          padding:
+              const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 32),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight:
-                  MediaQuery.of(context).size.height * 0.8, // max height 80% of screen height
+              maxHeight: MediaQuery.of(context).size.height *
+                  0.8, // max height 80% of screen height
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

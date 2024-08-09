@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +12,9 @@ import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
+import 'package:reimburse_rb/utility/image_picker_handler.dart';
 
-class SubmissionFormViewModel extends ChangeNotifier {
+class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
   SubmissionFormViewModel({
     required this.context,
   }) {
@@ -22,6 +26,9 @@ class SubmissionFormViewModel extends ChangeNotifier {
 
   HttpService http = HttpService();
   BuildContext context;
+
+  late ImagePickerHandler imagePicker;
+
   List<PurposeOptionData>? _listPurposeOption;
   List<PurposeOptionData>? get listPurposeOption => _listPurposeOption;
 
@@ -31,10 +38,17 @@ class SubmissionFormViewModel extends ChangeNotifier {
   List<DetailCostOptionData>? _listDetailOption;
   List<DetailCostOptionData>? get listDetailOption => _listDetailOption;
 
-  List<CardDetailSubmissionData> _listControllerDetailCost = [];
-  List<CardDetailSubmissionData> get listControllerDetailCost => _listControllerDetailCost;
+  final List<CardDetailSubmissionData> _listControllerDetailCost = [];
+  List<CardDetailSubmissionData> get listControllerDetailCost =>
+      _listControllerDetailCost;
 
-  List<Map> _listBodyDetailCost = [];
+  final List<File> _listAttachmentImageFile = [];
+  List<File> get listAttachmentImageFile => _listAttachmentImageFile;
+
+  final List<String> _listAttachmentImageBase64 = [];
+  List<String> get listAttachmentImageBase64 => _listAttachmentImageBase64;
+
+  final List<Map> _listBodyDetailCost = [];
   List<Map> get listBodyDetailCost => _listBodyDetailCost;
 
   PurposeOptionData? _selectedPurpose;
@@ -46,7 +60,7 @@ class SubmissionFormViewModel extends ChangeNotifier {
   double _totalCost = 0;
   double get totalCost => _totalCost;
 
-  Map _bodySubmission = {};
+  final Map _bodySubmission = {};
   Map get bodySubmission => _bodySubmission;
 
   // loading page
@@ -71,11 +85,13 @@ class SubmissionFormViewModel extends ChangeNotifier {
         nameController.text = profile?.name ?? '';
         notifyListeners();
       } else {
-        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+        Helper(context: context)
+            .showToast(message: response.msg, isSuccess: false);
       }
     }).catchError((err) {
       log('===> error $endpoint $err');
-      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+      Helper(context: context)
+          .showToast(message: err.toString(), isSuccess: false);
 
       stopLoading();
       notifyListeners();
@@ -99,11 +115,13 @@ class SubmissionFormViewModel extends ChangeNotifier {
 
         notifyListeners();
       } else {
-        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+        Helper(context: context)
+            .showToast(message: response.msg, isSuccess: false);
       }
     }).catchError((err) {
       log('===> error $endpoint $err');
-      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+      Helper(context: context)
+          .showToast(message: err.toString(), isSuccess: false);
 
       stopLoading();
       notifyListeners();
@@ -121,17 +139,20 @@ class SubmissionFormViewModel extends ChangeNotifier {
     String endpoint = 'reimburse/get-list-detail-title-option';
 
     await http.post(endpoint: endpoint).then((res) {
-      DetailCostOptionResponse response = DetailCostOptionResponse.fromJson(res);
+      DetailCostOptionResponse response =
+          DetailCostOptionResponse.fromJson(res);
       if (response.success) {
         _listDetailOption = response.data;
 
         notifyListeners();
       } else {
-        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+        Helper(context: context)
+            .showToast(message: response.msg, isSuccess: false);
       }
     }).catchError((err) {
       log('===> error $endpoint $err');
-      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+      Helper(context: context)
+          .showToast(message: err.toString(), isSuccess: false);
 
       stopLoading();
       notifyListeners();
@@ -181,7 +202,30 @@ class SubmissionFormViewModel extends ChangeNotifier {
     return Future.value(true);
   }
 
-  Future onChangeDetailTitle({required int index, required DetailCostOptionData newValue}) {
+  onTapAddImage({required AnimationController animationController}) {
+    imagePicker = ImagePickerHandler(this, animationController);
+    imagePicker.init(context);
+    imagePicker.showDialog(context);
+  }
+
+  addImage({required File imageFile}) {
+    String imageBase64 = base64Encode(imageFile.readAsBytesSync());
+
+    listAttachmentImageBase64.add(imageBase64);
+    listAttachmentImageFile.add(imageFile);
+
+    notifyListeners();
+  }
+
+  removeImage({required int index}) {
+    listAttachmentImageBase64.removeAt(index);
+    listAttachmentImageFile.removeAt(index);
+
+    notifyListeners();
+  }
+
+  Future onChangeDetailTitle(
+      {required int index, required DetailCostOptionData newValue}) {
     _listControllerDetailCost[index].selectedDetailTitle = newValue;
     _listBodyDetailCost[index]['detail_title_id'] = newValue.detail_title_id;
 
@@ -191,7 +235,8 @@ class SubmissionFormViewModel extends ChangeNotifier {
     return Future.value(true);
   }
 
-  Future onChangeFamilyMember({required int index, required FamilyMemberData newValue}) {
+  Future onChangeFamilyMember(
+      {required int index, required FamilyMemberData newValue}) {
     _listControllerDetailCost[index].selectedFamilyMember = newValue;
     _listBodyDetailCost[index]['detail_family_id'] = newValue.family_status_id;
 
@@ -201,8 +246,10 @@ class SubmissionFormViewModel extends ChangeNotifier {
     return Future.value(true);
   }
 
-  Future onChangeOtherDetailTitle({required int index, required String newValue}) {
-    _listControllerDetailCost[index].otherDetailTitleController?.text = newValue;
+  Future onChangeOtherDetailTitle(
+      {required int index, required String newValue}) {
+    _listControllerDetailCost[index].otherDetailTitleController?.text =
+        newValue;
     _listBodyDetailCost[index]['detail_title_other_text'] = newValue;
 
     log('===> ochange description $listBodyDetailCost');
@@ -226,7 +273,8 @@ class SubmissionFormViewModel extends ChangeNotifier {
       _listControllerDetailCost[index].selectedDateTime = pickedDate;
       _listControllerDetailCost[index].dateController?.text =
           DateFormat('dd/MM/yyyy').format(pickedDate);
-      _listBodyDetailCost[index]['detail_date'] = DateFormat('dd/MM/yyyy').format(pickedDate);
+      _listBodyDetailCost[index]['detail_date'] =
+          DateFormat('dd/MM/yyyy').format(pickedDate);
     }
     log('===> ochange date $listBodyDetailCost');
     notifyListeners();
@@ -237,15 +285,17 @@ class SubmissionFormViewModel extends ChangeNotifier {
   Future onEditingCompleteCost({required int index}) {
     _totalCost = 0;
     listControllerDetailCost.forEach((element) {
-      _totalCost = totalCost + (double.tryParse((element.costController?.text) ?? '0') ?? 0);
+      _totalCost = totalCost +
+          (double.tryParse((element.costController?.text) ?? '0') ?? 0);
     });
 
     totalCostController.text = Helper(context: context).formatCurrency(
       amount: totalCost,
       symbol: '',
     );
-    _listBodyDetailCost[index]['detail_cost'] =
-        double.tryParse(listControllerDetailCost[index].costController?.text ?? '0') ?? 0;
+    _listBodyDetailCost[index]['detail_cost'] = double.tryParse(
+            listControllerDetailCost[index].costController?.text ?? '0') ??
+        0;
 
     log('===> oneditingcompletecost $listBodyDetailCost\ntotal cost $totalCost');
     notifyListeners();
@@ -261,5 +311,16 @@ class SubmissionFormViewModel extends ChangeNotifier {
     notifyListeners();
 
     return Future.value(true);
+  }
+
+  @override
+  void userImage(File image) {
+    String base64Image = base64Encode(image.readAsBytesSync());
+    String fileName = image.path.split("/").last;
+    Uint8List byestsImg = const Base64Decoder().convert(base64Image);
+
+    addImage(imageFile: image);
+
+    log('===> imagepicker fileName $fileName');
   }
 }

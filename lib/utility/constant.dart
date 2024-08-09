@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class Constant {
   static String randomImageUrl = 'https://picsum.photos/200';
+  static String iconEmptyStateAsset = 'assets/empty_state/img-empty-state.png';
+  static String imageErrorAsset = 'assets/empty_state/img-error.png';
 
   static const Color greenDark = Color(0xFF004D34);
   static const Color greenMedium = const Color.fromRGBO(17, 143, 82, 1);

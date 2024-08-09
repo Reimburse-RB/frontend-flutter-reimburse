@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reimburse_rb/utility/constant.dart';
 
 class EmptyStateGeneral extends StatelessWidget {
   const EmptyStateGeneral({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class EmptyStateGeneral extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/empty_state/img-empty-state.png',
+            Constant.iconEmptyStateAsset,
             width: MediaQuery.of(context).size.width / 2.5,
           ),
           const SizedBox(height: 12),
