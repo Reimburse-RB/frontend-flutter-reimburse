@@ -85,7 +85,9 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                  userProvider.selectedReimbursementCategory
+                              ?.categoryReimbursementId ==
+                          1
                       ? 'Rincian Perawatan'
                       : 'Rincian Perjalanan',
                   style: const TextStyle(
@@ -95,22 +97,29 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 FormDropdownDetailCost(
-                  value: viewModel.listControllerDetailCost[detailCostIndex].selectedDetailTitle,
-                  hintText: userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                  value: viewModel.listControllerDetailCost[detailCostIndex]
+                      .selectedDetailTitle,
+                  hintText: userProvider.selectedReimbursementCategory
+                              ?.categoryReimbursementId ==
+                          1
                       ? 'Pilih Rincian Perawatan'
                       : 'Pilih Rincian Perjalanan',
                   items: viewModel.listDetailOption ?? [],
                   onChanged: (newValue) {
                     if (newValue != null) {
-                      viewModel.onChangeDetailTitle(index: detailCostIndex, newValue: newValue);
+                      viewModel.onChangeDetailTitle(
+                          index: detailCostIndex, newValue: newValue);
                     }
                   },
                 ),
                 const SizedBox(height: 8),
                 FormFieldText(
                   controllerName: viewModel
-                      .listControllerDetailCost[detailCostIndex].otherDetailTitleController,
-                  hintText: userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                      .listControllerDetailCost[detailCostIndex]
+                      .otherDetailTitleController,
+                  hintText: userProvider.selectedReimbursementCategory
+                              ?.categoryReimbursementId ==
+                          1
                       ? 'Lainnya'
                       : 'Lainnya',
                   note: Constant.noteFormDetailTitle,
@@ -122,31 +131,31 @@ class CardDetailCost extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 16),
-                if (userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1)
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Diperuntukkan Untuk',
-                        style: TextStyle(
-                          fontWeight: Constant.boldText,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                if (userProvider.selectedReimbursementCategory
+                        ?.categoryReimbursementId ==
+                    1) ...[
+                  const Text(
+                    'Diperuntukkan Untuk',
+                    style: TextStyle(
+                      fontWeight: Constant.boldText,
+                      fontSize: 14,
+                    ),
                   ),
-                const SizedBox(height: 8),
-                FormDropdownFamilyMember(
-                  value: viewModel.listControllerDetailCost[detailCostIndex].selectedFamilyMember,
-                  hintText: 'Pilih Anggota Keluarga',
-                  items: viewModel.profile?.family_member_data ?? [],
-                  onChanged: (newValue) {
-                    if (newValue != null) {
-                      viewModel.onChangeFamilyMember(index: detailCostIndex, newValue: newValue);
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
+                  const SizedBox(height: 8),
+                  FormDropdownFamilyMember(
+                    value: viewModel.listControllerDetailCost[detailCostIndex]
+                        .selectedFamilyMember,
+                    hintText: 'Pilih Anggota Keluarga',
+                    items: viewModel.profile?.family_member_data ?? [],
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        viewModel.onChangeFamilyMember(
+                            index: detailCostIndex, newValue: newValue);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 const Text(
                   'Tanggal Kuitansi',
                   style: TextStyle(
@@ -158,7 +167,8 @@ class CardDetailCost extends StatelessWidget {
                 const SizedBox(height: 8),
                 FormDatePicker(
                   hintText: 'Tanggal kuitansi',
-                  controller: viewModel.listControllerDetailCost[detailCostIndex].dateController,
+                  controller: viewModel
+                      .listControllerDetailCost[detailCostIndex].dateController,
                   onTap: () {
                     viewModel.onChangeDate(index: detailCostIndex);
                   },
@@ -175,8 +185,8 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 FormFieldText(
-                  controllerName:
-                      viewModel.listControllerDetailCost[detailCostIndex].costController,
+                  controllerName: viewModel
+                      .listControllerDetailCost[detailCostIndex].costController,
                   hintText: 'Masukkan biaya',
                   isCost: true,
                   keyboardType: TextInputType.number,
@@ -199,14 +209,16 @@ class CardDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 FormFieldText(
-                  controllerName:
-                      viewModel.listControllerDetailCost[detailCostIndex].descriptionController,
+                  controllerName: viewModel
+                      .listControllerDetailCost[detailCostIndex]
+                      .descriptionController,
                   hintText: 'Masukkan keterangan lain',
                   minLines: 5,
                   maxLines: 5,
                   onChanged: (String? newValue) {
                     if (newValue != null) {
-                      viewModel.onChangeDescription(index: detailCostIndex, newValue: newValue);
+                      viewModel.onChangeDescription(
+                          index: detailCostIndex, newValue: newValue);
                     }
                   },
                 ),

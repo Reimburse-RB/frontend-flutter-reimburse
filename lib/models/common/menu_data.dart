@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 
 class MenuCategoryData {
   MenuCategoryData({
@@ -14,8 +15,10 @@ class MenuItemData {
     required this.assetImage,
     required this.title,
     required this.page,
+    this.selectedReimbursementCategory,
   });
   late final String assetImage;
   late final String title;
   late final Widget page;
+  late final ReimbursementCategoryData? selectedReimbursementCategory;
 }

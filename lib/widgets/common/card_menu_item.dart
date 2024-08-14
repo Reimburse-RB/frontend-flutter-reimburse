@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class CardMenuItem extends StatelessWidget {
@@ -12,11 +13,17 @@ class CardMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigationProvider = context.read<NavigationProvider>();
+    final userProvider = context.read<UserProvider>();
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        navigationProvider.navigateToMenuPage(context: context, page: menuItemData.page);
+        if (menuItemData.selectedReimbursementCategory != null) {
+          userProvider.setSelectedReimbursementCategoryId(
+              menuItemData.selectedReimbursementCategory!);
+        }
+        navigationProvider.navigateToMenuPage(
+            context: context, page: menuItemData.page);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

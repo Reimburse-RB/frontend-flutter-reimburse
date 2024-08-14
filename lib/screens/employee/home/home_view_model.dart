@@ -8,6 +8,7 @@ import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_period_view.dart';
+import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
@@ -52,12 +53,16 @@ class HomeViewModel extends ChangeNotifier {
         MenuItemData(
           assetImage: 'assets/menu/icon-menu-health.png',
           title: 'Reimbursement Kesehatan',
-          page: const TermConditionScreen(),
+          page: const SubmissionFormScreen(),
+          selectedReimbursementCategory:
+              UserProvider().listReimbursementCategory[0],
         ),
         MenuItemData(
           assetImage: 'assets/menu/icon-menu-transport.png',
           title: 'Reimbursement Transportasi',
-          page: const TermConditionScreen(),
+          page: const SubmissionFormScreen(),
+          selectedReimbursementCategory:
+              UserProvider().listReimbursementCategory[1],
         ),
       ],
     ),
@@ -82,11 +87,13 @@ class HomeViewModel extends ChangeNotifier {
 
         notifyListeners();
       } else {
-        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+        Helper(context: context)
+            .showToast(message: response.msg, isSuccess: false);
       }
     }).catchError((err) {
       log('===> error $endpoint $err');
-      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+      Helper(context: context)
+          .showToast(message: err.toString(), isSuccess: false);
 
       stopLoading();
       notifyListeners();

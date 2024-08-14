@@ -30,8 +30,7 @@ class SubmissionFormView extends StatefulWidget {
   State<SubmissionFormView> createState() => _SubmissionFormViewState();
 }
 
-class _SubmissionFormViewState extends State<SubmissionFormView>
-    with TickerProviderStateMixin {
+class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProviderStateMixin {
   late AnimationController animationController;
 
   @override
@@ -57,8 +56,7 @@ class _SubmissionFormViewState extends State<SubmissionFormView>
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
         context: context,
-        title:
-            'Reimburse ${userProvider.selectedReimbursementCategory?.categoryReimbursementText}',
+        title: 'Reimburse ${userProvider.selectedReimbursementCategory?.categoryReimbursementText}',
       ),
       body: LoadingFallback(
         isLoading: viewModel.isLoading,
@@ -79,21 +77,30 @@ class _SubmissionFormViewState extends State<SubmissionFormView>
                     ),
                     const SizedBox(height: 16),
                     FormDropdownPurpose(
-                      hintText: userProvider.selectedReimbursementCategory
-                                  ?.categoryReimbursementId ==
-                              1
-                          ? 'Pilih Diagnosis'
-                          : 'Pilih Tujuan',
+                      hintText:
+                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                              ? 'Pilih Diagnosis'
+                              : 'Pilih Tujuan',
                       value: viewModel.selectedPurpose,
                       items: viewModel.listPurposeOption ?? [],
-                      placeholder: userProvider.selectedReimbursementCategory
-                                  ?.categoryReimbursementId ==
-                              1
-                          ? 'Diagnosis'
-                          : 'Tujuan',
+                      placeholder:
+                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                              ? 'Diagnosis'
+                              : 'Tujuan',
                       onChanged: (newValue) {
                         viewModel.onChangePurpose(newSelectedPurpose: newValue);
                       },
+                    ),
+                    const SizedBox(height: 8),
+                    FormFieldText(
+                      controllerName: viewModel.otherPurposeController,
+                      hintText:
+                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                              ? 'Lainnya'
+                              : 'Lainnya',
+                      note: userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                          ? Constant.noteFormPurposeHealth
+                          : Constant.noteFormPurposeTransport,
                     ),
                     const SizedBox(height: 16),
                     FormFieldText(
@@ -103,8 +110,7 @@ class _SubmissionFormViewState extends State<SubmissionFormView>
                       keyboardType: TextInputType.number,
                       controllerName: viewModel.totalCostController,
                       isCost: true,
-                      note:
-                          "Catatan: Total Biaya akan terisi otomatis oleh sistem",
+                      note: "Catatan: Total Biaya akan terisi otomatis oleh sistem",
                       noteStyle: Constant.regularNoteStyle,
                     ),
                     const SizedBox(height: 16),
@@ -116,8 +122,7 @@ class _SubmissionFormViewState extends State<SubmissionFormView>
               title: 'Lampiran Bukti',
               viewModel: viewModel,
               onTapAddImage: () {
-                viewModel.onTapAddImage(
-                    animationController: animationController);
+                viewModel.onTapAddImage(animationController: animationController);
               },
             ),
             const SizedBox(height: 24),
@@ -145,13 +150,25 @@ class _SubmissionFormViewState extends State<SubmissionFormView>
                 },
                 prefixIcon: const Icon(
                   Icons.add_rounded,
-                  color: Colors.white,
+                  color: Constant.green,
                 ),
+                isWhiteButton: true,
                 color: Constant.greenDark,
                 text: 'Tambahkan Rincian',
               ),
             ),
             const SizedBox(height: 48),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: ButtonGeneral(
+                onTap: () {
+                  viewModel.postUploadSubmission();
+                },
+                color: Constant.greenDark,
+                text: 'Unggah Pengajuan',
+              ),
+            ),
+            const SizedBox(height: 72),
           ],
         ),
       ),

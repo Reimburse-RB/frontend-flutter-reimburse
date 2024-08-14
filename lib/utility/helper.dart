@@ -43,6 +43,7 @@ class Helper {
     Color backgroundColor = Constant.acceptedStatusIconColor,
     Color messageColor = Colors.white,
     Color borderColor = Colors.white,
+    int seconds = 3,
     Widget? icon,
   }) {
     Flushbar(
@@ -54,9 +55,8 @@ class Helper {
       borderRadius: BorderRadius.circular(20),
       message: message,
       messageColor: messageColor,
-      duration: const Duration(seconds: 3),
-      backgroundColor:
-          isSuccess ? backgroundColor : Constant.rejectedStatusColor,
+      duration: Duration(seconds: seconds),
+      backgroundColor: isSuccess ? backgroundColor : Constant.rejectedStatusColor,
     ).show(context);
   }
 
@@ -68,8 +68,7 @@ class Helper {
         margin: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.25, vertical: 10),
         padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            color: Colors.black45, borderRadius: BorderRadius.circular(4)),
+        decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(4)),
         child: Text(
           content,
           style: const TextStyle(
@@ -149,8 +148,7 @@ class Helper {
     if (isEditing) {
       await Helper(context: context).alertClose(
         title: 'Konfirmasi',
-        message:
-            'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
+        message: 'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
         context: context,
         firstButtonOnTap: () {
           Navigator.pop(context);
@@ -270,12 +268,11 @@ class Helper {
       ),
       builder: (context) {
         return Padding(
-          padding:
-              const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 32),
+          padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 32),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height *
-                  0.8, // max height 80% of screen height
+              maxHeight:
+                  MediaQuery.of(context).size.height * 0.8, // max height 80% of screen height
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
