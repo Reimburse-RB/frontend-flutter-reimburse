@@ -9,7 +9,7 @@ import 'package:reimburse_rb/widgets/common/form_dropdown_purpose.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
 import 'package:reimburse_rb/widgets/common/form_image_attachment.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
-import 'package:reimburse_rb/widgets/employee/card_detail_cost.dart';
+import 'package:reimburse_rb/widgets/employee/card_form_detail_cost.dart';
 
 class SubmissionFormScreen extends StatelessWidget {
   const SubmissionFormScreen({super.key});
@@ -78,13 +78,15 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
                     const SizedBox(height: 16),
                     FormDropdownPurpose(
                       hintText:
-                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                          userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                                  Constant.healthCategoryReimbursementId
                               ? 'Pilih Diagnosis'
                               : 'Pilih Tujuan',
                       value: viewModel.selectedPurpose,
                       items: viewModel.listPurposeOption ?? [],
                       placeholder:
-                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                          userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                                  Constant.healthCategoryReimbursementId
                               ? 'Diagnosis'
                               : 'Tujuan',
                       onChanged: (newValue) {
@@ -95,10 +97,12 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
                     FormFieldText(
                       controllerName: viewModel.otherPurposeController,
                       hintText:
-                          userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
-                              ? 'Lainnya'
-                              : 'Lainnya',
-                      note: userProvider.selectedReimbursementCategory?.categoryReimbursementId == 1
+                          userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                                  Constant.healthCategoryReimbursementId
+                              ? 'Diagnosis Lainnya'
+                              : 'Tujuan Lainnya',
+                      note: userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                              Constant.healthCategoryReimbursementId
                           ? Constant.noteFormPurposeHealth
                           : Constant.noteFormPurposeTransport,
                     ),
@@ -134,7 +138,7 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
               itemBuilder: (context, index) {
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),
-                  child: CardDetailCost(
+                  child: CardFormDetailCost(
                     viewModel: viewModel,
                     detailCostIndex: index,
                   ),

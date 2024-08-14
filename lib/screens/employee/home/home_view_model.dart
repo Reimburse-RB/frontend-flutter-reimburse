@@ -33,8 +33,8 @@ class HomeViewModel extends ChangeNotifier {
   void startLoading() => _isLoading = true;
   void stopLoading() => _isLoading = false;
 
-  List<GetUserReimburseData> _listReimbursementActive = [];
-  List<GetUserReimburseData> get listReimbursementActive => _listReimbursementActive;
+  List<ItemUserReimburseData> _listReimbursementActive = [];
+  List<ItemUserReimburseData> get listReimbursementActive => _listReimbursementActive;
 
   List<MenuCategoryData> listMenuCategory = [
     MenuCategoryData(
@@ -115,7 +115,7 @@ class HomeViewModel extends ChangeNotifier {
     };
 
     await http.post(endpoint: endpoint, body: body).then((res) {
-      GetUserReimburseResponse response = GetUserReimburseResponse.fromJson(res);
+      ListUserReimburseResponse response = ListUserReimburseResponse.fromJson(res);
       if (response.success) {
         _listReimbursementActive = response.data ?? [];
         notifyListeners();

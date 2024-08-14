@@ -6,15 +6,22 @@ import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 
 class CardSubmissionEmployee extends StatelessWidget {
-  const CardSubmissionEmployee({super.key, required this.reimburseData});
+  const CardSubmissionEmployee({
+    super.key,
+    required this.reimburseData,
+  });
 
-  final GetUserReimburseData reimburseData;
+  final ItemUserReimburseData reimburseData;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<NavigationProvider>().navigateToDetailReimbursement(context: context);
+        if (reimburseData.id != null) {
+          context
+              .read<NavigationProvider>()
+              .navigateToDetailReimbursement(context: context, id: reimburseData.id!);
+        }
       },
       child: Card(
         elevation: 4.0,

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
+import 'package:reimburse_rb/widgets/common/button_general.dart';
+import 'package:reimburse_rb/widgets/common/card_detail_cost.dart';
+import 'package:reimburse_rb/widgets/common/detail_text.dart';
 import 'package:reimburse_rb/widgets/common/list_horizontal_detail_receipt_image.dart';
+import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 
 class DetailReimbursementScreen extends StatelessWidget {
   const DetailReimbursementScreen({super.key});
@@ -12,7 +18,7 @@ class DetailReimbursementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<DetailReimbursementViewModel>(
-      create: (_) => DetailReimbursementViewModel(),
+      create: (_) => DetailReimbursementViewModel(context: context),
       child: const DetailReimbursementView(),
     );
   }
@@ -21,81 +27,118 @@ class DetailReimbursementScreen extends StatelessWidget {
 class DetailReimbursementView extends StatelessWidget {
   const DetailReimbursementView({super.key});
 
-  Widget buildDetailText({
-    required String title,
-    String? textValue,
-    double? costValue,
-    Color valueColor = Colors.black,
-    EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 24),
-  }) {
-    final formatter =
-        NumberFormat.currency(locale: 'id_ID', decimalDigits: 2, symbol: 'Rp ');
-    return Container(
-      padding: padding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: Constant.secondTitleStyle,
-          ),
-          const SizedBox(height: 8),
-          if (costValue != null)
-            Text(
-              formatter.format(costValue),
-              style: TextStyle(color: valueColor),
-            ),
-          if (textValue != null)
-            Text(
-              textValue,
-              style: TextStyle(color: valueColor),
-            ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<DetailReimbursementViewModel>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
         context: context,
         title: 'Detail Reimbursement',
       ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 24),
-          buildDetailText(
-            title: 'Status',
-            textValue: 'Menunggu Diproses',
-            valueColor: Constant.waitingStatusColor,
-          ),
-          const SizedBox(height: 20),
-          buildDetailText(
-            title: 'Nama Karyawan',
-            textValue: 'Yudha Haryoputranto',
-          ),
-          const SizedBox(height: 20),
-          buildDetailText(
-            title: 'Diagnosis',
-            textValue: 'Flu Batuk',
-          ),
-          const SizedBox(height: 20),
-          buildDetailText(
-            title: 'Total Biaya',
-            costValue: 250000,
-          ),
-          const SizedBox(height: 20),
-          const ListHorizontalDetailReceiptImage(
-            title: 'Lampiran',
-            listImageUrl: [
-              'https://www.pdffiller.com/preview/470/590/470590793/large.png',
-              'https://imgv2-1-f.scribdassets.com/img/document/556166473/original/d5434b43c5/1718521196?v=1',
-              'https://imgv2-1-f.scribdassets.com/img/document/555063486/original/87a635ab89/1719397768?v=1',
-            ],
-          )
-        ],
+      body: LoadingFallback(
+        isLoading: viewModel.isLoading,
+        child: ListView(
+          children: [
+            const SizedBox(height: 24),
+            DetailText(
+              title: 'Status',
+              textValue: viewModel.detailReimburseData?.status_text ?? '',
+              valueColor: viewModel.statusColor ?? Colors.black,
+            ),
+            const SizedBox(height: 20),
+            DetailText(
+              title: 'Nama Karyawan',
+              textValue: viewModel.detailReimburseData?.name ?? '',
+            ),
+            const SizedBox(height: 20),
+            DetailText(
+              title: 'Nomor Induk karyawan',
+              textValue: viewModel.detailReimburseData?.nik ?? '',
+            ),
+            const SizedBox(height: 20),
+            DetailText(
+              title: 'Diagnosis',
+              textValue: viewModel.detailReimburseData?.purpose_text ?? '',
+            ),
+            const SizedBox(height: 20),
+            DetailText(
+              title: 'Total Biaya',
+              costValue: viewModel.detailReimburseData?.totalPrice,
+            ),
+            const SizedBox(height: 20),
+            ListHorizontalDetailReceiptImage(
+              title: 'Lampiran',
+              listAttachment: viewModel.detailReimburseData?.list_attachment ?? [],
+            ),
+            const SizedBox(height: 20),
+            ListView.builder(
+              itemCount: viewModel.detailReimburseData?.detailReimburse?.length ?? 0,
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                if (viewModel.detailReimburseData!.detailReimburse != null) {
+                  ItemDetailReimburseData item =
+                      viewModel.detailReimburseData!.detailReimburse![index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: CardDetailCost(
+                      itemDetailReimburseData: item,
+                      categoryReimbursementId:
+                          viewModel.detailReimburseData?.category_reimbursement_id,
+                      index: index,
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  if (viewModel.detailReimburseData?.status_id == Constant.waitingStatusId) ...[
+                    ButtonGeneral(
+                      onTap: () {
+                        viewModel.postChangeDetailReimbursement(
+                          newStatusId: Constant.processStatusId,
+                        );
+                      },
+                      text: 'Proses Pengajuan',
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  if (viewModel.detailReimburseData?.status_id == Constant.processStatusId) ...[
+                    ButtonGeneral(
+                      onTap: () {
+                        viewModel.postChangeDetailReimbursement(
+                          newStatusId: Constant.acceptedStatusId,
+                        );
+                      },
+                      text: 'Setujui Pengajuan',
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  if (viewModel.detailReimburseData?.status_id == Constant.waitingStatusId ||
+                      viewModel.detailReimburseData?.status_id == Constant.processStatusId)
+                    ButtonGeneral(
+                      onTap: () {
+                        viewModel.postChangeDetailReimbursement(
+                          newStatusId: Constant.rejectedStatusId,
+                        );
+                      },
+                      text: 'Tolak Pengajuan',
+                      isWhiteButton: true,
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 48),
+          ],
+        ),
       ),
     );
   }

@@ -8,7 +8,7 @@ class ListSubmission extends StatelessWidget {
     required this.listReimbursement,
   });
 
-  final List<GetUserReimburseData> listReimbursement;
+  final List<ItemUserReimburseData> listReimbursement;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ListSubmission extends StatelessWidget {
       shrinkWrap: true,
       itemCount: listReimbursement.length,
       itemBuilder: (context, index) {
-        GetUserReimburseData item = listReimbursement[index];
+        ItemUserReimburseData item = listReimbursement[index];
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
           child: CardSubmissionEmployee(reimburseData: item),

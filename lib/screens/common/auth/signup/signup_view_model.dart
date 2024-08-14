@@ -5,6 +5,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:reimburse_rb/models/common/auth_response.dart';
 import 'package:reimburse_rb/models/common/role_data.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view_model.dart';
+import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
@@ -109,14 +110,15 @@ class SignUpViewModel extends ChangeNotifier {
         localStorage.setItem('role', response.data?.role);
         localStorage.setItem(
           'is-admin-or-hrd',
-          response.data?.role == 2 || response.data?.role == 3,
+          response.data?.role == Constant.adminRoleId || response.data?.role == Constant.hrdRoleId,
         );
 
         notifyListeners();
 
-        if (response.data?.role == 1) {
+        if (response.data?.role == Constant.employeeRoleId) {
           SignInViewModel(context: context).navigateToEmployeeMainMenu();
-        } else if (response.data?.role == 2 && response.data?.role == 3) {
+        } else if (response.data?.role == Constant.adminRoleId &&
+            response.data?.role == Constant.hrdRoleId) {
           SignInViewModel(context: context).navigateToAdminMainMenu();
         }
       } else {

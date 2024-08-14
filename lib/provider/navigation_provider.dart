@@ -8,7 +8,12 @@ import 'package:reimburse_rb/screens/employee/submission/submission_form/submiss
 class NavigationProvider extends ChangeNotifier {
   NavigationProvider() {}
 
-  void navigateToDetailReimbursement({required BuildContext context}) {
+  void navigateToDetailReimbursement({
+    required BuildContext context,
+    required int id,
+  }) {
+    final userProvider = context.read<UserProvider>();
+    userProvider.setSelectedDetailReimbursementId(id);
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => const DetailReimbursementScreen(),
     ));

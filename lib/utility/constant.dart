@@ -14,6 +14,18 @@ class Constant {
 
   static const Color grey = Color(0xFFA8A8A8);
 
+  static const int employeeRoleId = 1;
+  static const int adminRoleId = 2;
+  static const int hrdRoleId = 3;
+
+  static const int waitingStatusId = 1;
+  static const int processStatusId = 2;
+  static const int acceptedStatusId = 3;
+  static const int rejectedStatusId = 4;
+
+  static const int healthCategoryReimbursementId = 1;
+  static const int transportCategoryReimbursementId = 2;
+
   static const Color waitingStatusColor = Color(0xFFFFC107);
   static const Color processStatusIconColor = Color(0xFF0021F5);
   static const Color processStatusTextColor = Color(0xFF020064);

@@ -67,8 +67,8 @@ class SubmissionHomeViewModel extends ChangeNotifier {
   Map _selectedBodyTab = {};
   Map get selectedBodyTab => _selectedBodyTab;
 
-  List<GetUserReimburseData> _listReimbursement = [];
-  List<GetUserReimburseData> get listReimbursement => _listReimbursement;
+  List<ItemUserReimburseData> _listReimbursement = [];
+  List<ItemUserReimburseData> get listReimbursement => _listReimbursement;
 
   void initTabController(TickerProvider vsync, int length) {
     _tabController = TabController(length: length, vsync: vsync);
@@ -79,6 +79,7 @@ class SubmissionHomeViewModel extends ChangeNotifier {
     if (_tabController.indexIsChanging) {
       _listReimbursement = [];
       _selectedBodyTab = listBodyTab[_tabController.index];
+      context.read<UserProvider>().setSelectedSubmissionTabIndex(_tabController.index);
       getUserReimburse();
 
       notifyListeners();
@@ -98,7 +99,7 @@ class SubmissionHomeViewModel extends ChangeNotifier {
     Map body = selectedBodyTab;
 
     await http.post(endpoint: endpoint, body: body).then((res) {
-      GetUserReimburseResponse response = GetUserReimburseResponse.fromJson(res);
+      ListUserReimburseResponse response = ListUserReimburseResponse.fromJson(res);
       if (response.success) {
         _listReimbursement = response.data ?? [];
         notifyListeners();

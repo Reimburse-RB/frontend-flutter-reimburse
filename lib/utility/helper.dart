@@ -246,10 +246,12 @@ class Helper {
   String formatCurrency({
     required double amount,
     String symbol = 'Rp ',
+    int decimalDigits = 2,
   }) {
     final formatCurrency = NumberFormat.currency(
       locale: 'id_ID',
       symbol: symbol,
+      decimalDigits: decimalDigits,
     );
     return formatCurrency.format(amount);
   }

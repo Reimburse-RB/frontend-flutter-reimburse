@@ -6,6 +6,7 @@ import 'package:reimburse_rb/models/common/auth_response.dart';
 import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signup/signup_view.dart';
 import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
+import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
@@ -89,14 +90,15 @@ class SignInViewModel extends ChangeNotifier {
         localStorage.setItem('role', response.user?.role);
         localStorage.setItem(
           'is-admin-or-hrd',
-          response.user?.role == 2 || response.user?.role == 3,
+          response.user?.role == Constant.adminRoleId || response.user?.role == Constant.hrdRoleId,
         );
 
         notifyListeners();
 
-        if (response.user?.role == 1) {
+        if (response.user?.role == Constant.employeeRoleId) {
           navigateToEmployeeMainMenu();
-        } else if (response.user?.role == 2 && response.user?.role == 3) {
+        } else if (response.user?.role == Constant.adminRoleId &&
+            response.user?.role == Constant.hrdRoleId) {
           navigateToAdminMainMenu();
         }
       } else {

@@ -123,24 +123,24 @@ class AddReimburseData {
 
 // endpoint : reimburse/get-user-reimburse
 @JsonSerializable()
-class GetUserReimburseResponse {
+class ListUserReimburseResponse {
   final bool success;
   final String msg;
-  List<GetUserReimburseData>? data;
+  List<ItemUserReimburseData>? data;
 
-  GetUserReimburseResponse({
+  ListUserReimburseResponse({
     this.success = false,
     this.msg = '',
     this.data,
   });
 
-  factory GetUserReimburseResponse.fromJson(Map<String, dynamic> json) =>
-      _$GetUserReimburseResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$GetUserReimburseResponseToJson(this);
+  factory ListUserReimburseResponse.fromJson(Map<String, dynamic> json) =>
+      _$ListUserReimburseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ListUserReimburseResponseToJson(this);
 }
 
 @JsonSerializable()
-class GetUserReimburseData {
+class ItemUserReimburseData {
   final int? id;
   final String? typeReimburse;
   final String? status;
@@ -149,7 +149,7 @@ class GetUserReimburseData {
   final String? nik;
   final double? totalPrice;
 
-  GetUserReimburseData({
+  ItemUserReimburseData({
     this.id,
     this.typeReimburse,
     this.status,
@@ -159,7 +159,122 @@ class GetUserReimburseData {
     this.totalPrice,
   });
 
-  factory GetUserReimburseData.fromJson(Map<String, dynamic> json) =>
-      _$GetUserReimburseDataFromJson(json);
-  Map<String, dynamic> toJson() => _$GetUserReimburseDataToJson(this);
+  factory ItemUserReimburseData.fromJson(Map<String, dynamic> json) =>
+      _$ItemUserReimburseDataFromJson(json);
+  Map<String, dynamic> toJson() => _$ItemUserReimburseDataToJson(this);
+}
+
+// endpoint : reimburse/get-detail-reimburse
+@JsonSerializable()
+class DetailReimburseResponse {
+  final bool success;
+  final String msg;
+  DetailReimburseData? data;
+
+  DetailReimburseResponse({
+    this.success = false,
+    this.msg = '',
+    this.data,
+  });
+
+  factory DetailReimburseResponse.fromJson(Map<String, dynamic> json) =>
+      _$DetailReimburseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$DetailReimburseResponseToJson(this);
+}
+
+@JsonSerializable()
+class DetailReimburseData {
+  final String? name;
+  final String? email;
+  final String? nik;
+  final int? status_id;
+  final String? status_text;
+  final int? category_reimbursement_id;
+  final String? category_reimbursement_text;
+  final int? purpose_id;
+  final String? purpose_text;
+  final String? date;
+  final double? totalPrice;
+  List<ItemAttachmentData>? list_attachment;
+  List<ItemDetailReimburseData>? detailReimburse;
+
+  DetailReimburseData({
+    this.name,
+    this.email,
+    this.nik,
+    this.status_id,
+    this.status_text,
+    this.category_reimbursement_id,
+    this.category_reimbursement_text,
+    this.purpose_id,
+    this.purpose_text,
+    this.date,
+    this.totalPrice,
+    this.list_attachment,
+    this.detailReimburse,
+  });
+
+  factory DetailReimburseData.fromJson(Map<String, dynamic> json) =>
+      _$DetailReimburseDataFromJson(json);
+  Map<String, dynamic> toJson() => _$DetailReimburseDataToJson(this);
+}
+
+@JsonSerializable()
+class ItemAttachmentData {
+  final int? id;
+  final String? image;
+
+  ItemAttachmentData({
+    this.id,
+    this.image,
+  });
+
+  factory ItemAttachmentData.fromJson(Map<String, dynamic> json) =>
+      _$ItemAttachmentDataFromJson(json);
+  Map<String, dynamic> toJson() => _$ItemAttachmentDataToJson(this);
+}
+
+@JsonSerializable()
+class ItemDetailReimburseData {
+  final int? detail_id;
+  final int? detail_title_id;
+  final String? detail_title_text;
+  final int? detail_family_id;
+  final String? detail_family_name;
+  final double? detail_cost;
+  final String? detail_date;
+  final String? detail_desc;
+
+  ItemDetailReimburseData({
+    this.detail_id,
+    this.detail_title_id,
+    this.detail_title_text,
+    this.detail_family_id,
+    this.detail_family_name,
+    this.detail_cost,
+    this.detail_date,
+    this.detail_desc,
+  });
+
+  factory ItemDetailReimburseData.fromJson(Map<String, dynamic> json) =>
+      _$ItemDetailReimburseDataFromJson(json);
+  Map<String, dynamic> toJson() => _$ItemDetailReimburseDataToJson(this);
+}
+
+// endpoint : reimburse/change-status-reimburse
+@JsonSerializable()
+class ChangeStatusReimburseResponse {
+  final bool success;
+  final String msg;
+  AddReimburseData? data;
+
+  ChangeStatusReimburseResponse({
+    this.success = false,
+    this.msg = '',
+    this.data,
+  });
+
+  factory ChangeStatusReimburseResponse.fromJson(Map<String, dynamic> json) =>
+      _$ChangeStatusReimburseResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ChangeStatusReimburseResponseToJson(this);
 }

@@ -46,4 +46,14 @@ class UserProvider extends ChangeNotifier {
   void setSelectedReimbursementCategoryId(ReimbursementCategoryData value) =>
       _selectedReimbursementCategory = value;
   void clearSelectedReimbursementCategoryId() => _selectedReimbursementCategory = null;
+
+  int _selectedSubmissionTabIndex = 0;
+  int get selectedSubmissionTabIndex => _selectedSubmissionTabIndex;
+  void setSelectedSubmissionTabIndex(int value) => _selectedSubmissionTabIndex = value;
+  void clearSelectedSubmissionTabIndex() => _selectedSubmissionTabIndex = 0;
+
+  int? _selectedDetailReimbursementId;
+  int? get selectedDetailReimbursementId => _selectedDetailReimbursementId;
+  void setSelectedDetailReimbursementId(int value) => _selectedDetailReimbursementId = value;
+  void clearSelectedDetailReimbursementId() => _selectedDetailReimbursementId = null;
 }
