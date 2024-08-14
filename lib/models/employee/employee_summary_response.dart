@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'employee_summary_response.g.dart';
 
+// endpoint : reimburse/get-summary-reimburse
 @JsonSerializable()
 class EmployeeSummaryResponse {
   final bool success;

@@ -225,7 +225,7 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
       String endpoint = 'reimburse/add-reimburse';
 
       await http.post(endpoint: endpoint, body: bodySubmission).then((res) {
-        AddReimbursementResponse response = AddReimbursementResponse.fromJson(res);
+        AddReimburseResponse response = AddReimburseResponse.fromJson(res);
         if (response.success) {
           Navigator.pop(context);
           Helper(context: context).showToast(message: response.msg);

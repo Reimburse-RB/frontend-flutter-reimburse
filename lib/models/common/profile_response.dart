@@ -3,6 +3,7 @@ import 'package:reimburse_rb/models/common/auth_response.dart';
 
 part 'profile_response.g.dart';
 
+// endpoint : user/get-profile
 @JsonSerializable()
 class ProfileResponse {
   final bool success;
@@ -19,6 +20,7 @@ class ProfileResponse {
   Map<String, dynamic> toJson() => _$ProfileResponseToJson(this);
 }
 
+// endpoint : user/edit-profile
 @JsonSerializable()
 class EditProfileResponse {
   final bool success;

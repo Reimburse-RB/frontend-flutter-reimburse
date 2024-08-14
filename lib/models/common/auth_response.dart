@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_response.g.dart';
 
+// endpoint : user/register
 @JsonSerializable()
 class SignUpResponse {
   final bool success;
@@ -18,6 +19,7 @@ class SignUpResponse {
   Map<String, dynamic> toJson() => _$SignUpResponseToJson(this);
 }
 
+// endpoint : user/login
 @JsonSerializable()
 class SignInResponse {
   final bool success;

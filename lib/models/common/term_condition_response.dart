@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'term_condition_response.g.dart';
 
+// endpoint : tnc/get-tnc
 @JsonSerializable()
 class TermConditionResponse {
   final bool success;

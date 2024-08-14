@@ -72,27 +72,26 @@ Map<String, dynamic> _$DetailCostOptionDataToJson(
       'detail_title_text': instance.detail_title_text,
     };
 
-AddReimbursementResponse _$AddReimbursementResponseFromJson(
+AddReimburseResponse _$AddReimburseResponseFromJson(
         Map<String, dynamic> json) =>
-    AddReimbursementResponse(
+    AddReimburseResponse(
       success: json['success'] as bool? ?? false,
       msg: json['msg'] as String? ?? '',
       data: json['data'] == null
           ? null
-          : AddReimbursementData.fromJson(json['data'] as Map<String, dynamic>),
+          : AddReimburseData.fromJson(json['data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$AddReimbursementResponseToJson(
-        AddReimbursementResponse instance) =>
+Map<String, dynamic> _$AddReimburseResponseToJson(
+        AddReimburseResponse instance) =>
     <String, dynamic>{
       'success': instance.success,
       'msg': instance.msg,
       'data': instance.data,
     };
 
-AddReimbursementData _$AddReimbursementDataFromJson(
-        Map<String, dynamic> json) =>
-    AddReimbursementData(
+AddReimburseData _$AddReimburseDataFromJson(Map<String, dynamic> json) =>
+    AddReimburseData(
       status: (json['status'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
       purpose_id: (json['purpose_id'] as num?)?.toInt(),
@@ -103,8 +102,7 @@ AddReimbursementData _$AddReimbursementDataFromJson(
       createdAt: json['createdAt'] as String?,
     );
 
-Map<String, dynamic> _$AddReimbursementDataToJson(
-        AddReimbursementData instance) =>
+Map<String, dynamic> _$AddReimburseDataToJson(AddReimburseData instance) =>
     <String, dynamic>{
       'status': instance.status,
       'id': instance.id,
@@ -114,4 +112,46 @@ Map<String, dynamic> _$AddReimbursementDataToJson(
       'category': instance.category,
       'updatedAt': instance.updatedAt,
       'createdAt': instance.createdAt,
+    };
+
+GetUserReimburseResponse _$GetUserReimburseResponseFromJson(
+        Map<String, dynamic> json) =>
+    GetUserReimburseResponse(
+      success: json['success'] as bool? ?? false,
+      msg: json['msg'] as String? ?? '',
+      data: json['data'] == null
+          ? null
+          : GetUserReimburseData.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$GetUserReimburseResponseToJson(
+        GetUserReimburseResponse instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+      'msg': instance.msg,
+      'data': instance.data,
+    };
+
+GetUserReimburseData _$GetUserReimburseDataFromJson(
+        Map<String, dynamic> json) =>
+    GetUserReimburseData(
+      id: (json['id'] as num?)?.toInt(),
+      typeReimbursement: json['typeReimbursement'] as String?,
+      status: json['status'] as String?,
+      createdDate: json['createdDate'] as String?,
+      name: json['name'] as String?,
+      nik: json['nik'] as String?,
+      totalPrice: (json['totalPrice'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$GetUserReimburseDataToJson(
+        GetUserReimburseData instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'typeReimbursement': instance.typeReimbursement,
+      'status': instance.status,
+      'createdDate': instance.createdDate,
+      'name': instance.name,
+      'nik': instance.nik,
+      'totalPrice': instance.totalPrice,
     };
