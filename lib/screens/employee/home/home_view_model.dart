@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
@@ -18,6 +19,7 @@ class HomeViewModel extends ChangeNotifier {
     this.moveToAnotherTab,
   }) {
     getEmployeeSummary();
+    getUserReimburse();
   }
 
   final Function(int)? moveToAnotherTab;
@@ -30,6 +32,9 @@ class HomeViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   void startLoading() => _isLoading = true;
   void stopLoading() => _isLoading = false;
+
+  List<GetUserReimburseData> _listReimbursementActive = [];
+  List<GetUserReimburseData> get listReimbursementActive => _listReimbursementActive;
 
   List<MenuCategoryData> listMenuCategory = [
     MenuCategoryData(
@@ -54,15 +59,13 @@ class HomeViewModel extends ChangeNotifier {
           assetImage: 'assets/menu/icon-menu-health.png',
           title: 'Reimbursement Kesehatan',
           page: const SubmissionFormScreen(),
-          selectedReimbursementCategory:
-              UserProvider().listReimbursementCategory[0],
+          selectedReimbursementCategory: UserProvider().listReimbursementCategory[0],
         ),
         MenuItemData(
           assetImage: 'assets/menu/icon-menu-transport.png',
           title: 'Reimbursement Transportasi',
           page: const SubmissionFormScreen(),
-          selectedReimbursementCategory:
-              UserProvider().listReimbursementCategory[1],
+          selectedReimbursementCategory: UserProvider().listReimbursementCategory[1],
         ),
       ],
     ),
@@ -87,13 +90,41 @@ class HomeViewModel extends ChangeNotifier {
 
         notifyListeners();
       } else {
-        Helper(context: context)
-            .showToast(message: response.msg, isSuccess: false);
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
       }
     }).catchError((err) {
       log('===> error $endpoint $err');
-      Helper(context: context)
-          .showToast(message: err.toString(), isSuccess: false);
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
+    return Future.value(true);
+  }
+
+  Future getUserReimburse() async {
+    startLoading();
+    notifyListeners();
+
+    String endpoint = 'reimburse/get-user-reimburse';
+    Map body = {
+      'status': 1,
+    };
+
+    await http.post(endpoint: endpoint, body: body).then((res) {
+      GetUserReimburseResponse response = GetUserReimburseResponse.fromJson(res);
+      if (response.success) {
+        _listReimbursementActive = response.data ?? [];
+        notifyListeners();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
 
       stopLoading();
       notifyListeners();

@@ -91,7 +91,9 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           ListView(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
         children: [
-          const ListSubmission(),
+          ListSubmission(
+            listReimbursement: [],
+          ),
         ],
       ),
     );

@@ -119,9 +119,9 @@ GetUserReimburseResponse _$GetUserReimburseResponseFromJson(
     GetUserReimburseResponse(
       success: json['success'] as bool? ?? false,
       msg: json['msg'] as String? ?? '',
-      data: json['data'] == null
-          ? null
-          : GetUserReimburseData.fromJson(json['data'] as Map<String, dynamic>),
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => GetUserReimburseData.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$GetUserReimburseResponseToJson(
@@ -136,7 +136,7 @@ GetUserReimburseData _$GetUserReimburseDataFromJson(
         Map<String, dynamic> json) =>
     GetUserReimburseData(
       id: (json['id'] as num?)?.toInt(),
-      typeReimbursement: json['typeReimbursement'] as String?,
+      typeReimburse: json['typeReimburse'] as String?,
       status: json['status'] as String?,
       createdDate: json['createdDate'] as String?,
       name: json['name'] as String?,
@@ -148,7 +148,7 @@ Map<String, dynamic> _$GetUserReimburseDataToJson(
         GetUserReimburseData instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'typeReimbursement': instance.typeReimbursement,
+      'typeReimburse': instance.typeReimburse,
       'status': instance.status,
       'createdDate': instance.createdDate,
       'name': instance.name,

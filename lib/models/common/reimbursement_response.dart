@@ -126,7 +126,7 @@ class AddReimburseData {
 class GetUserReimburseResponse {
   final bool success;
   final String msg;
-  GetUserReimburseData? data;
+  List<GetUserReimburseData>? data;
 
   GetUserReimburseResponse({
     this.success = false,
@@ -142,7 +142,7 @@ class GetUserReimburseResponse {
 @JsonSerializable()
 class GetUserReimburseData {
   final int? id;
-  final String? typeReimbursement;
+  final String? typeReimburse;
   final String? status;
   final String? createdDate;
   final String? name;
@@ -151,7 +151,7 @@ class GetUserReimburseData {
 
   GetUserReimburseData({
     this.id,
-    this.typeReimbursement,
+    this.typeReimburse,
     this.status,
     this.createdDate,
     this.name,

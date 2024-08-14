@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class CardSubmissionEmployee extends StatelessWidget {
-  const CardSubmissionEmployee({
-    super.key,
-  });
+  const CardSubmissionEmployee({super.key, required this.reimburseData});
+
+  final GetUserReimburseData reimburseData;
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +28,11 @@ class CardSubmissionEmployee extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Align(
+              Align(
                 alignment: Alignment.topRight,
                 child: Text(
-                  '21 Februari 2024',
-                  style: TextStyle(
+                  reimburseData.createdDate ?? '',
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: Constant.lightWeightText,
                   ),
@@ -47,24 +48,33 @@ class CardSubmissionEmployee extends StatelessWidget {
                     height: 48,
                   ),
                   const SizedBox(width: 12.0),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Reimbursement Transportasi',
-                          style: TextStyle(
+                          reimburseData.status ?? '',
+                          style: const TextStyle(
+                            color: Constant.processStatusTextColor,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          reimburseData.typeReimburse ?? '',
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,
                             fontWeight: Constant.semiBoldText,
                           ),
                         ),
-                        SizedBox(height: 4.0),
+                        const SizedBox(height: 4.0),
                         Text(
-                          'Menunggu persetujuan Admin',
-                          style: TextStyle(
-                            color: Constant.processStatusTextColor,
-                            fontSize: 12.0,
+                          'Total : Rp ${reimburseData.totalPrice}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            fontWeight: Constant.semiBoldText,
                           ),
                         ),
                       ],

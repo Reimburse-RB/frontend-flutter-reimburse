@@ -74,18 +74,20 @@ class HomeView extends StatelessWidget {
   Widget buildActiveSubmissionList(HomeViewModel viewModel) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Pengajuan Aktif',
             style: TextStyle(
               fontSize: 16,
               fontWeight: Constant.semiBoldText,
             ),
           ),
-          SizedBox(height: 12),
-          ListSubmission(),
+          const SizedBox(height: 12),
+          ListSubmission(
+            listReimbursement: viewModel.listReimbursementActive,
+          ),
         ],
       ),
     );
@@ -110,7 +112,7 @@ class HomeView extends StatelessWidget {
               buildSubmissionSummary(),
               buildHorizontalMenu(viewModel),
               buildActiveSubmissionList(viewModel),
-              EmptyStateGeneral(),
+              const EmptyStateGeneral(),
               const SizedBox(height: 24),
             ],
           ),
