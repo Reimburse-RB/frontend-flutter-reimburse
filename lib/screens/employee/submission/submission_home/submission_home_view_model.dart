@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,8 @@ import 'package:reimburse_rb/models/common/modal_data.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
+import 'package:reimburse_rb/utility/helper.dart';
+import 'package:reimburse_rb/utility/http_service.dart';
 
 class SubmissionHomeViewModel extends ChangeNotifier {
   SubmissionHomeViewModel({
@@ -25,9 +29,21 @@ class SubmissionHomeViewModel extends ChangeNotifier {
         ),
       );
     }
+
+    getUserReimburse();
   }
 
-  BuildContext context;
+  late TabController _tabController;
+  TabController get tabController => _tabController;
+
+  HttpService http = HttpService();
+  late BuildContext context;
+
+  // loading page
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  void startLoading() => _isLoading = true;
+  void stopLoading() => _isLoading = false;
 
   String modalTitle = 'Jenis Pengajuan';
   List<ModalRegularData> modalOptionList = [];
@@ -36,8 +52,69 @@ class SubmissionHomeViewModel extends ChangeNotifier {
     'Semua',
     'Menunggu Diproses',
     'Sedang Diproses',
-    'Selesai',
+    'Diterima',
+    'Ditolak',
   ];
 
-  onTapTab() {}
+  List<Map> listBodyTab = [
+    {},
+    {'status': 1},
+    {'status': 2},
+    {'status': 3},
+    {'status': 4},
+  ];
+
+  Map _selectedBodyTab = {};
+  Map get selectedBodyTab => _selectedBodyTab;
+
+  List<GetUserReimburseData> _listReimbursement = [];
+  List<GetUserReimburseData> get listReimbursement => _listReimbursement;
+
+  void initTabController(TickerProvider vsync, int length) {
+    _tabController = TabController(length: length, vsync: vsync);
+    _tabController.addListener(_handleTabChange);
+  }
+
+  void _handleTabChange() {
+    if (_tabController.indexIsChanging) {
+      _listReimbursement = [];
+      _selectedBodyTab = listBodyTab[_tabController.index];
+      getUserReimburse();
+
+      notifyListeners();
+    }
+  }
+
+  void dispose() {
+    _tabController.removeListener(_handleTabChange);
+    _tabController.dispose();
+  }
+
+  Future getUserReimburse() async {
+    startLoading();
+    notifyListeners();
+
+    String endpoint = 'reimburse/get-user-reimburse';
+    Map body = selectedBodyTab;
+
+    await http.post(endpoint: endpoint, body: body).then((res) {
+      GetUserReimburseResponse response = GetUserReimburseResponse.fromJson(res);
+      if (response.success) {
+        _listReimbursement = response.data ?? [];
+        notifyListeners();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
+    return Future.value(true);
+  }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 
 class CardSubmissionEmployee extends StatelessWidget {
   const CardSubmissionEmployee({super.key, required this.reimburseData});
@@ -70,7 +71,7 @@ class CardSubmissionEmployee extends StatelessWidget {
                         ),
                         const SizedBox(height: 4.0),
                         Text(
-                          'Total : Rp ${reimburseData.totalPrice}',
+                          'Total : Rp ${Helper(context: context).formatCurrency(amount: reimburseData.totalPrice ?? 0)}',
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,

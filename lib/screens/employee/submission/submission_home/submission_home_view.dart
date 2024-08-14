@@ -5,7 +5,9 @@ import 'package:reimburse_rb/screens/employee/submission/submission_home/submiss
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
+import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
+import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 import 'package:reimburse_rb/widgets/employee/list_submission.dart';
 
 class SubmissionHomeScreen extends StatelessWidget {
@@ -29,15 +31,21 @@ class SubmissionHomeView extends StatefulWidget {
 
 class _SubmissionHomeViewState extends State<SubmissionHomeView>
     with SingleTickerProviderStateMixin {
-  TabController? tabController;
-
   @override
   void initState() {
-    final viewModel = Provider.of<SubmissionHomeViewModel>(context, listen: false);
+    final viewModel = context.read<SubmissionHomeViewModel>();
 
-    tabController = TabController(vsync: this, length: viewModel.listStatusTab.length);
+    viewModel.initTabController(this, viewModel.listStatusTab.length);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    final viewModel = context.read<SubmissionHomeViewModel>();
+
+    viewModel.dispose();
+    super.dispose();
   }
 
   @override
@@ -62,7 +70,7 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           unselectedLabelColor: Colors.grey.shade200,
           indicatorColor: Colors.white,
           indicatorSize: TabBarIndicatorSize.label,
-          controller: tabController,
+          controller: viewModel.tabController,
           tabs: [
             for (int i = 0; i < viewModel.listStatusTab.length; i++)
               Tab(
@@ -80,22 +88,37 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           );
         },
       ),
-      body:
-          // const Column(
-          //   children: [
-          //     Spacer(),
-          //     EmptyStateGeneral(),
-          //     Spacer(),
-          //   ],
-          // )
-          ListView(
-        padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
-        children: [
-          ListSubmission(
-            listReimbursement: [],
-          ),
-        ],
+      body: LoadingFallback(
+        isLoading: viewModel.isLoading,
+        child: TabBarView(
+          controller: viewModel.tabController,
+          children: viewModel.listStatusTab.map((tab) {
+            return (viewModel.listReimbursement.isEmpty)
+                ? const Column(
+                    children: [
+                      Spacer(),
+                      EmptyStateGeneral(),
+                      Spacer(),
+                    ],
+                  )
+                : ListView(
+                    padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
+                    children: [
+                      ListSubmission(
+                        listReimbursement: viewModel.listReimbursement,
+                      ),
+                    ],
+                  );
+          }).toList(),
+        ),
       ),
+      // const Column(
+      //   children: [
+      //     Spacer(),
+      //     EmptyStateGeneral(),
+      //     Spacer(),
+      //   ],
+      // )
     );
   }
 }
