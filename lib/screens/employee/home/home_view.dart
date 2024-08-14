@@ -111,8 +111,9 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 24),
               buildSubmissionSummary(),
               buildHorizontalMenu(viewModel),
-              buildActiveSubmissionList(viewModel),
-              const EmptyStateGeneral(),
+              (viewModel.listReimbursementActive.isNotEmpty)
+                  ? buildActiveSubmissionList(viewModel)
+                  : const EmptyStateGeneral(),
               const SizedBox(height: 24),
             ],
           ),

@@ -76,10 +76,11 @@ class SubmissionHomeViewModel extends ChangeNotifier {
   }
 
   void _handleTabChange() {
-    if (_tabController.indexIsChanging) {
+    if (!tabController.indexIsChanging && tabController.index != tabController.previousIndex) {
+      // log('current tab index ${tabController.index}');
       _listReimbursement = [];
-      _selectedBodyTab = listBodyTab[_tabController.index];
-      context.read<UserProvider>().setSelectedSubmissionTabIndex(_tabController.index);
+      _selectedBodyTab = listBodyTab[tabController.index];
+      context.read<UserProvider>().setSelectedSubmissionTabIndex(tabController.index);
       getUserReimburse();
 
       notifyListeners();
@@ -101,7 +102,7 @@ class SubmissionHomeViewModel extends ChangeNotifier {
     await http.post(endpoint: endpoint, body: body).then((res) {
       ListUserReimburseResponse response = ListUserReimburseResponse.fromJson(res);
       if (response.success) {
-        _listReimbursement = response.data ?? [];
+        _listReimbursement.addAll(response.data ?? []);
         notifyListeners();
       } else {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);
