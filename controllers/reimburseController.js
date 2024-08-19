@@ -180,14 +180,15 @@ module.exports = {
           );
 
           returnData.purpose_id = reimburse.purpose_id;
+          returnData.purpose_text = purposeText ? purposeText.purpose_text : null;
         } else {
           returnData.purposeId = null;
+          returnData.purpose_text = reimburse.purpose_other;
         }
 
         returnData.category_reimbursement_text = cat
           ? cat.category_reimbursement_text
           : "";
-        returnData.purpose_text = purposeText ? purposeText.purpose_text : null;
 
         const date = new Date(reimburse.createdAt);
 
