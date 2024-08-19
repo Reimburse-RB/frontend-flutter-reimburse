@@ -35,7 +35,24 @@ class ProfileDetailView extends StatefulWidget {
   State<ProfileDetailView> createState() => _ProfileDetailViewState();
 }
 
-class _ProfileDetailViewState extends State<ProfileDetailView> {
+class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProviderStateMixin {
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   Widget buildFamilyForm({required ProfileViewModel viewModel}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -63,7 +80,8 @@ class _ProfileDetailViewState extends State<ProfileDetailView> {
                       (element) => element['id'] == familyMemberItemData?.family_status_id),
                   listStatusOption: viewModel.listFamilyStatusOptionMap,
                   name: familyMemberItemData?.name ?? '',
-                  isActiveDeleteButton: !(familyMemberItemData?.family_status_id == 1),
+                  isActiveDeleteButton:
+                      (familyMemberItemData?.family_status_id != Constant.selfStatusId),
                 ),
               );
             },
@@ -187,7 +205,19 @@ class _ProfileDetailViewState extends State<ProfileDetailView> {
               const SizedBox(height: 24),
               ImageCircleGeneral(
                 size: width / 2,
+                isEditing: viewModel.isEditing,
                 imageUrl: viewModel.profile?.img_url,
+                isImageFile: viewModel.isEditing && viewModel.newProfileImageFile != null,
+                imageFile: viewModel.newProfileImageFile,
+                onTap: () {
+                  if (viewModel.isEditing) {
+                    viewModel.onTapAddImage(animationController: animationController);
+                    // Helper(context: context)
+                    //     .viewPhoto(source: viewModel.newProfileImageFile, isImageFile: true);
+                  } else {
+                    Helper(context: context).viewPhoto(source: viewModel.profile?.img_url);
+                  }
+                },
               ),
               const SizedBox(height: 24),
               Form(

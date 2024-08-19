@@ -18,6 +18,11 @@ class Constant {
   static const int adminRoleId = 2;
   static const int hrdRoleId = 3;
 
+  static const int selfStatusId = 1;
+  static const int wifeStatusId = 2;
+  static const int husbandStatusId = 3;
+  static const int childStatusId = 4;
+
   static const int waitingStatusId = 1;
   static const int processStatusId = 2;
   static const int acceptedStatusId = 3;

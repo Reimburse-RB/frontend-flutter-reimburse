@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +13,9 @@ import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
+import 'package:reimburse_rb/utility/image_picker_handler.dart';
 
-class ProfileViewModel extends ChangeNotifier {
+class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
   ProfileViewModel({
     required this.context,
     this.isProfileDetail = false,
@@ -24,6 +27,8 @@ class ProfileViewModel extends ChangeNotifier {
   }
   HttpService http = HttpService();
   final LocalStorage localStorage = LocalStorage('reimburse_rb');
+
+  late ImagePickerHandler imagePicker;
 
   BuildContext context;
   bool isProfileDetail = false;
@@ -37,6 +42,12 @@ class ProfileViewModel extends ChangeNotifier {
   ProfileData? _profile;
   ProfileData? get profile => _profile;
 
+  File? _newProfileImageFile;
+  File? get newProfileImageFile => _newProfileImageFile;
+
+  String? _newProfileImageBase64;
+  String? get newProfileImageBase64 => _newProfileImageBase64;
+
   // loading page
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -48,8 +59,6 @@ class ProfileViewModel extends ChangeNotifier {
   Map get bodyEditProfile => _bodyEditProfile;
   List _listEditFamilyMemberData = [];
   List get listEditFamilyMemberData => _listEditFamilyMemberData;
-  String? _newImageBase64;
-  String? get newImageBase64 => _newImageBase64;
 
   // late ProfileData _backupOriginalProfile;
   // ProfileData get backupOriginalProfile => _backupOriginalProfile;
@@ -119,6 +128,8 @@ class ProfileViewModel extends ChangeNotifier {
       EditProfileResponse response = EditProfileResponse.fromJson(res);
       if (response.success) {
         _isEditing = false;
+        _newProfileImageFile = null;
+        _newProfileImageBase64 = null;
         Helper(context: context).showToast(message: response.msg, isSuccess: true);
         getProfile();
       } else {
@@ -157,6 +168,8 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future cancelEdit() {
     _isEditing = false;
+    _newProfileImageFile = null;
+    _newProfileImageBase64 = null;
     getProfile();
 
     notifyListeners();
@@ -180,7 +193,7 @@ class ProfileViewModel extends ChangeNotifier {
     _bodyEditProfile['name'] = nameController.text;
     _bodyEditProfile['identity_number'] = nikController.text;
     _bodyEditProfile['email'] = emailController.text;
-    _bodyEditProfile['image'] = newImageBase64;
+    _bodyEditProfile['image'] = newProfileImageBase64;
     _bodyEditProfile['family_member_data'] = listEditFamilyMemberData;
 
     log('===> save body edit profile ${bodyEditProfile}');
@@ -190,6 +203,21 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
 
     return Future.value(true);
+  }
+
+  onTapAddImage({required AnimationController animationController}) {
+    imagePicker = ImagePickerHandler(this, animationController);
+    imagePicker.init(context);
+    imagePicker.showDialog(context);
+  }
+
+  addImage({required File imageFile}) {
+    String imageBase64 = base64Encode(imageFile.readAsBytesSync());
+
+    _newProfileImageFile = imageFile;
+    _newProfileImageBase64 = imageBase64;
+
+    notifyListeners();
   }
 
   Future addFamilyMember() {
@@ -261,5 +289,16 @@ class ProfileViewModel extends ChangeNotifier {
       builder: (context) => const SignInScreen(),
     ));
     return Future.value(true);
+  }
+
+  @override
+  void userImage(File image) {
+    // String base64Image = base64Encode(image.readAsBytesSync());
+    String fileName = image.path.split("/").last;
+    // Uint8List byestsImg = const Base64Decoder().convert(base64Image);
+
+    addImage(imageFile: image);
+
+    log('===> imagepicker fileName $fileName');
   }
 }
