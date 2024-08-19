@@ -282,13 +282,13 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
     ));
   }
 
-  Future signOut() {
+  void signOut() {
     localStorage.clear();
 
-    Navigator.of(context).pushReplacement(CupertinoPageRoute(
-      builder: (context) => const SignInScreen(),
-    ));
-    return Future.value(true);
+    Navigator.of(context).pushAndRemoveUntil(
+      CupertinoPageRoute(builder: (context) => const SignInScreen()),
+      (Route<dynamic> route) => false, // Hapus semua rute sebelumnya
+    );
   }
 
   @override
