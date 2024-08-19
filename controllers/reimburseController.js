@@ -18,6 +18,9 @@ module.exports = {
       };
 
       if (isNotNil(status)) {
+        whereParam.status = {
+          [Op.in]: status,
+        };
         whereParam.status = status;
       }
 
@@ -74,6 +77,7 @@ module.exports = {
           const dataCard = {
             id: item.id,
             typeReimburse: cat ? cat.category_reimbursement_text : "",
+            statusId: item.status,
             status:
               item.status == 1
                 ? "Menunggu Diproses"
@@ -169,15 +173,21 @@ module.exports = {
         const cat = allStatus.listCategoryReimbursement.find(
           (itemCat) => itemCat.category_reimbursement_id === reimburse.category
         );
-        const purposeText = allStatus.purposeId.find(
-          (itemCat) => itemCat.purpose_id === reimburse.purpose_id
-        );
+
+        if (reimburse.purposeId !== 0) {
+          const purposeText = allStatus.purposeId.find(
+            (itemCat) => itemCat.purpose_id === reimburse.purpose_id
+          );
+
+          returnData.purpose_id = reimburse.purpose_id;
+        } else {
+          returnData.purposeId = null;
+        }
 
         returnData.category_reimbursement_text = cat
           ? cat.category_reimbursement_text
           : "";
-        returnData.purpose_id = reimburse.purpose_id;
-        returnData.purpose_text = purposeText ? purposeText.purpose_text : "";
+        returnData.purpose_text = purposeText ? purposeText.purpose_text : null;
 
         const date = new Date(reimburse.createdAt);
 
@@ -371,6 +381,13 @@ module.exports = {
 
     try {
       if (isNil(purpose_id)) {
+        return res.json({
+          success: false,
+          msg: "diagnosiss or destination must be filled",
+        });
+      }
+
+      if (purpose_id == 0 && purpose_other_text == null) {
         return res.json({
           success: false,
           msg: "diagnosiss or destination must be filled",
