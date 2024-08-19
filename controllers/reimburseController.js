@@ -5,6 +5,7 @@ const ReimburseDetail = require("../models/Reimburse-Detail");
 const allStatus = require("../utils/allStatus");
 const UserFamily = require("../models/User-Family");
 const User = require("../models/User");
+const { Op } = require('sequelize');
 require("dotenv").config();
 
 module.exports = {
@@ -21,7 +22,6 @@ module.exports = {
         whereParam.status = {
           [Op.in]: status,
         };
-        whereParam.status = status;
       }
 
       const reimburse = await Reimburse.findAll({
