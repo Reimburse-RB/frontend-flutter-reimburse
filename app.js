@@ -6,6 +6,7 @@ var logger = require("morgan");
 var cors = require("cors");
 const helmet = require("helmet");
 const sequelize = require("./config/database");
+const bodyParser = require("body-parser");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
