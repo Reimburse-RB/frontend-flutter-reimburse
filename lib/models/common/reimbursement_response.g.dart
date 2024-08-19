@@ -137,6 +137,7 @@ ItemUserReimburseData _$ItemUserReimburseDataFromJson(
         Map<String, dynamic> json) =>
     ItemUserReimburseData(
       id: (json['id'] as num?)?.toInt(),
+      statusId: (json['statusId'] as num?)?.toInt(),
       typeReimburse: json['typeReimburse'] as String?,
       status: json['status'] as String?,
       createdDate: json['createdDate'] as String?,
@@ -149,6 +150,7 @@ Map<String, dynamic> _$ItemUserReimburseDataToJson(
         ItemUserReimburseData instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'statusId': instance.statusId,
       'typeReimburse': instance.typeReimburse,
       'status': instance.status,
       'createdDate': instance.createdDate,

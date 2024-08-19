@@ -58,10 +58,18 @@ class SubmissionHomeViewModel extends ChangeNotifier {
 
   List<Map> listBodyTab = [
     {},
-    {'status': 1},
-    {'status': 2},
-    {'status': 3},
-    {'status': 4},
+    {
+      'status': [1]
+    },
+    {
+      'status': [2]
+    },
+    {
+      'status': [3]
+    },
+    {
+      'status': [4]
+    },
   ];
 
   Map _selectedBodyTab = {};

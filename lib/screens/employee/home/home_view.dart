@@ -85,9 +85,11 @@ class HomeView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          ListSubmission(
-            listReimbursement: viewModel.listReimbursementActive,
-          ),
+          (viewModel.listReimbursementActive.isNotEmpty)
+              ? ListSubmission(
+                  listReimbursement: viewModel.listReimbursementActive,
+                )
+              : const EmptyStateGeneral(),
         ],
       ),
     );
@@ -111,9 +113,7 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 24),
               buildSubmissionSummary(),
               buildHorizontalMenu(viewModel),
-              (viewModel.listReimbursementActive.isNotEmpty)
-                  ? buildActiveSubmissionList(viewModel)
-                  : const EmptyStateGeneral(),
+              buildActiveSubmissionList(viewModel),
               const SizedBox(height: 24),
             ],
           ),

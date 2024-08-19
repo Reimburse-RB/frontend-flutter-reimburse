@@ -23,6 +23,11 @@ class Constant {
   static const int acceptedStatusId = 3;
   static const int rejectedStatusId = 4;
 
+  static const String waitingStatusAsset = 'assets/status/icon-status-waiting.png';
+  static const String processStatusAsset = 'assets/status/icon-status-process.png';
+  static const String acceptedStatusAsset = 'assets/status/icon-status-succeed.png';
+  static const String rejectedStatusAsset = 'assets/status/icon-status-failed.png';
+
   static const int healthCategoryReimbursementId = 1;
   static const int transportCategoryReimbursementId = 2;
 

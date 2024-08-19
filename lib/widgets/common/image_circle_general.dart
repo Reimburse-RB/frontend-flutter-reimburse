@@ -60,12 +60,9 @@ class ImageCircleGeneral extends StatelessWidget {
               border: Border.all(width: 2, color: Constant.greenDark),
             ),
             child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(fallbackUrl ?? Constant.randomImageUrl),
-                ),
-                shape: BoxShape.circle,
-              ),
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+              child: Image.asset(Constant.imageErrorAsset),
             ),
           );
         },

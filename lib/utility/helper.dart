@@ -329,4 +329,28 @@ class Helper {
       },
     );
   }
+
+  Color getStatusColor({required int? statusId}) {
+    return statusId == Constant.waitingStatusId
+        ? Constant.waitingStatusColor
+        : statusId == Constant.processStatusId
+            ? Constant.processStatusTextColor
+            : statusId == Constant.acceptedStatusId
+                ? Constant.acceptedStatusTextColor
+                : statusId == Constant.rejectedStatusId
+                    ? Constant.rejectedStatusColor
+                    : Constant.grey;
+  }
+
+  String getStatusAsset({required int? statusId}) {
+    return statusId == Constant.waitingStatusId
+        ? Constant.waitingStatusAsset
+        : statusId == Constant.processStatusId
+            ? Constant.processStatusAsset
+            : statusId == Constant.acceptedStatusId
+                ? Constant.acceptedStatusAsset
+                : statusId == Constant.rejectedStatusId
+                    ? Constant.rejectedStatusAsset
+                    : '';
+  }
 }

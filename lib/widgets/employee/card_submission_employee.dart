@@ -51,7 +51,7 @@ class CardSubmissionEmployee extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
-                    'assets/status/icon-status-process.png',
+                    Helper(context: context).getStatusAsset(statusId: reimburseData.statusId),
                     width: 48,
                     height: 48,
                   ),
@@ -62,8 +62,9 @@ class CardSubmissionEmployee extends StatelessWidget {
                       children: [
                         Text(
                           reimburseData.status ?? '',
-                          style: const TextStyle(
-                            color: Constant.processStatusTextColor,
+                          style: TextStyle(
+                            color: Helper(context: context)
+                                .getStatusColor(statusId: reimburseData.statusId),
                             fontSize: 12.0,
                           ),
                         ),

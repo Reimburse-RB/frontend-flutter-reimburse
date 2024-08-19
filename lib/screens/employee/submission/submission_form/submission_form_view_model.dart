@@ -162,9 +162,9 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
   bool checkFormCompleteness() {
     // Cek kondisi khusus untuk purpose_id dan purpose_other_text
     bool purposeCondition =
-        bodySubmission.containsKey('purpose_id') && bodySubmission['purpose_id'] != null ||
+        bodySubmission.containsKey('purpose_id') && bodySubmission['purpose_id'] != 0 ||
             bodySubmission.containsKey('purpose_other_text') &&
-                bodySubmission['purpose_other_text'].toString().isNotEmpty;
+                bodySubmission['purpose_other_text'] != null;
 
     // Cek kondisi khusus untuk detail_title_id dan detail_title_other_text
     bool detailCondition = true;
@@ -202,7 +202,14 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
   }
 
   Future postUploadSubmission() async {
-    _bodySubmission['purpose_other_text'] = otherPurposeController.text;
+    _bodySubmission['purpose_other_text'] =
+        otherPurposeController.text.isNotEmpty ? otherPurposeController.text : null;
+
+    if (bodySubmission['purpose_other_text'] != null &&
+        bodySubmission['purpose_other_text'] != '') {
+      // default value when other purpose field is filled
+      _bodySubmission['purpose_id'] = 0;
+    }
 
     _bodySubmission['image'] = listAttachmentImageBase64;
 
@@ -276,7 +283,7 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
     _listBodyDetailCost.add({
       "detail_title_id": null,
       "detail_title_other_text": '',
-      "detail_family_id": profile?.family_member_data.first.family_status_id,
+      "detail_family_id": profile?.family_member_data.first.id,
       "detail_cost": 0,
       "detail_date": null,
       "description": null
@@ -328,7 +335,7 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
 
   Future onChangeFamilyMember({required int index, required FamilyMemberData newValue}) {
     _listControllerDetailCost[index].selectedFamilyMember = newValue;
-    _listBodyDetailCost[index]['detail_family_id'] = newValue.family_status_id;
+    _listBodyDetailCost[index]['detail_family_id'] = newValue.id;
 
     log('===> ochange detail title $listBodyDetailCost');
     notifyListeners();

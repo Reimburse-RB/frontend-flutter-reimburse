@@ -142,6 +142,7 @@ class ListUserReimburseResponse {
 @JsonSerializable()
 class ItemUserReimburseData {
   final int? id;
+  final int? statusId;
   final String? typeReimburse;
   final String? status;
   final String? createdDate;
@@ -151,6 +152,7 @@ class ItemUserReimburseData {
 
   ItemUserReimburseData({
     this.id,
+    this.statusId,
     this.typeReimburse,
     this.status,
     this.createdDate,

@@ -109,16 +109,16 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
                 amount: viewModel.employeeSummaryData?.total_reimburse_this_year.toDouble() ?? 0,
               ),
             ),
-            const SizedBox(height: 8),
-            Container(
-              margin: const EdgeInsets.only(left: 32),
-              child: LinearProgressIndicator(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: Constant.limitColor,
-                value: 0.15,
-                backgroundColor: Colors.grey.shade300,
-              ),
-            )
+            // const SizedBox(height: 8),
+            // Container(
+            //   margin: const EdgeInsets.only(left: 32),
+            //   child: LinearProgressIndicator(
+            //     borderRadius: const BorderRadius.all(Radius.circular(10)),
+            //     color: Constant.limitColor,
+            //     value: 0.15,
+            //     backgroundColor: Colors.grey.shade300,
+            //   ),
+            // )
           ],
         ),
       ),

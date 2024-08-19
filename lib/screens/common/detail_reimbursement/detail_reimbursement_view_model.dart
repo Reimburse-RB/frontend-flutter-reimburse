@@ -29,15 +29,8 @@ class DetailReimbursementViewModel extends ChangeNotifier {
   Color? get statusColor => _statusColor;
 
   void setStatusColor() {
-    _statusColor = detailReimburseData?.status_id == Constant.waitingStatusId
-        ? Constant.waitingStatusColor
-        : detailReimburseData?.status_id == Constant.processStatusId
-            ? Constant.processStatusTextColor
-            : detailReimburseData?.status_id == Constant.acceptedStatusId
-                ? Constant.acceptedStatusTextColor
-                : detailReimburseData?.status_id == Constant.rejectedStatusId
-                    ? Constant.rejectedStatusColor
-                    : Constant.grey;
+    _statusColor =
+        Helper(context: context).getStatusColor(statusId: detailReimburseData?.status_id);
     notifyListeners();
   }
 
