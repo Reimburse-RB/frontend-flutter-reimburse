@@ -174,7 +174,7 @@ module.exports = {
           (itemCat) => itemCat.category_reimbursement_id === reimburse.category
         );
 
-        if (reimburse.purposeId !== 0) {
+        if (reimburse.purpose_id !== 0) {
           const purposeText = allStatus.purposeId.find(
             (itemCat) => itemCat.purpose_id === reimburse.purpose_id
           );
