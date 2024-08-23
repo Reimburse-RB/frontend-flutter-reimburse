@@ -17,5 +17,10 @@ router.post(
   authLogin,
   userController.verificationAccount
 );
+router.post(
+  "/get-detail-user-verification",
+  authLogin,
+  userController.getDetailVerificationUser
+);
 
 module.exports = router;

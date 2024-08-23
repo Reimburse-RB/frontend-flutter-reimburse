@@ -213,6 +213,88 @@ module.exports = {
     }
   },
 
+  getDetailVerificationUser: async (req, res) => {
+    const { userId } = req.body;
+    const user = req.userAuth;
+    try {
+      if (isNil(userId)) {
+        return res.json({
+          success: false,
+          msg: "Input user id",
+        });
+      }
+
+      if (user.role != 2) {
+        return res.json({
+          success: false,
+          msg: "you're not using admin account",
+        });
+      }
+
+      const detailUser = await User.findOne({
+        where: {
+          id: userId,
+        },
+      });
+
+      var returnData = {};
+
+      if (detailUser) {
+        const roleUser = allStatus.role.find(
+          (itemRole) => itemRole.role_id === detailUser.role
+        );
+
+        returnData = {
+          nik: detailUser.identity_number,
+          name: detailUser.fullname,
+          email: detailUser.email,
+          role_id: detailUser.role,
+          role_text: roleUser ? roleUser.role_text : "",
+          img_url:
+            user.image_url != null
+              ? `${process.env.URL}${detailUser.image_url}`
+              : null,
+        };
+
+        const userFamily = await UserFamily.findAll({
+          where: { user_id: userId },
+        });
+        const detailFamily = [];
+        if (userFamily.length > 0) {
+          for (const item of userFamily) {
+            const familyStatus = allStatus.familyOption.find(
+              (itemFamStat) => itemFamStat.family_status_id === item.status
+            );
+
+            detailFamily.push({
+              id: item.id,
+              family_status_id: item.status,
+              family_status_text: familyStatus
+                ? familyStatus.family_status_text
+                : "",
+              name: item.fullname,
+            });
+          }
+        }
+
+        returnData.family_member_data = detailFamily;
+
+        return res.json({
+          success: true,
+          msg: "success getting detail user verification",
+          data: returnData,
+        });
+      }
+
+      return res.json({
+        success: false,
+        msg: "failed getting detail user verification",
+      });
+    } catch (error) {
+      return res.json({ msg: error.message });
+    }
+  },
+
   editUser: async (req, res) => {
     try {
       const { email, name, identity_number, family_member_data } = req.body;
