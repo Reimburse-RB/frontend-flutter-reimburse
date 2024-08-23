@@ -8,6 +8,7 @@ const { isNil } = require("ramda");
 const UserFamily = require("../models/User-Family");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
+const fs = require("fs");
 
 module.exports = {
   userRegister: async (req, res) => {
@@ -38,6 +39,7 @@ module.exports = {
         email,
         password: hashPassword,
         identity_number,
+        status: 2,
         role,
         token,
       });
@@ -70,6 +72,91 @@ module.exports = {
         msg: "Anda Berhasil Login!!",
         token: user.token,
         user: user,
+      });
+    } catch (error) {
+      return res.json({ msg: error.message });
+    }
+  },
+
+  getVerificationAccount: async (req, res) => {
+    const user = req.userAuth;
+
+    try {
+      if (user.role != 2) {
+        return res.json({
+          success: false,
+          msg: "you're not using admin account",
+        });
+      }
+
+      const allUser = await User.findAll({
+        where: {
+          status: 2,
+        },
+      });
+
+      const returnData = [];
+      for (const item of allUser) {
+        returnData.push({
+          id: item.id,
+          nik: item.identity_number,
+          name: item.fullname,
+          img_url:
+            user.image_url != null
+              ? `${process.env.URL}${user.image_url}`
+              : null,
+        });
+      }
+
+      return res.json({
+        success: true,
+        msg: "Success getting data user verification!",
+        data: returnData,
+      });
+    } catch (error) {
+      return res.json({ msg: error.message });
+    }
+  },
+
+  verificationAccount: async (req, res) => {
+    const { userId } = req.body;
+    const user = req.userAuth;
+
+    try {
+      if (isNil(userId)) {
+        return res.json({
+          success: false,
+          msg: "Input user id",
+        });
+      }
+
+      if (user.role != 2) {
+        return res.json({
+          success: false,
+          msg: "you're not using admin account",
+        });
+      }
+
+      const userDetail = await User.findOne({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (userDetail) {
+        userDetail.status = 1;
+        userDetail.save();
+
+        return res.json({
+          success: true,
+          msg: "success verification user",
+          data: userDetail,
+        });
+      }
+
+      return res.json({
+        success: false,
+        msg: "failed verification user",
       });
     } catch (error) {
       return res.json({ msg: error.message });

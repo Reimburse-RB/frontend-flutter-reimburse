@@ -7,5 +7,15 @@ router.post("/register", userController.userRegister);
 router.post("/login", userController.userLogin);
 router.post("/get-profile", authLogin, userController.getProfile);
 router.post("/edit-profile", authLogin, uploadImage, userController.editUser);
+router.post(
+  "/get-user-verification",
+  authLogin,
+  userController.getVerificationAccount
+);
+router.post(
+  "/verification-account",
+  authLogin,
+  userController.verificationAccount
+);
 
 module.exports = router;

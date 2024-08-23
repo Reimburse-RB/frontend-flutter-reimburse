@@ -5,7 +5,7 @@ const ReimburseDetail = require("../models/Reimburse-Detail");
 const allStatus = require("../utils/allStatus");
 const UserFamily = require("../models/User-Family");
 const User = require("../models/User");
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 require("dotenv").config();
 
 module.exports = {
@@ -14,9 +14,13 @@ module.exports = {
     const user = req.userAuth;
 
     try {
-      const whereParam = {
-        user_id: user.id,
-      };
+      const whereParam = {};
+
+      if (!isNil(isAdmin)) {
+        if (isAdmin == false) {
+          whereParam.user_id = user.id;
+        }
+      }
 
       if (isNotNil(status)) {
         whereParam.status = {
@@ -180,7 +184,9 @@ module.exports = {
           );
 
           returnData.purpose_id = reimburse.purpose_id;
-          returnData.purpose_text = purposeText ? purposeText.purpose_text : null;
+          returnData.purpose_text = purposeText
+            ? purposeText.purpose_text
+            : null;
         } else {
           returnData.purposeId = null;
           returnData.purpose_text = reimburse.purpose_other;
@@ -381,6 +387,13 @@ module.exports = {
     const user = req.userAuth;
 
     try {
+      if (user.status == 2) {
+        return res.json({
+          success: false,
+          msg: "User not verified",
+        });
+      }
+
       if (isNil(purpose_id)) {
         return res.json({
           success: false,
