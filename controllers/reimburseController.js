@@ -137,6 +137,47 @@ module.exports = {
     }
   },
 
+  getCurrentStatusActive: async (req, res) => {
+    const user = req.userAuth;
+
+    try {
+      if (user.role != 2) {
+        return res.json({
+          success: false,
+          msg: "you're not using admin account",
+        });
+      }
+
+      const reimburse = await Reimburse.findAll({});
+
+      const returnData = {
+        totalDiproses: 0,
+        totalKesehatanDiproses: 0,
+        totalTrasnportDiproses: 0,
+      };
+
+      for (const item of reimburse) {
+        if (item.category == 1 && item.status == 1) {
+          returnData.totalKesehatanDiproses += 1;
+          returnData.totalDiproses += 1;
+        }
+
+        if (item.category == 2 && item.status == 1) {
+          returnData.totalKesehatanDiproses += 1;
+          returnData.totalDiproses += 1;
+        }
+      }
+
+      return res.json({
+        success: true,
+        msg: "success getting data",
+        data: returnData,
+      });
+    } catch (e) {
+      return res.json({ msg: e.message });
+    }
+  },
+
   getDetailReimburse: async (req, res) => {
     const { reimburseId } = req.body;
     const user = req.userAuth;

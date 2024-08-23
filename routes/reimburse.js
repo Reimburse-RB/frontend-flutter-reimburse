@@ -50,4 +50,10 @@ router.post(
   reimburseController.changeStatusReimburse
 );
 
+router.post(
+  "/get-current-status-active",
+  authLogin,
+  reimburseController.getCurrentStatusActive
+);
+
 module.exports = router;
