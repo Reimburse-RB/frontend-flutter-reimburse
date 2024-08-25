@@ -308,7 +308,7 @@ module.exports = {
         ) {
           user.image_url = `images/upload/${req.fileName}`;
         } else {
-          await fs.unlink(path.join(`public/images/upload/${user.imageUrl}`));
+          await fs.promises.unlink(path.join(`public/${user.image_url}`));
           user.image_url = `images/${req.fileName}`;
         }
       }
