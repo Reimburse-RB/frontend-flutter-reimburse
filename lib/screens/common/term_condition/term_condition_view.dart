@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/term_condition_response.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -163,6 +164,7 @@ class TermConditionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<TermConditionViewModel>();
+    final userProvider = context.read<UserProvider>();
     return WillPopScope(
       onWillPop: () async {
         if (viewModel.isEditing) {
@@ -228,7 +230,7 @@ class TermConditionView extends StatelessWidget {
                 ),
               )
             : null,
-        floatingActionButton: (!viewModel.isEditing)
+        floatingActionButton: (!viewModel.isEditing && userProvider.isAdmin)
             ? FloatingActionButtonGeneral(
                 onPressed: () {
                   viewModel.setChangeIsEditingValue();

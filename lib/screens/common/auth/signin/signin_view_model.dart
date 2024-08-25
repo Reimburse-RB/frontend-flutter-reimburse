@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/auth_response.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signup/signup_view.dart';
-import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
@@ -56,22 +58,6 @@ class SignInViewModel extends ChangeNotifier {
     ));
   }
 
-  void navigateToEmployeeMainMenu() {
-    log('===> navigate to employee main menu');
-
-    Navigator.of(context).pushReplacement(CupertinoPageRoute(
-      builder: (context) => const MainMenuScreen(),
-    ));
-  }
-
-  void navigateToAdminMainMenu() {
-    log('===> navigate to admin main menu');
-
-    // Navigator.of(context).pushReplacement(CupertinoPageRoute(
-    //   builder: (context) => const MainMenuScreen(),
-    // ));
-  }
-
   Future submitSignIn() async {
     startLoading();
     notifyListeners();
@@ -86,21 +72,16 @@ class SignInViewModel extends ChangeNotifier {
       SignInResponse response = SignInResponse.fromJson(res);
       if (response.success) {
         Helper(context: context).showToast(message: response.msg);
+
+        bool isAdmin = response.user?.role == Constant.adminRoleId ||
+            response.user?.role == Constant.hrdRoleId;
+
         localStorage.setItem('auth-token', response.token);
         localStorage.setItem('role', response.user?.role);
-        localStorage.setItem(
-          'is-admin-or-hrd',
-          response.user?.role == Constant.adminRoleId || response.user?.role == Constant.hrdRoleId,
-        );
+        localStorage.setItem('is-admin-or-hrd', isAdmin);
 
-        notifyListeners();
-
-        if (response.user?.role == Constant.employeeRoleId) {
-          navigateToEmployeeMainMenu();
-        } else if (response.user?.role == Constant.adminRoleId &&
-            response.user?.role == Constant.hrdRoleId) {
-          navigateToAdminMainMenu();
-        }
+        context.read<UserProvider>().setIsAdmin(isAdmin);
+        context.read<NavigationProvider>().navigateToMainMenuPage(context: context);
       } else {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);
       }

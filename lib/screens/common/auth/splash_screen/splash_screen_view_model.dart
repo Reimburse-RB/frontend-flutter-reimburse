@@ -4,9 +4,9 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/onboarding/onboarding_view.dart';
-import 'package:reimburse_rb/screens/common/auth/signin/signin_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 
@@ -22,22 +22,21 @@ class SplashScreenViewModel extends ChangeNotifier {
       int? role = localStorage.getItem('role');
       bool isAdmin = localStorage.getItem('is-admin-or-hrd') ?? false;
 
-      final provider = context.read<UserProvider>();
-      provider.setIsAdmin(isAdmin);
-
+      context.read<UserProvider>().setIsAdmin(isAdmin);
       log('===> check auth \n===> token : $token\n===> role : $role\n===> isAdmin : $isAdmin');
 
       if (token.isNotEmpty) {
         if (role != null) {
-          (role == Constant.employeeRoleId) // Karyawan
-              ? SignInViewModel(context: context).navigateToEmployeeMainMenu()
-              : (role == Constant.adminRoleId || role == Constant.hrdRoleId) // Admin & HRD
-                  ? SignInViewModel(context: context).navigateToEmployeeMainMenu()
-                  // ? SignInViewModel(context: context).navigateToAdminMainMenu()
-                  : Helper(context: context).showToast(
-                      message: 'Role tidak valid',
-                      isSuccess: false,
-                    );
+          (role == Constant.employeeRoleId ||
+                  role == Constant.adminRoleId ||
+                  role == Constant.hrdRoleId)
+              ? context
+                  .read<NavigationProvider>()
+                  .navigateToMainMenuPage(context: context)
+              : Helper(context: context).showToast(
+                  message: 'Role tidak valid',
+                  isSuccess: false,
+                );
         }
       } else {
         startOnboard(context: context);

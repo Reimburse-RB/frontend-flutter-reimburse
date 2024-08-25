@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
@@ -70,6 +69,13 @@ class ProfileView extends StatelessWidget {
             ImageCircleGeneral(
               size: width / 2,
               imageUrl: viewModel.profile?.img_url,
+              onTap: viewModel.profile?.img_url != null
+                  ? () {
+                      Helper(context: context).viewPhoto(
+                        source: viewModel.profile?.img_url,
+                      );
+                    }
+                  : null,
             ),
             const SizedBox(height: 16),
             Text(

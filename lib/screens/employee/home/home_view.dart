@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
@@ -50,13 +51,21 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget buildHorizontalMenu(HomeViewModel viewModel) {
+  Widget buildHorizontalMenu(BuildContext context, HomeViewModel viewModel) {
+    bool isAdmin = context.read<UserProvider>().isAdmin;
+
+    int listCategoryMenuLength = isAdmin
+        ? viewModel.listMenuCategoryAdmin.length
+        : viewModel.listMenuCategoryEmployee.length;
+    List<MenuCategoryData> listCategoryMenu =
+        isAdmin ? viewModel.listMenuCategoryAdmin : viewModel.listMenuCategoryEmployee;
+
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: viewModel.listMenuCategory.length,
+      itemCount: listCategoryMenuLength,
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        MenuCategoryData menuCategoryData = viewModel.listMenuCategory[index];
+        MenuCategoryData menuCategoryData = listCategoryMenu[index];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,6 +107,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
+    final userProvider = context.read<UserProvider>();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -112,8 +122,8 @@ class HomeView extends StatelessWidget {
             children: [
               const SizedBox(height: 24),
               buildSubmissionSummary(),
-              buildHorizontalMenu(viewModel),
-              buildActiveSubmissionList(viewModel),
+              buildHorizontalMenu(context, viewModel),
+              if (!userProvider.isAdmin) buildActiveSubmissionList(viewModel),
               const SizedBox(height: 24),
             ],
           ),

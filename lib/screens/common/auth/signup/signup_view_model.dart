@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/auth_response.dart';
 import 'package:reimburse_rb/models/common/role_data.dart';
-import 'package:reimburse_rb/screens/common/auth/signin/signin_view_model.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
@@ -106,21 +108,16 @@ class SignUpViewModel extends ChangeNotifier {
       SignUpResponse response = SignUpResponse.fromJson(res);
       if (response.success) {
         Helper(context: context).showToast(message: response.msg);
+
+        bool isAdmin = response.data?.role == Constant.adminRoleId ||
+            response.data?.role == Constant.hrdRoleId;
+
         localStorage.setItem('auth-token', response.data?.token);
         localStorage.setItem('role', response.data?.role);
-        localStorage.setItem(
-          'is-admin-or-hrd',
-          response.data?.role == Constant.adminRoleId || response.data?.role == Constant.hrdRoleId,
-        );
+        localStorage.setItem('is-admin-or-hrd', isAdmin);
 
-        notifyListeners();
-
-        if (response.data?.role == Constant.employeeRoleId) {
-          SignInViewModel(context: context).navigateToEmployeeMainMenu();
-        } else if (response.data?.role == Constant.adminRoleId &&
-            response.data?.role == Constant.hrdRoleId) {
-          SignInViewModel(context: context).navigateToAdminMainMenu();
-        }
+        context.read<UserProvider>().setIsAdmin(isAdmin);
+        context.read<NavigationProvider>().navigateToMainMenuPage(context: context);
       } else {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);
       }

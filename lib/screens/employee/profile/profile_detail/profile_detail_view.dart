@@ -258,10 +258,12 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
                 ),
               ),
               const SizedBox(height: 32),
-              if (!viewModel.isAdmin) buildFormDivider(),
-              if (!viewModel.isAdmin) const SizedBox(height: 24),
-              if (!viewModel.isAdmin) buildFamilyForm(viewModel: viewModel),
-              if (!viewModel.isAdmin) const SizedBox(height: 32),
+              if (!viewModel.isAdmin) ...[
+                buildFormDivider(),
+                const SizedBox(height: 24),
+                buildFamilyForm(viewModel: viewModel),
+                const SizedBox(height: 32),
+              ],
               buildFormDivider(),
               const SizedBox(height: 32),
               Padding(

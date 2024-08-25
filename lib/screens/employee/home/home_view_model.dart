@@ -36,7 +36,35 @@ class HomeViewModel extends ChangeNotifier {
   List<ItemUserReimburseData> _listReimbursementActive = [];
   List<ItemUserReimburseData> get listReimbursementActive => _listReimbursementActive;
 
-  List<MenuCategoryData> listMenuCategory = [
+  List<MenuCategoryData> listMenuCategoryAdmin = [
+    MenuCategoryData(
+      categoryTitle: 'Informasi',
+      menuList: [
+        MenuItemData(
+          assetImage: 'assets/menu/icon-menu-syarat.png',
+          title: 'Persyaratan Pengajuan',
+          page: const TermConditionScreen(),
+        ),
+        MenuItemData(
+          assetImage: 'assets/menu/icon-menu-rekapitulasi.png',
+          title: 'Rekapitulasi Reimbursement',
+          page: const RecapitulationListPeriodScreen(),
+        ),
+      ],
+    ),
+    MenuCategoryData(
+      categoryTitle: 'Permintaan Masuk',
+      menuList: [
+        MenuItemData(
+          assetImage: 'assets/menu/icon-menu-verif-akun.png',
+          title: 'Verifikasi Perubahan dan Akun Baru',
+          page: const RecapitulationListPeriodScreen(),
+        ),
+      ],
+    ),
+  ];
+
+  List<MenuCategoryData> listMenuCategoryEmployee = [
     MenuCategoryData(
       categoryTitle: 'Informasi',
       menuList: [

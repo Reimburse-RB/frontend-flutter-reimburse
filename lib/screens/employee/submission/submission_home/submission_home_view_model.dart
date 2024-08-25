@@ -106,6 +106,9 @@ class SubmissionHomeViewModel extends ChangeNotifier {
 
     String endpoint = 'reimburse/get-user-reimburse';
     Map body = selectedBodyTab;
+    if (context.read<UserProvider>().isAdmin) {
+      body['isAdmin'] = true;
+    }
 
     await http.post(endpoint: endpoint, body: body).then((res) {
       ListUserReimburseResponse response = ListUserReimburseResponse.fromJson(res);

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
-import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/card_detail_cost.dart';
@@ -30,6 +29,7 @@ class DetailReimbursementView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<DetailReimbursementViewModel>();
+    final userProvider = context.read<UserProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
@@ -95,47 +95,49 @@ class DetailReimbursementView extends StatelessWidget {
                 }
               },
             ),
-            const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  if (viewModel.detailReimburseData?.status_id == Constant.waitingStatusId) ...[
-                    ButtonGeneral(
-                      onTap: () {
-                        viewModel.postChangeDetailReimbursement(
-                          newStatusId: Constant.processStatusId,
-                        );
-                      },
-                      text: 'Proses Pengajuan',
-                    ),
-                    const SizedBox(height: 16),
+            if (userProvider.isAdmin) ...[
+              const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  children: [
+                    if (viewModel.detailReimburseData?.status_id == Constant.waitingStatusId) ...[
+                      ButtonGeneral(
+                        onTap: () {
+                          viewModel.postChangeDetailReimbursement(
+                            newStatusId: Constant.processStatusId,
+                          );
+                        },
+                        text: 'Proses Pengajuan',
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    if (viewModel.detailReimburseData?.status_id == Constant.processStatusId) ...[
+                      ButtonGeneral(
+                        onTap: () {
+                          viewModel.postChangeDetailReimbursement(
+                            newStatusId: Constant.acceptedStatusId,
+                          );
+                        },
+                        text: 'Setujui Pengajuan',
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    if (viewModel.detailReimburseData?.status_id == Constant.waitingStatusId ||
+                        viewModel.detailReimburseData?.status_id == Constant.processStatusId)
+                      ButtonGeneral(
+                        onTap: () {
+                          viewModel.postChangeDetailReimbursement(
+                            newStatusId: Constant.rejectedStatusId,
+                          );
+                        },
+                        text: 'Tolak Pengajuan',
+                        isWhiteButton: true,
+                      ),
                   ],
-                  if (viewModel.detailReimburseData?.status_id == Constant.processStatusId) ...[
-                    ButtonGeneral(
-                      onTap: () {
-                        viewModel.postChangeDetailReimbursement(
-                          newStatusId: Constant.acceptedStatusId,
-                        );
-                      },
-                      text: 'Setujui Pengajuan',
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  if (viewModel.detailReimburseData?.status_id == Constant.waitingStatusId ||
-                      viewModel.detailReimburseData?.status_id == Constant.processStatusId)
-                    ButtonGeneral(
-                      onTap: () {
-                        viewModel.postChangeDetailReimbursement(
-                          newStatusId: Constant.rejectedStatusId,
-                        );
-                      },
-                      text: 'Tolak Pengajuan',
-                      isWhiteButton: true,
-                    ),
-                ],
+                ),
               ),
-            ),
+            ],
             const SizedBox(height: 48),
           ],
         ),

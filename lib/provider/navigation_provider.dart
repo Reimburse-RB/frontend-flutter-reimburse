@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view.dart';
+import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
 
 class NavigationProvider extends ChangeNotifier {
@@ -36,6 +37,12 @@ class NavigationProvider extends ChangeNotifier {
   }) {
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => page,
+    ));
+  }
+
+  void navigateToMainMenuPage({required BuildContext context}) {
+    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+      builder: (context) => const MainMenuScreen(),
     ));
   }
 }
