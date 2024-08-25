@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -51,6 +52,7 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<SubmissionHomeViewModel>();
+    final userProvider = context.read<UserProvider>();
     return Scaffold(
       appBar: AppBarGeneral(
         context: context,
@@ -79,15 +81,17 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButtonGeneral(
-        onPressed: () {
-          Helper(context: context).showModalReimbursement(
-            context: context,
-            title: viewModel.modalTitle,
-            listOptions: viewModel.modalOptionList,
-          );
-        },
-      ),
+      floatingActionButton: (!userProvider.isAdmin)
+          ? FloatingActionButtonGeneral(
+              onPressed: () {
+                Helper(context: context).showModalReimbursement(
+                  context: context,
+                  title: viewModel.modalTitle,
+                  listOptions: viewModel.modalOptionList,
+                );
+              },
+            )
+          : null,
       body: LoadingFallback(
         isLoading: viewModel.isLoading,
         child: TabBarView(

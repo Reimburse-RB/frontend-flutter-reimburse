@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 
-class CardSubmissionEmployee extends StatelessWidget {
-  const CardSubmissionEmployee({
+class CardSubmission extends StatelessWidget {
+  const CardSubmission({
     super.key,
     required this.reimburseData,
   });
@@ -15,6 +16,8 @@ class CardSubmissionEmployee extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.read<UserProvider>();
+    bool isAdmin = userProvider.isAdmin;
     return InkWell(
       onTap: () {
         if (reimburseData.id != null) {
@@ -69,12 +72,32 @@ class CardSubmissionEmployee extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8.0),
+                        if (isAdmin) ...[
+                          Text(
+                            reimburseData.name ?? '',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontWeight: Constant.boldText,
+                            ),
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            reimburseData.nik ?? '',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontWeight: Constant.lightWeightText,
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                        ],
                         Text(
                           reimburseData.typeReimburse ?? '',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,
-                            fontWeight: Constant.semiBoldText,
+                            fontWeight: isAdmin ? Constant.mediumWeightText : Constant.semiBoldText,
                           ),
                         ),
                         const SizedBox(height: 4.0),

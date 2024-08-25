@@ -204,7 +204,7 @@ class Helper {
       ),
       buttons: [
         DialogButton(
-          radius: BorderRadius.circular(20),
+          radius: BorderRadius.circular(12),
           child: Text(
             firstButtonLabel,
             style: const TextStyle(
@@ -213,9 +213,13 @@ class Helper {
           ),
           onPressed: firstButtonOnTap,
           color: Constant.green,
+          border: Border.all(
+            width: 1.5,
+            color: Constant.green,
+          ),
         ),
         DialogButton(
-          radius: BorderRadius.circular(20),
+          radius: BorderRadius.circular(12),
           child: Text(
             secondButtonLabel,
             style: const TextStyle(
@@ -225,7 +229,7 @@ class Helper {
           onPressed: secondButtonOnTap,
           color: Colors.white,
           border: Border.all(
-            width: 1,
+            width: 1.5,
             color: Constant.green,
           ),
         ),
