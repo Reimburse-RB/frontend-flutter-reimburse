@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/widgets/admin/card_summary_admin_hrd.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/list_horizontal_menu.dart';
@@ -12,16 +13,13 @@ import 'package:reimburse_rb/widgets/employee/list_submission.dart';
 import 'home_view_model.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.moveToAnotherTab});
-
-  final Function(int) moveToAnotherTab;
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeViewModel>(
       create: (_) => HomeViewModel(
         context: context,
-        moveToAnotherTab: moveToAnotherTab,
       ),
       child: const HomeView(),
     );
@@ -31,21 +29,22 @@ class HomeScreen extends StatelessWidget {
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
-  Widget buildSubmissionSummary() {
+  Widget buildSubmissionSummary(BuildContext context) {
+    bool isAdmin = context.read<UserProvider>().isAdmin;
     return Container(
       margin: const EdgeInsets.only(left: 24, right: 24, bottom: 32),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Ringkasan Pengajuan',
-            style: TextStyle(
+            isAdmin ? 'Permintaan Saat Ini' : 'Ringkasan Pengajuan',
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: Constant.semiBoldText,
             ),
           ),
-          SizedBox(height: 12),
-          CardSubmissionSummary(),
+          const SizedBox(height: 12),
+          isAdmin ? const CardSummaryAdminHrd() : const CardSubmissionSummary(),
         ],
       ),
     );
@@ -97,6 +96,9 @@ class HomeView extends StatelessWidget {
           (viewModel.listReimbursementActive.isNotEmpty)
               ? ListSubmission(
                   listReimbursement: viewModel.listReimbursementActive,
+                  onReturn: (value) {
+                    viewModel.getData();
+                  },
                 )
               : const EmptyStateGeneral(),
         ],
@@ -121,7 +123,7 @@ class HomeView extends StatelessWidget {
           child: ListView(
             children: [
               const SizedBox(height: 24),
-              buildSubmissionSummary(),
+              buildSubmissionSummary(context),
               buildHorizontalMenu(context, viewModel),
               if (!userProvider.isAdmin) buildActiveSubmissionList(viewModel),
               const SizedBox(height: 24),

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:reimburse_rb/models/admin/admin_summary_response.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
@@ -8,6 +9,18 @@ class UserProvider extends ChangeNotifier {
   bool get isAdmin => _isAdmin;
   void setIsAdmin(bool value) => _isAdmin = value;
   void clearIsAdmin() => _isAdmin = false;
+
+  int _selectedMainMenuIndex = 0;
+  int get selectedMainMenuIndex => _selectedMainMenuIndex;
+  void setSelectedMainMenuIndex(int value) {
+    _selectedMainMenuIndex = value;
+    notifyListeners();
+  }
+
+  void clearSelectedMainMenuindex() {
+    _selectedMainMenuIndex = 0;
+    notifyListeners();
+  }
 
   List<ReimbursementCategoryData> listReimbursementCategory = [
     ReimbursementCategoryData(
@@ -36,6 +49,13 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  AdminSummaryData? _adminSummaryData;
+  AdminSummaryData? get adminSummaryData => _adminSummaryData;
+  void setAdminSummaryData(AdminSummaryData? value) {
+    _adminSummaryData = value;
+    notifyListeners();
+  }
+
   void clearEmployeeSummaryData() {
     _employeeSummaryData = null;
     notifyListeners();
@@ -56,4 +76,10 @@ class UserProvider extends ChangeNotifier {
   int? get selectedDetailReimbursementId => _selectedDetailReimbursementId;
   void setSelectedDetailReimbursementId(int value) => _selectedDetailReimbursementId = value;
   void clearSelectedDetailReimbursementId() => _selectedDetailReimbursementId = null;
+
+  int? _selectedDetailAccountVerificationId;
+  int? get selectedDetailAccountVerificationId => _selectedDetailAccountVerificationId;
+  void setSelectedDetailAccountVerificationId(int value) =>
+      _selectedDetailAccountVerificationId = value;
+  void clearSelectedDetailAccountVerificationId() => _selectedDetailAccountVerificationId = null;
 }

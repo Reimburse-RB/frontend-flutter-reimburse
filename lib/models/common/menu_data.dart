@@ -16,9 +16,11 @@ class MenuItemData {
     required this.title,
     required this.page,
     this.selectedReimbursementCategory,
+    this.menuIndex,
   });
   late final String assetImage;
   late final String title;
   late final Widget page;
+  final int? menuIndex;
   late final ReimbursementCategoryData? selectedReimbursementCategory;
 }

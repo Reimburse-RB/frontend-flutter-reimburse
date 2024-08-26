@@ -3,26 +3,26 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/admin/admin_summary_response.dart';
 import 'package:reimburse_rb/models/common/menu_data.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
+import 'package:reimburse_rb/screens/admin/account_verification/account_verification_view.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
-import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_period_view.dart';
+import 'package:reimburse_rb/screens/employee/home/home_view.dart';
+import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_year_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
+import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel({
     required this.context,
-    this.moveToAnotherTab,
   }) {
-    getEmployeeSummary();
-    getUserReimburse();
+    getData();
   }
-
-  final Function(int)? moveToAnotherTab;
 
   HttpService http = HttpService();
   late BuildContext context;
@@ -48,7 +48,7 @@ class HomeViewModel extends ChangeNotifier {
         MenuItemData(
           assetImage: 'assets/menu/icon-menu-rekapitulasi.png',
           title: 'Rekapitulasi Reimbursement',
-          page: const RecapitulationListPeriodScreen(),
+          page: const RecapitulationListYearScreen(),
         ),
       ],
     ),
@@ -56,9 +56,15 @@ class HomeViewModel extends ChangeNotifier {
       categoryTitle: 'Permintaan Masuk',
       menuList: [
         MenuItemData(
+          assetImage: 'assets/menu/icon-menu-reimbursement.png',
+          title: 'Reimbursement',
+          page: const HomeScreen(),
+          menuIndex: Constant.reimburseMenuindex,
+        ),
+        MenuItemData(
           assetImage: 'assets/menu/icon-menu-verif-akun.png',
           title: 'Verifikasi Perubahan dan Akun Baru',
-          page: const RecapitulationListPeriodScreen(),
+          page: const AccountVerificationListScreen(),
         ),
       ],
     ),
@@ -76,7 +82,7 @@ class HomeViewModel extends ChangeNotifier {
         MenuItemData(
           assetImage: 'assets/menu/icon-menu-rekapitulasi.png',
           title: 'Rekapitulasi Reimbursement',
-          page: const RecapitulationListPeriodScreen(),
+          page: const RecapitulationListYearScreen(),
         ),
       ],
     ),
@@ -99,9 +105,43 @@ class HomeViewModel extends ChangeNotifier {
     ),
   ];
 
-  void navigateToTab(int index) {
-    moveToAnotherTab!(index);
+  void getData() {
+    bool isAdmin = context.read<UserProvider>().isAdmin;
+    if (isAdmin) {
+      getAdminHrdSummary();
+    } else {
+      getEmployeeSummary();
+      getUserReimburse();
+    }
+  }
+
+  Future getAdminHrdSummary() async {
+    startLoading();
     notifyListeners();
+
+    String endpoint = 'reimburse/get-current-status-active';
+
+    await http.post(endpoint: endpoint).then((res) {
+      AdminSummaryResponse response = AdminSummaryResponse.fromJson(res);
+      if (response.success) {
+        final provider = context.read<UserProvider>();
+        provider.setAdminSummaryData(response.data);
+
+        notifyListeners();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
+    return Future.value(true);
   }
 
   Future getEmployeeSummary() async {

@@ -110,6 +110,9 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
                     children: [
                       ListSubmission(
                         listReimbursement: viewModel.listReimbursement,
+                        onReturn: (value) {
+                          viewModel.getUserReimburse();
+                        },
                       ),
                     ],
                   );

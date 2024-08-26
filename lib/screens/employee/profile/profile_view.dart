@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -91,7 +92,12 @@ class ProfileView extends StatelessWidget {
             const SizedBox(height: 32),
             ButtonGeneral(
               onTap: () {
-                viewModel.navigateToProfileDetail();
+                context.read<NavigationProvider>().navigateToProfileDetail(
+                      context: context,
+                      onReturn: (value) {
+                        viewModel.getProfile();
+                      },
+                    );
               },
               text: 'Lihat Informasi Pribadi',
             ),

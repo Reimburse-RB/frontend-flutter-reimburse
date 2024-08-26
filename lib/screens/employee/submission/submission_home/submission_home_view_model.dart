@@ -113,7 +113,7 @@ class SubmissionHomeViewModel extends ChangeNotifier {
     await http.post(endpoint: endpoint, body: body).then((res) {
       ListUserReimburseResponse response = ListUserReimburseResponse.fromJson(res);
       if (response.success) {
-        _listReimbursement.addAll(response.data ?? []);
+        _listReimbursement = response.data ?? [];
         notifyListeners();
       } else {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);

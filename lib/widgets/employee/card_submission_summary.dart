@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
+import 'package:reimburse_rb/widgets/common/detail_summary.dart';
 
 class CardSubmissionSummary extends StatefulWidget {
   const CardSubmissionSummary({
@@ -15,47 +16,6 @@ class CardSubmissionSummary extends StatefulWidget {
 }
 
 class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
-  Widget summaryDetail({
-    required String iconAsset,
-    Icon? iconAlternative,
-    required String detailTitle,
-    required String detailValue,
-  }) {
-    return Row(
-      children: [
-        if (iconAlternative == null)
-          Image.asset(
-            iconAsset,
-            width: 24,
-            height: 24,
-          ),
-        if (iconAlternative != null) iconAlternative,
-        const SizedBox(width: 12),
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  detailTitle,
-                  style: const TextStyle(
-                    fontWeight: Constant.mediumWeightText,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                detailValue,
-                style: const TextStyle(
-                  fontWeight: Constant.mediumWeightText,
-                ),
-              ),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<UserProvider>();
@@ -72,32 +32,32 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
         ),
         child: Column(
           children: [
-            // summaryDetail(
+            // DetailSummary(
             //   iconAsset: 'assets/status/icon-status-waiting.png',
             //   detailTitle: 'Reimburse Menunggu Diproses',
             //   detailValue: '1',
             // ),
             // const SizedBox(height: 8),
 
-            summaryDetail(
+            DetailSummary(
               iconAsset: 'assets/status/icon-status-process.png',
               detailTitle: 'Reimburse Diproses',
               detailValue: viewModel.employeeSummaryData?.onproceed.toString() ?? '0',
             ),
             const SizedBox(height: 8),
-            summaryDetail(
+            DetailSummary(
               iconAsset: 'assets/status/icon-status-succeed.png',
               detailTitle: 'Reimburse Disetujui',
               detailValue: viewModel.employeeSummaryData?.accepted.toString() ?? '0',
             ),
             const SizedBox(height: 8),
-            summaryDetail(
+            DetailSummary(
               iconAsset: 'assets/status/icon-status-failed.png',
               detailTitle: 'Reimburse Ditolak',
               detailValue: viewModel.employeeSummaryData?.rejected.toString() ?? '0',
             ),
             const SizedBox(height: 8),
-            summaryDetail(
+            DetailSummary(
               iconAsset: '',
               iconAlternative: const Icon(
                 IconlyBold.graph,

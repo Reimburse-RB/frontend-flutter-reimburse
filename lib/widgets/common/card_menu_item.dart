@@ -19,11 +19,14 @@ class CardMenuItem extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: () {
         if (menuItemData.selectedReimbursementCategory != null) {
-          userProvider.setSelectedReimbursementCategoryId(
-              menuItemData.selectedReimbursementCategory!);
+          userProvider
+              .setSelectedReimbursementCategoryId(menuItemData.selectedReimbursementCategory!);
         }
-        navigationProvider.navigateToMenuPage(
-            context: context, page: menuItemData.page);
+        if (menuItemData.menuIndex != null) {
+          userProvider.setSelectedMainMenuIndex(menuItemData.menuIndex!);
+        } else {
+          navigationProvider.navigateToMenuPage(context: context, page: menuItemData.page);
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

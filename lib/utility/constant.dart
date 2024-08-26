@@ -37,6 +37,11 @@ class Constant {
   static const int healthCategoryReimbursementId = 1;
   static const int transportCategoryReimbursementId = 2;
 
+  static const int homeMenuIndex = 0;
+  static const int reimburseMenuindex = 1;
+  static const int notificationMenuIndex = 2;
+  static const int profileMenuIndex = 3;
+
   static const Color waitingStatusColor = Color(0xFFFFC107);
   static const Color processStatusIconColor = Color(0xFF0021F5);
   static const Color processStatusTextColor = Color(0xFF020064);

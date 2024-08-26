@@ -4,20 +4,20 @@ import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_view
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/card_recapitulation_period.dart';
 
-class RecapitulationListPeriodScreen extends StatelessWidget {
-  const RecapitulationListPeriodScreen({super.key});
+class RecapitulationListYearScreen extends StatelessWidget {
+  const RecapitulationListYearScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => RecapitulationViewModel(context: context),
-      child: const RecapitulationListPeriodView(),
+      child: const RecapitulationListYearView(),
     );
   }
 }
 
-class RecapitulationListPeriodView extends StatelessWidget {
-  const RecapitulationListPeriodView({super.key});
+class RecapitulationListYearView extends StatelessWidget {
+  const RecapitulationListYearView({super.key});
 
   @override
   Widget build(BuildContext context) {

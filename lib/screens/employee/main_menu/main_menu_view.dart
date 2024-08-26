@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/home/home_view.dart';
 import 'package:reimburse_rb/screens/employee/notification/notification_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view.dart';
@@ -14,7 +15,7 @@ class MainMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MainMenuViewModel(),
+      create: (context) => MainMenuViewModel(context: context),
       child: const MainMenuView(),
     );
   }
@@ -35,10 +36,11 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<MainMenuViewModel>(context);
+    final viewModel = context.read<MainMenuViewModel>();
+    final userProvider = context.watch<UserProvider>();
 
     List<Widget> pages = [
-      HomeScreen(moveToAnotherTab: viewModel.onItemTapped),
+      const HomeScreen(),
       const SubmissionHomeScreen(),
       const NotificationScreen(),
       const ProfileScreen(),
@@ -51,7 +53,7 @@ class _MainMenuViewState extends State<MainMenuView> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: pages[viewModel.selectedIndex],
+          child: pages[userProvider.selectedMainMenuIndex],
         ),
         bottomNavigationBar: Container(
           height: 70,
@@ -84,11 +86,11 @@ class _MainMenuViewState extends State<MainMenuView> {
               backgroundColor: Colors.white,
               type: BottomNavigationBarType.fixed,
               elevation: 0.0,
-              currentIndex: viewModel.selectedIndex,
+              currentIndex: userProvider.selectedMainMenuIndex,
               onTap: viewModel.onItemTapped,
               items: [
                 BottomNavigationBarItem(
-                  icon: viewModel.selectedIndex == 0
+                  icon: userProvider.selectedMainMenuIndex == 0
                       ? const Icon(
                           IconlyLight.home,
                         )
@@ -98,7 +100,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   label: 'Beranda',
                 ),
                 BottomNavigationBarItem(
-                  icon: viewModel.selectedIndex == 1
+                  icon: userProvider.selectedMainMenuIndex == 1
                       ? const Icon(
                           IconlyLight.paper,
                         )
@@ -108,7 +110,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   label: 'Pengajuan',
                 ),
                 BottomNavigationBarItem(
-                  icon: viewModel.selectedIndex == 2
+                  icon: userProvider.selectedMainMenuIndex == 2
                       ? const Icon(
                           IconlyLight.notification,
                         )
@@ -118,7 +120,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   label: 'Notifikasi',
                 ),
                 BottomNavigationBarItem(
-                  icon: viewModel.selectedIndex == 2
+                  icon: userProvider.selectedMainMenuIndex == 2
                       ? const Icon(
                           IconlyLight.profile,
                         )

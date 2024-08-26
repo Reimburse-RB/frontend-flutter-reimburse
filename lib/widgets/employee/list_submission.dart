@@ -6,9 +6,11 @@ class ListSubmission extends StatelessWidget {
   const ListSubmission({
     super.key,
     required this.listReimbursement,
+    required this.onReturn,
   });
 
   final List<ItemUserReimburseData> listReimbursement;
+  final Function(dynamic) onReturn;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,10 @@ class ListSubmission extends StatelessWidget {
         ItemUserReimburseData item = listReimbursement[index];
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
-          child: CardSubmission(reimburseData: item),
+          child: CardSubmission(
+            reimburseData: item,
+            onReturn: onReturn,
+          ),
         );
       },
     );

@@ -271,11 +271,6 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
     return Future.value(true);
   }
 
-  void navigateToProfileDetail() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => const ProfileDetailSceen()))
-        .then((value) => getProfile());
-  }
-
   void navigateToForgotPasswordScreen() {
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => const ForgotPasswordScreen(),

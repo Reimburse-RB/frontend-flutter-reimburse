@@ -2,16 +2,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 
 class MainMenuViewModel extends ChangeNotifier {
-  int _selectedIndex = 0;
+  MainMenuViewModel({required this.context}) {}
+
+  BuildContext context;
+
   bool _statusClose = false;
 
-  int get selectedIndex => _selectedIndex;
-
   void onItemTapped(int index) {
-    _selectedIndex = index;
-    notifyListeners();
+    final userProvider = context.read<UserProvider>();
+    userProvider.setSelectedMainMenuIndex(index);
   }
 
   void close() {

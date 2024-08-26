@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
+import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 
@@ -10,9 +11,11 @@ class CardSubmission extends StatelessWidget {
   const CardSubmission({
     super.key,
     required this.reimburseData,
+    required this.onReturn,
   });
 
   final ItemUserReimburseData reimburseData;
+  final Function(dynamic) onReturn;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +24,11 @@ class CardSubmission extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (reimburseData.id != null) {
-          context
-              .read<NavigationProvider>()
-              .navigateToDetailReimbursement(context: context, id: reimburseData.id!);
+          context.read<NavigationProvider>().navigateToDetailReimbursement(
+                context: context,
+                id: reimburseData.id!,
+                onReturn: onReturn,
+              );
         }
       },
       child: Card(
