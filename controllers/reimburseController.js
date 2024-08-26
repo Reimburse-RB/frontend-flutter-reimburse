@@ -141,10 +141,10 @@ module.exports = {
     const user = req.userAuth;
 
     try {
-      if (user.role != 2) {
+      if (user.role == 1) {
         return res.json({
           success: false,
-          msg: "you're not using admin account",
+          msg: "you're not using admin or hr account",
         });
       }
 
@@ -327,10 +327,16 @@ module.exports = {
     const user = req.userAuth;
     const { year } = req.body;
     try {
+      const whereParam = {};
+
+      if (!isNil(isAdmin)) {
+        if (isAdmin == false) {
+          whereParam.user_id = user.id;
+        }
+      }
+
       const reimburse = await Reimburse.findAll({
-        where: {
-          user_id: user.id,
-        },
+        where: whereParam,
         order: [["createdAt", "asc"]],
       });
 
@@ -388,10 +394,16 @@ module.exports = {
     const user = req.userAuth;
 
     try {
+      const whereParam = {};
+
+      if (!isNil(isAdmin)) {
+        if (isAdmin == false) {
+          whereParam.user_id = user.id;
+        }
+      }
+      
       const reimburse = await Reimburse.findAll({
-        where: {
-          user_id: user.id,
-        },
+        where: whereParam,
         order: [["createdAt", "asc"]],
       });
 
