@@ -176,7 +176,7 @@ module.exports = {
         email: user.email,
         role_id: user.role,
         role_text: roleUser ? roleUser.role_text : "",
-        is_account_verified: role.status == 1 ? true : false,
+        is_account_verified: user.status == 1 ? true : false,
         img_url:
           user.image_url != null ? `${process.env.URL}${user.image_url}` : null,
       };

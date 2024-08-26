@@ -325,7 +325,7 @@ module.exports = {
 
   getMonthRecap: async (req, res) => {
     const user = req.userAuth;
-    const { year } = req.body;
+    const { year, isAdmin } = req.body;
     try {
       const whereParam = {};
 
@@ -391,6 +391,7 @@ module.exports = {
   },
 
   getYearRecap: async (req, res) => {
+    const { isAdmin } = req.body;
     const user = req.userAuth;
 
     try {
