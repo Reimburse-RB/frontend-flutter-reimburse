@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class CardRecapitulationPeriod extends StatelessWidget {
   const CardRecapitulationPeriod({
     super.key,
+    required this.value,
     required this.onTap,
   });
 
+  final String value;
   final VoidCallback onTap;
 
   @override
@@ -23,7 +25,7 @@ class CardRecapitulationPeriod extends StatelessWidget {
           ),
         ),
         child: Text(
-          'Mei 2023',
+          value,
           style: TextStyle(fontSize: 16),
         ),
       ),

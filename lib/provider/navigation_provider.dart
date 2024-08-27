@@ -6,10 +6,23 @@ import 'package:reimburse_rb/screens/admin/account_verification/account_verifica
 import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view.dart';
 import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
+import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_month_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
 
 class NavigationProvider extends ChangeNotifier {
   NavigationProvider() {}
+
+  void navigateToRecapitulationPeriodMonth({
+    required BuildContext context,
+    required String year,
+  }) {
+    final userProvider = context.read<UserProvider>();
+    userProvider.setSelectedRecapitulationYear(year);
+
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const RecapitulationListMonthScreen(),
+    ));
+  }
 
   void navigateToDetailAccountVerification({
     required BuildContext context,
@@ -76,10 +89,18 @@ class NavigationProvider extends ChangeNotifier {
   void navigateToMenuPage({
     required BuildContext context,
     required Widget page,
+    required Function(dynamic) onReturn,
   }) {
-    Navigator.of(context).push(CupertinoPageRoute(
+    Navigator.of(context)
+        .push(CupertinoPageRoute(
       builder: (context) => page,
-    ));
+    ))
+        .then(
+      ((value) {
+        onReturn(value);
+      }),
+    );
+    ;
   }
 
   void navigateToMainMenuPage({required BuildContext context}) {

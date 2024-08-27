@@ -71,6 +71,9 @@ class HomeView extends StatelessWidget {
             ListHorizontalMenu(
               menuCategory: menuCategoryData,
               padding: const EdgeInsets.symmetric(horizontal: 24),
+              onReturn: (value) {
+                viewModel.getData();
+              },
             ),
             const SizedBox(height: 20),
           ],

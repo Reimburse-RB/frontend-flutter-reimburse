@@ -7,8 +7,13 @@ import 'package:reimburse_rb/utility/constant.dart';
 
 class CardMenuItem extends StatelessWidget {
   final MenuItemData menuItemData;
+  final Function(dynamic) onReturn;
 
-  const CardMenuItem({Key? key, required this.menuItemData}) : super(key: key);
+  const CardMenuItem({
+    Key? key,
+    required this.menuItemData,
+    required this.onReturn,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,11 @@ class CardMenuItem extends StatelessWidget {
         if (menuItemData.menuIndex != null) {
           userProvider.setSelectedMainMenuIndex(menuItemData.menuIndex!);
         } else {
-          navigationProvider.navigateToMenuPage(context: context, page: menuItemData.page);
+          navigationProvider.navigateToMenuPage(
+            context: context,
+            page: menuItemData.page,
+            onReturn: onReturn,
+          );
         }
       },
       child: Container(

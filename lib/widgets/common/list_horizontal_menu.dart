@@ -6,10 +6,12 @@ import 'package:reimburse_rb/widgets/common/card_menu_item.dart';
 class ListHorizontalMenu extends StatelessWidget {
   final EdgeInsets padding;
   final MenuCategoryData menuCategory;
+  final Function(dynamic) onReturn;
 
   const ListHorizontalMenu({
     super.key,
     required this.menuCategory,
+    required this.onReturn,
     this.padding = const EdgeInsets.symmetric(horizontal: 24),
   });
 
@@ -35,7 +37,10 @@ class ListHorizontalMenu extends StatelessWidget {
                   .map(
                     (MenuItemData item) => Row(
                       children: [
-                        CardMenuItem(menuItemData: item),
+                        CardMenuItem(
+                          menuItemData: item,
+                          onReturn: onReturn,
+                        ),
                         const SizedBox(width: 16),
                       ],
                     ),

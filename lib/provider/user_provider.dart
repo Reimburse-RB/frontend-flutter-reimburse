@@ -82,4 +82,14 @@ class UserProvider extends ChangeNotifier {
   void setSelectedDetailAccountVerificationId(int value) =>
       _selectedDetailAccountVerificationId = value;
   void clearSelectedDetailAccountVerificationId() => _selectedDetailAccountVerificationId = null;
+
+  String? _selectedRecapitulationYear;
+  String? get selectedRecapitulationYear => _selectedRecapitulationYear;
+  void setSelectedRecapitulationYear(String value) => _selectedRecapitulationYear = value;
+  void clearSelectedRecapitulationYear() => _selectedRecapitulationYear = null;
+
+  String? _selectedRecapitulationMonth;
+  String? get selectedRecapitulationMonth => _selectedRecapitulationMonth;
+  void setSelectedRecapitulationMonth(String value) => _selectedRecapitulationMonth = value;
+  void clearSelectedRecapitulationMonth() => _selectedRecapitulationMonth = null;
 }

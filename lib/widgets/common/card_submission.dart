@@ -3,17 +3,18 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
-import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 
 class CardSubmission extends StatelessWidget {
   const CardSubmission({
     super.key,
+    this.isShowIcon = true,
     required this.reimburseData,
     required this.onReturn,
   });
 
+  final bool isShowIcon;
   final ItemUserReimburseData reimburseData;
   final Function(dynamic) onReturn;
 
@@ -38,8 +39,8 @@ class CardSubmission extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 20,
+            vertical: 20,
+            horizontal: 24,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,12 +59,14 @@ class CardSubmission extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    Helper(context: context).getStatusAsset(statusId: reimburseData.statusId),
-                    width: 48,
-                    height: 48,
-                  ),
-                  const SizedBox(width: 12.0),
+                  if (isShowIcon) ...[
+                    Image.asset(
+                      Helper(context: context).getStatusAsset(statusId: reimburseData.statusId),
+                      width: 48,
+                      height: 48,
+                    ),
+                    const SizedBox(width: 12.0),
+                  ],
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +79,7 @@ class CardSubmission extends StatelessWidget {
                             fontSize: 12.0,
                           ),
                         ),
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: 6.0),
                         if (isAdmin) ...[
                           Text(
                             reimburseData.name ?? '',
@@ -86,7 +89,7 @@ class CardSubmission extends StatelessWidget {
                               fontWeight: Constant.boldText,
                             ),
                           ),
-                          const SizedBox(height: 4.0),
+                          const SizedBox(height: 2.0),
                           Text(
                             reimburseData.nik ?? '',
                             style: const TextStyle(
@@ -95,7 +98,7 @@ class CardSubmission extends StatelessWidget {
                               fontWeight: Constant.lightWeightText,
                             ),
                           ),
-                          const SizedBox(height: 8.0),
+                          const SizedBox(height: 6.0),
                         ],
                         Text(
                           reimburseData.typeReimburse ?? '',
@@ -105,7 +108,7 @@ class CardSubmission extends StatelessWidget {
                             fontWeight: isAdmin ? Constant.mediumWeightText : Constant.semiBoldText,
                           ),
                         ),
-                        const SizedBox(height: 4.0),
+                        const SizedBox(height: 2.0),
                         Text(
                           'Total : Rp ${Helper(context: context).formatCurrency(amount: reimburseData.totalPrice ?? 0)}',
                           style: const TextStyle(

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
+import 'package:reimburse_rb/widgets/common/card_submission.dart';
+import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 import 'package:reimburse_rb/widgets/employee/card_recapitulation.dart';
 
 class RecapitulationListScreen extends StatelessWidget {
@@ -22,11 +26,14 @@ class RecapitulationListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<RecapitulationViewModel>();
+    final userProvider = context.read<UserProvider>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
         context: context,
-        title: 'Mei 2023',
+        title: userProvider.selectedRecapitulationMonth ?? '',
       ),
       floatingActionButton: SizedBox(
         height: 64.0,
@@ -40,21 +47,32 @@ class RecapitulationListView extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView(
-        children: [
-          ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-            itemCount: 5,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const CardRecapitulation(),
-              );
-            },
-          )
-        ],
+      body: LoadingFallback(
+        isLoading: viewModel.isLoading,
+        child: ListView(
+          children: [
+            ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              itemCount: viewModel.listRecapitulation.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                ItemUserReimburseData item = viewModel.listRecapitulation[index];
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: CardSubmission(
+                    reimburseData: item,
+                    isShowIcon: false,
+                    onReturn: (value) {
+                      viewModel.getData();
+                    },
+                  ),
+                  // child: const CardRecapitulation(),
+                );
+              },
+            )
+          ],
+        ),
       ),
     );
   }
