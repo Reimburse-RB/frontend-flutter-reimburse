@@ -7,7 +7,6 @@ import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/card_submission.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
-import 'package:reimburse_rb/widgets/employee/card_recapitulation.dart';
 
 class RecapitulationListScreen extends StatelessWidget {
   const RecapitulationListScreen({super.key});
@@ -59,7 +58,7 @@ class RecapitulationListView extends StatelessWidget {
               itemBuilder: (context, index) {
                 ItemUserReimburseData item = viewModel.listRecapitulation[index];
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
+                  margin: const EdgeInsets.only(bottom: 8),
                   child: CardSubmission(
                     reimburseData: item,
                     isShowIcon: false,
