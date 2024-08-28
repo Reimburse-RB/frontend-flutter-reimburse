@@ -63,7 +63,7 @@ class ImageCircleGeneral extends StatelessWidget {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          image: DecorationImage(image: imageProvider),
+                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                           shape: BoxShape.circle,
                         ),
                       ),

@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class Constant {
   static String randomImageUrl = 'https://picsum.photos/200';
   static String iconEmptyStateAsset = 'assets/empty_state/img-empty-state.png';
+
   static String imageErrorAsset = 'assets/empty_state/img-error.png';
   static String imageEmptyProfileAsset = 'assets/empty_state/img-empty-profile.png';
+
+  static String imageRbCompany = 'assets/other/icon-rb-group.png';
+  static String addressRbCompany =
+      'Wirausaha Building 5th floor\nJl. HR. Rasuna Said Kav. C5 Jakarta 12940 Indonesia\nTelp. : +62 21 521 3590, Fax. : +62 21 521 3591 \nwww.rbgroup-jkt.com';
 
   static const Color greenDark = Color(0xFF004D34);
   static const Color greenMedium = const Color.fromRGBO(17, 143, 82, 1);
