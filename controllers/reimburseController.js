@@ -10,7 +10,7 @@ require("dotenv").config();
 
 module.exports = {
   getUserReimburse: async (req, res) => {
-    const { dateReimburse, status, isAdmin } = req.body;
+    const { dateReimburse, status, isAdmin, startDate, endDate } = req.body;
     const user = req.userAuth;
 
     try {
@@ -25,6 +25,12 @@ module.exports = {
       if (isNotNil(status)) {
         whereParam.status = {
           [Op.in]: status,
+        };
+      }
+
+      if (isNotNil(startDate) && isNotNil(endDate)) {
+        whereParam.createdAt = {
+          [Op.between]: [startDate, endDate],
         };
       }
 
@@ -93,7 +99,45 @@ module.exports = {
                 ? "Ditolak"
                 : "",
             createdDate: formattedDate,
+            approval_by: null,
+            approval_by_role: null,
+            approval_date: null,
           };
+
+          if (item.purpose_id !== 0) {
+            const purposeText = allStatus.purposeId.find(
+              (itemCat) => itemCat.purpose_id === item.purpose_id
+            );
+
+            dataCard.purpose_id = item.purpose_id;
+            dataCard.purpose_text = purposeText
+              ? purposeText.purpose_text
+              : null;
+          } else {
+            dataCard.purposeId = null;
+            dataCard.purpose_text = item.purpose_other;
+          }
+
+          if (!isNil(item.approval_date)) {
+            const formattedDateApproval = new Intl.DateTimeFormat("id-ID", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }).format(new Date(item.approval_date));
+
+            dataCard.approval_date = formattedDateApproval;
+
+            const userApproval = await User.findOne({
+              where: { id: item.approval_by },
+            });
+
+            dataCard.approval_by = userApproval.fullname;
+
+            const roleUser = allStatus.role.find(
+              (itemRole) => itemRole.role_id === userApproval.role
+            );
+            dataCard.approval_by_role = roleUser.role_text;
+          }
 
           if (!isNil(isAdmin)) {
             if (isAdmin == true) {
@@ -213,6 +257,9 @@ module.exports = {
               ? "Ditolak"
               : "",
           category_reimbursement_id: reimburse.category,
+          approval_by: null,
+          approval_by_role: null,
+          approval_date: null,
         };
 
         const cat = allStatus.listCategoryReimbursement.find(
@@ -231,6 +278,27 @@ module.exports = {
         } else {
           returnData.purposeId = null;
           returnData.purpose_text = reimburse.purpose_other;
+        }
+
+        if (!isNil(reimburse.approval_date)) {
+          const formattedDateApproval = new Intl.DateTimeFormat("id-ID", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }).format(new Date(reimburse.approval_date));
+
+          returnData.approval_date = formattedDateApproval;
+
+          const userApproval = await User.findOne({
+            where: { id: reimburse.approval_by },
+          });
+
+          returnData.approval_by = userApproval.fullname;
+
+          const roleUser = allStatus.role.find(
+            (itemRole) => itemRole.role_id === userApproval.role
+          );
+          returnData.approval_by_role = roleUser.role_text;
         }
 
         returnData.category_reimbursement_text = cat
@@ -402,7 +470,7 @@ module.exports = {
           whereParam.user_id = user.id;
         }
       }
-      
+
       const reimburse = await Reimburse.findAll({
         where: whereParam,
         order: [["createdAt", "asc"]],
@@ -540,6 +608,8 @@ module.exports = {
 
       if (reimburse) {
         reimburse.status = change_status_id;
+        reimburse.approval_by = user.id;
+        reimburse.approval_date = Date.now();
         reimburse.save();
 
         return res.json({

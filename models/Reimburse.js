@@ -26,6 +26,14 @@ const Reimburse = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    approval_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    approval_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,
