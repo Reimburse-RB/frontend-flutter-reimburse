@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
+import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 
 class MainMenuViewModel extends ChangeNotifier {
-  MainMenuViewModel({required this.context}) {}
+  MainMenuViewModel({required this.context}) {
+    ProfileViewModel(context: context).getProfile();
+  }
 
   BuildContext context;
 

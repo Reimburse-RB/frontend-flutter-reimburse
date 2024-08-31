@@ -7,7 +7,7 @@ import 'package:reimburse_rb/widgets/common/form_date_picker.dart';
 class ModalDateRange {
   final BuildContext context;
   final String title;
-  final Function() onTapContinue;
+  final Function(String, String) onTapContinue;
 
   ModalDateRange({
     required this.context,
@@ -92,7 +92,11 @@ class ModalDateRange {
                   },
                 ),
                 const SizedBox(height: 20),
-                ButtonGeneral(onTap: () {}, text: 'Cetak'),
+                ButtonGeneral(
+                    onTap: () {
+                      onTapContinue(startDateController.text, endDateController.text);
+                    },
+                    text: 'Cetak'),
                 const SizedBox(height: 16),
               ],
             ),

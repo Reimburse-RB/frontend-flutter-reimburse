@@ -139,11 +139,16 @@ ItemUserReimburseData _$ItemUserReimburseDataFromJson(
       id: (json['id'] as num?)?.toInt(),
       statusId: (json['statusId'] as num?)?.toInt(),
       typeReimburse: json['typeReimburse'] as String?,
+      purpose_id: (json['purpose_id'] as num?)?.toInt(),
+      purpose_text: json['purpose_text'] as String?,
       status: json['status'] as String?,
       createdDate: json['createdDate'] as String?,
       name: json['name'] as String?,
       nik: json['nik'] as String?,
       totalPrice: (json['totalPrice'] as num?)?.toDouble(),
+      approval_date: json['approval_date'] as String?,
+      approval_by: json['approval_by'] as String?,
+      approval_by_role: json['approval_by_role'] as String?,
     );
 
 Map<String, dynamic> _$ItemUserReimburseDataToJson(
@@ -152,11 +157,16 @@ Map<String, dynamic> _$ItemUserReimburseDataToJson(
       'id': instance.id,
       'statusId': instance.statusId,
       'typeReimburse': instance.typeReimburse,
+      'purpose_id': instance.purpose_id,
+      'purpose_text': instance.purpose_text,
       'status': instance.status,
       'createdDate': instance.createdDate,
       'name': instance.name,
       'nik': instance.nik,
       'totalPrice': instance.totalPrice,
+      'approval_date': instance.approval_date,
+      'approval_by': instance.approval_by,
+      'approval_by_role': instance.approval_by_role,
     };
 
 DetailReimburseResponse _$DetailReimburseResponseFromJson(
@@ -199,6 +209,9 @@ DetailReimburseData _$DetailReimburseDataFromJson(Map<String, dynamic> json) =>
           ?.map((e) =>
               ItemDetailReimburseData.fromJson(e as Map<String, dynamic>))
           .toList(),
+      approval_date: json['approval_date'] as String?,
+      approval_by: json['approval_by'] as String?,
+      approval_by_role: json['approval_by_role'] as String?,
     );
 
 Map<String, dynamic> _$DetailReimburseDataToJson(
@@ -215,6 +228,9 @@ Map<String, dynamic> _$DetailReimburseDataToJson(
       'purpose_text': instance.purpose_text,
       'date': instance.date,
       'totalPrice': instance.totalPrice,
+      'approval_date': instance.approval_date,
+      'approval_by': instance.approval_by,
+      'approval_by_role': instance.approval_by_role,
       'list_attachment': instance.list_attachment,
       'detailReimburse': instance.detailReimburse,
     };

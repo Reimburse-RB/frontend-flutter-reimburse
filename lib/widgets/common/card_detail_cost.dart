@@ -52,29 +52,29 @@ class CardDetailCost extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DetailText(
+                  margin: EdgeInsets.zero,
                   title:
                       'Rincian ${categoryReimbursementId == Constant.healthCategoryReimbursementId ? 'Perawatan' : categoryReimbursementId == Constant.transportCategoryReimbursementId ? 'Perjalanan' : ''}',
                   textValue: itemDetailReimburseData.detail_title_text ?? '',
                 ),
-                if (categoryReimbursementId == Constant.healthCategoryReimbursementId) ...[
-                  const SizedBox(height: 16),
+                if (categoryReimbursementId == Constant.healthCategoryReimbursementId)
                   DetailText(
+                    margin: EdgeInsets.only(top: 16),
                     title: 'Diperuntukkan untuk...',
                     textValue: itemDetailReimburseData.detail_family_name ?? '',
                   ),
-                ],
-                const SizedBox(height: 16),
                 DetailText(
+                  margin: EdgeInsets.only(top: 16),
                   title: 'Tanggal Kuitansi',
                   textValue: itemDetailReimburseData.detail_date ?? '',
                 ),
-                const SizedBox(height: 16),
                 DetailText(
+                  margin: EdgeInsets.only(top: 16),
                   title: 'Biaya',
                   costValue: itemDetailReimburseData.detail_cost,
                 ),
-                const SizedBox(height: 16),
                 DetailText(
+                  margin: EdgeInsets.only(top: 16),
                   title: 'Keterangan',
                   textValue: itemDetailReimburseData.detail_desc ?? '',
                 ),

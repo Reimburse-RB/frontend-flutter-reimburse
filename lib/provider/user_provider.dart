@@ -92,4 +92,14 @@ class UserProvider extends ChangeNotifier {
   String? get selectedRecapitulationMonth => _selectedRecapitulationMonth;
   void setSelectedRecapitulationMonth(String value) => _selectedRecapitulationMonth = value;
   void clearSelectedRecapitulationMonth() => _selectedRecapitulationMonth = null;
+
+  String? _selectedStartDateRangeRecap;
+  String? get selectedStartDateRangeRecap => _selectedStartDateRangeRecap;
+  void setSelectedStartDateRangeRecap(String value) => _selectedStartDateRangeRecap = value;
+  void clearSelectedStartDateRangeRecap() => _selectedStartDateRangeRecap = null;
+
+  String? _selectedEndDateRangeRecap;
+  String? get selectedEndDateRangeRecap => _selectedEndDateRangeRecap;
+  void setSelectedEndDateRangeRecap(String value) => _selectedEndDateRangeRecap = value;
+  void clearSelectedEndDateRangeRecap() => _selectedEndDateRangeRecap = null;
 }

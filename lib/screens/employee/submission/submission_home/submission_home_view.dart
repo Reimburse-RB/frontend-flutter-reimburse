@@ -85,10 +85,10 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           ? FloatingActionButtonGeneral(
               onPressed: () {
                 ModalListOption(
-                        context: context,
-                        title: viewModel.modalTitle,
-                        listOptions: viewModel.modalOptionList)
-                    .show();
+                  context: context,
+                  title: viewModel.modalTitle,
+                  listOptions: viewModel.modalOptionList,
+                ).show();
               },
             )
           : null,

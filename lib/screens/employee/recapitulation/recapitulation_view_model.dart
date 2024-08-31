@@ -85,7 +85,12 @@ class RecapitulationViewModel extends ChangeNotifier {
     return Future.value(true);
   }
 
-  Future getRecapitulationList() async {
+  Future getRecapitulationList({
+    bool isRangePicked = false,
+    bool isShowPrint = false,
+    String? startDate,
+    String? endDate,
+  }) async {
     startLoading();
     notifyListeners();
 
@@ -93,8 +98,9 @@ class RecapitulationViewModel extends ChangeNotifier {
     String endpoint = 'reimburse/get-user-reimburse';
     Map body = {
       'isAdmin': userProvider.isAdmin,
-      'dateReimburse': userProvider.selectedRecapitulationMonth,
-      // "${userProvider.selectedRecapitulationMonth} ${userProvider.selectedRecapitulationYear}",
+      'dateReimburse': isRangePicked ? null : userProvider.selectedRecapitulationMonth,
+      'startDate': startDate,
+      'endDate': endDate,
     };
 
     await http.post(endpoint: endpoint, body: body).then((res) {
@@ -102,6 +108,12 @@ class RecapitulationViewModel extends ChangeNotifier {
       if (response.success) {
         _listRecapitulation = response.data ?? [];
         notifyListeners();
+        if (isShowPrint) {
+          Helper(context: context).generateAndOpenPdfFormatAll(
+            listRecapitulation: listRecapitulation,
+            isRangePicked: isRangePicked,
+          );
+        }
       } else {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);
       }

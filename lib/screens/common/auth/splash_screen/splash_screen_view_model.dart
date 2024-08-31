@@ -30,9 +30,7 @@ class SplashScreenViewModel extends ChangeNotifier {
           (role == Constant.employeeRoleId ||
                   role == Constant.adminRoleId ||
                   role == Constant.hrdRoleId)
-              ? context
-                  .read<NavigationProvider>()
-                  .navigateToMainMenuPage(context: context)
+              ? context.read<NavigationProvider>().navigateToMainMenuPage(context: context)
               : Helper(context: context).showToast(
                   message: 'Role tidak valid',
                   isSuccess: false,

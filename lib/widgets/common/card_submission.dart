@@ -110,7 +110,7 @@ class CardSubmission extends StatelessWidget {
                         ),
                         const SizedBox(height: 2.0),
                         Text(
-                          'Total : Rp ${Helper(context: context).formatCurrency(amount: reimburseData.totalPrice ?? 0)}',
+                          'Total : ${Helper(context: context).formatCurrency(amount: reimburseData.totalPrice ?? 0)}',
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,

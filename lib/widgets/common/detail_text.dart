@@ -10,6 +10,7 @@ class DetailText extends StatelessWidget {
     this.costValue,
     this.valueColor = Colors.black,
     this.padding = const EdgeInsets.symmetric(horizontal: 24),
+    this.margin = const EdgeInsets.only(top: 20),
   });
 
   final String title;
@@ -17,6 +18,7 @@ class DetailText extends StatelessWidget {
   final double? costValue;
   final Color valueColor;
   final EdgeInsets padding;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class DetailText extends StatelessWidget {
         ? Container()
         : Container(
             padding: padding,
+            margin: margin,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

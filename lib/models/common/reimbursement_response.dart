@@ -144,21 +144,31 @@ class ItemUserReimburseData {
   final int? id;
   final int? statusId;
   final String? typeReimburse;
+  final int? purpose_id;
+  final String? purpose_text;
   final String? status;
   final String? createdDate;
   final String? name;
   final String? nik;
   final double? totalPrice;
+  final String? approval_date;
+  final String? approval_by;
+  final String? approval_by_role;
 
   ItemUserReimburseData({
     this.id,
     this.statusId,
     this.typeReimburse,
+    this.purpose_id,
+    this.purpose_text,
     this.status,
     this.createdDate,
     this.name,
     this.nik,
     this.totalPrice,
+    this.approval_date,
+    this.approval_by,
+    this.approval_by_role,
   });
 
   factory ItemUserReimburseData.fromJson(Map<String, dynamic> json) =>
@@ -197,6 +207,9 @@ class DetailReimburseData {
   final String? purpose_text;
   final String? date;
   final double? totalPrice;
+  final String? approval_date;
+  final String? approval_by;
+  final String? approval_by_role;
   List<ItemAttachmentData>? list_attachment;
   List<ItemDetailReimburseData>? detailReimburse;
 
@@ -214,6 +227,9 @@ class DetailReimburseData {
     this.totalPrice,
     this.list_attachment,
     this.detailReimburse,
+    this.approval_date,
+    this.approval_by,
+    this.approval_by_role,
   });
 
   factory DetailReimburseData.fromJson(Map<String, dynamic> json) =>

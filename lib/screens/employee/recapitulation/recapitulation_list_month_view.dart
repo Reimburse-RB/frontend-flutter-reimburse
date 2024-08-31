@@ -36,7 +36,23 @@ class RecapitulationListMonthView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButtonGeneral(
         onPressed: () async {
-          ModalDateRange(context: context, title: 'Pilih Periode', onTapContinue: () {}).show();
+          ModalDateRange(
+            context: context,
+            title: 'Pilih Periode',
+            onTapContinue: (startValue, endValue) {
+              Navigator.of(context).pop();
+
+              userProvider.setSelectedStartDateRangeRecap(startValue);
+              userProvider.setSelectedEndDateRangeRecap(endValue);
+
+              viewModel.getRecapitulationList(
+                isShowPrint: true,
+                isRangePicked: true,
+                startDate: startValue,
+                endDate: endValue,
+              );
+            },
+          ).show();
         },
         icon: const Icon(Icons.print_rounded),
       ),

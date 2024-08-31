@@ -27,25 +27,25 @@ class Authentication {
   //   // await FirebaseAuth.instance.useAuthEmulator('localhost', 5575);
   // }
 
-  static void checkAuth({required BuildContext context}) {
-    var duration = const Duration(seconds: 3);
-    Timer(duration, () {
-      SplashScreenViewModel.startOnboard(context: context);
+  // static void checkAuth({required BuildContext context}) {
+  //   var duration = const Duration(seconds: 3);
+  //   Timer(duration, () {
+  //     SplashScreenViewModel.startOnboard(context: context);
 
-      // FirebaseAuth.instance.userChanges().listen(
-      //   (User? user) async {
-      //     if (user == null) {
-      //       print('User is currently signed out!');
-      //       SplashScreenViewModel.startOnboard(context: context);
-      //     } else {
-      //       print('User is signed in!');
-      //       await getData();
-      //       LoginViewModel.onCallBackLogin(context: context);
-      //     }
-      //   },
-      // );
-    });
-  }
+  //     // FirebaseAuth.instance.userChanges().listen(
+  //     //   (User? user) async {
+  //     //     if (user == null) {
+  //     //       print('User is currently signed out!');
+  //     //       SplashScreenViewModel.startOnboard(context: context);
+  //     //     } else {
+  //     //       print('User is signed in!');
+  //     //       await getData();
+  //     //       LoginViewModel.onCallBackLogin(context: context);
+  //     //     }
+  //     //   },
+  //     // );
+  //   });
+  // }
 
   // static void createUserWithEmailAndPassword({required BuildContext context}) async {
   //   final registerViewModel = context.read<RegisterViewModel>();

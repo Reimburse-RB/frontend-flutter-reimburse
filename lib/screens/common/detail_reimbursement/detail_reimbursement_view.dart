@@ -54,33 +54,76 @@ class DetailReimbursementView extends StatelessWidget {
         isLoading: viewModel.isLoading,
         child: ListView(
           children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DetailText(
+                        margin: EdgeInsets.only(top: 24),
+                        title: 'Nama Karyawan',
+                        textValue: viewModel.detailReimburseData?.name ?? '',
+                      ),
+                      DetailText(
+                        title: 'Nomor Induk karyawan',
+                        textValue: viewModel.detailReimburseData?.nik ?? '',
+                      ),
+                      DetailText(
+                        title: 'Diagnosis',
+                        textValue: viewModel.detailReimburseData?.purpose_text ?? '',
+                      ),
+                      DetailText(
+                        title: 'Total Biaya',
+                        costValue: viewModel.detailReimburseData?.totalPrice,
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DetailText(
+                        margin: EdgeInsets.only(top: 24),
+                        title: 'Status',
+                        textValue: viewModel.detailReimburseData?.status_text ?? '',
+                        valueColor: viewModel.statusColor ?? Colors.black,
+                      ),
+                      DetailText(
+                        title: 'Tanggal Pembaruan Status',
+                        textValue: viewModel.detailReimburseData?.approval_date ??
+                            viewModel.detailReimburseData?.status_text ??
+                            '',
+                        valueColor: (viewModel.detailReimburseData?.approval_date == null)
+                            ? viewModel.statusColor ?? Colors.black
+                            : Colors.black,
+                      ),
+                      DetailText(
+                        title: 'Penanggung Jawab',
+                        textValue: (viewModel.detailReimburseData?.approval_by != null)
+                            ? ((viewModel.detailReimburseData?.approval_by ?? '') +
+                                ' (' +
+                                (viewModel.detailReimburseData?.approval_by_role ?? '') +
+                                ')')
+                            : viewModel.detailReimburseData?.status_text ?? '',
+                        valueColor: (viewModel.detailReimburseData?.approval_by == null)
+                            ? viewModel.statusColor ?? Colors.black
+                            : Colors.black,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 24),
-            DetailText(
-              title: 'Status',
-              textValue: viewModel.detailReimburseData?.status_text ?? '',
-              valueColor: viewModel.statusColor ?? Colors.black,
+            Divider(
+              height: 20,
+              thickness: 20,
+              color: Colors.grey.shade200,
             ),
-            const SizedBox(height: 20),
-            DetailText(
-              title: 'Nama Karyawan',
-              textValue: viewModel.detailReimburseData?.name ?? '',
-            ),
-            const SizedBox(height: 20),
-            DetailText(
-              title: 'Nomor Induk karyawan',
-              textValue: viewModel.detailReimburseData?.nik ?? '',
-            ),
-            const SizedBox(height: 20),
-            DetailText(
-              title: 'Diagnosis',
-              textValue: viewModel.detailReimburseData?.purpose_text ?? '',
-            ),
-            const SizedBox(height: 20),
-            DetailText(
-              title: 'Total Biaya',
-              costValue: viewModel.detailReimburseData?.totalPrice,
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             ListHorizontalDetailReceiptImage(
               title: 'Lampiran',
               listAttachment: viewModel.detailReimburseData?.list_attachment ?? [],

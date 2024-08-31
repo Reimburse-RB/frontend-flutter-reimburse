@@ -22,9 +22,11 @@ class SubmissionHomeViewModel extends ChangeNotifier {
           text: 'Reimburse ${reimbursementCategory.categoryReimbursementText}',
           onTap: () {
             context.read<NavigationProvider>().navigateToFormReimbursement(
-                  context: context,
-                  reimbursementCategory: reimbursementCategory,
-                );
+                context: context,
+                reimbursementCategory: reimbursementCategory,
+                onReturn: (value) {
+                  getUserReimburse();
+                });
           },
         ),
       );

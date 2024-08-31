@@ -63,12 +63,19 @@ class NavigationProvider extends ChangeNotifier {
   void navigateToFormReimbursement({
     required BuildContext context,
     required ReimbursementCategoryData reimbursementCategory,
+    required Function(dynamic) onReturn,
   }) {
     final userProvider = context.read<UserProvider>();
     userProvider.setSelectedReimbursementCategoryId(reimbursementCategory);
-    Navigator.of(context).push(CupertinoPageRoute(
+    Navigator.of(context)
+        .push(CupertinoPageRoute(
       builder: (context) => const SubmissionFormScreen(),
-    ));
+    ))
+        .then(
+      ((value) {
+        onReturn(value);
+      }),
+    );
   }
 
   void navigateToProfileDetail({

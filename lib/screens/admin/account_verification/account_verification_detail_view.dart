@@ -42,22 +42,18 @@ class DetailAccountVerificationView extends StatelessWidget {
               size: width / 2,
               imageUrl: viewModel.detailAccount?.img_url,
             ),
-            const SizedBox(height: 20),
             DetailText(
               title: 'Nama Karyawan',
               textValue: viewModel.detailAccount?.name ?? '',
             ),
-            const SizedBox(height: 20),
             DetailText(
               title: 'Email',
               textValue: viewModel.detailAccount?.email ?? '',
             ),
-            const SizedBox(height: 20),
             DetailText(
               title: 'Nomor Induk Karyawan',
               textValue: viewModel.detailAccount?.nik ?? '',
             ),
-            const SizedBox(height: 20),
             DetailText(
               title: 'Role',
               textValue: viewModel.detailAccount?.role_text ?? '',

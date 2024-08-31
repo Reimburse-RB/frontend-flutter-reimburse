@@ -309,10 +309,12 @@ class Helper {
 
   Future<void> generateAndOpenPdfFormatAll({
     required List<ItemUserReimburseData> listRecapitulation,
+    required bool isRangePicked,
   }) async {
     try {
       final pdfFile = await PdfRecapitulationApi(context: context).generatePdfAllRecap(
         listRecapitulation: listRecapitulation,
+        isRangePicked: isRangePicked,
       );
       log('Generated PDF: $pdfFile');
       await PdfApi.openFile(pdfFile);

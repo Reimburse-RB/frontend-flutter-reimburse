@@ -17,8 +17,10 @@ class PdfRecapitulationApi {
   PdfRecapitulationApi({required this.context}) {}
   late BuildContext context;
 
-  Future<File> generatePdfAllRecap(
-      {required List<ItemUserReimburseData> listRecapitulation}) async {
+  Future<File> generatePdfAllRecap({
+    required List<ItemUserReimburseData> listRecapitulation,
+    required isRangePicked,
+  }) async {
     final pdf = Document();
 
     final imageCompany = (await rootBundle.load(Constant.imageRbCompany)).buffer.asUint8List();
@@ -31,7 +33,7 @@ class PdfRecapitulationApi {
         pw.SizedBox(height: 1 * PdfPageFormat.cm),
         buildTitle('Rekapitulasi Reimbursement'),
         pw.SizedBox(height: 1 * PdfPageFormat.cm),
-        buildDetailAllRecap(),
+        buildDetailAllRecap(isRangePicked: isRangePicked),
         pw.SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildTableAllRecap(listRecapitulation),
         pw.SizedBox(height: 1 * PdfPageFormat.cm),
@@ -67,23 +69,26 @@ class PdfRecapitulationApi {
         pw.SizedBox(height: 1 * PdfPageFormat.cm),
         buildDetailOnly(detailReimburseData),
         pw.SizedBox(height: 0.5 * PdfPageFormat.cm),
-        buildTableOnly(detailReimburseData),
+        buildTableDetailOnly(detailReimburseData),
         pw.SizedBox(height: 1 * PdfPageFormat.cm),
         pw.Container(
-          margin: pw.EdgeInsets.symmetric(horizontal: 48),
+          margin: (userProvider.isAdmin) ? pw.EdgeInsets.symmetric(horizontal: 48) : null,
           child: pw.Row(
-            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: (userProvider.isAdmin)
+                ? pw.MainAxisAlignment.spaceBetween
+                : pw.MainAxisAlignment.end,
             children: [
               buildSignature(
                 role: 'Karyawan',
                 name: detailReimburseData.name ?? '-',
                 nik: detailReimburseData.nik ?? '-',
               ),
-              buildSignature(
-                role: userProvider.profileData?.role_text ?? '-',
-                name: userProvider.profileData?.name ?? '-',
-                nik: userProvider.profileData?.nik ?? '-',
-              ),
+              if (userProvider.isAdmin)
+                buildSignature(
+                  role: userProvider.profileData?.role_text ?? '-',
+                  name: userProvider.profileData?.name ?? '-',
+                  nik: userProvider.profileData?.nik ?? '-',
+                ),
             ],
           ),
         ),
@@ -150,14 +155,22 @@ class PdfRecapitulationApi {
         ],
       );
 
-  pw.Widget buildDetailAllRecap() {
+  pw.Widget buildDetailAllRecap({required bool isRangePicked}) {
     final userProvider = context.read<UserProvider>();
 
     return pw.TableHelper.fromTextArray(
       tableWidth: TableWidth.min,
       border: pw.TableBorder.all(style: pw.BorderStyle.none),
       data: [
-        ['Periode Reimburse', ': ${userProvider.selectedRecapitulationMonth}'],
+        if (!userProvider.isAdmin) ['Nama Karyawan', ': ${userProvider.profileData?.name ?? ''}'],
+        if (!userProvider.isAdmin)
+          ['Nomor Induk Karyawan', ': ${userProvider.profileData?.nik ?? ''}'],
+        [
+          'Periode Reimburse',
+          isRangePicked
+              ? '${userProvider.selectedStartDateRangeRecap} - ${userProvider.selectedEndDateRangeRecap}'
+              : ': ${userProvider.selectedRecapitulationMonth}',
+        ],
       ],
       cellStyle: const pw.TextStyle(fontSize: 12),
       cellHeight: 25,
@@ -169,11 +182,13 @@ class PdfRecapitulationApi {
   }
 
   pw.Widget buildTableAllRecap(List<ItemUserReimburseData> data) {
+    final userProvider = context.read<UserProvider>();
+
     return pw.TableHelper.fromTextArray(
       headers: [
         'No',
         'Tanggal Pengajuan',
-        'Nama Karyawan',
+        if (userProvider.isAdmin) 'Nama Karyawan',
         'Kategori',
         'Status',
         'Tujuan/ Diagnosis',
@@ -186,12 +201,12 @@ class PdfRecapitulationApi {
         return [
           '$index',
           item.createdDate ?? '-',
-          item.name ?? '-',
+          if (userProvider.isAdmin) item.name ?? '-',
           item.typeReimburse ?? '-',
           item.status ?? '-',
-          '-', // As Tujuan/Diagnosis is not present in the data, it’s set to '-'
-          'Yhezra (Admin)', // Assuming the admin is static in this context
-          'Rp ${Helper(context: context).formatCurrency(amount: item.totalPrice ?? 0)}',
+          item.purpose_text, // As Tujuan/Diagnosis is not present in the data, it’s set to '-'
+          item.approval_by ?? item.status ?? '-', // Assuming the admin is static in this context
+          Helper(context: context).formatCurrency(amount: item.totalPrice ?? 0),
         ];
       }).toList(),
       cellStyle: const pw.TextStyle(fontSize: 10),
@@ -221,12 +236,23 @@ class PdfRecapitulationApi {
         ['Nomor Induk Karyawan', ': ${detailReimburseData.nik}'],
         ['Kategori Pengajuan', ': ${detailReimburseData.category_reimbursement_text}'],
         ['Tanggal Pengajuan', ': ${detailReimburseData.date}'],
-        ['Tanggal Disetujui', ': TANGGAL DISETUJUI \\ BELUM ADA DATA DARI API'],
-        ['Tujuan/ Diagnosis', ': TUJUANNYA APA \\ BELUM ADA DATA DARI API'],
-        ['Total Biaya', ': ${detailReimburseData.totalPrice}'],
+        [
+          'Tanggal Disetujui',
+          ': ${detailReimburseData.approval_date ?? detailReimburseData.status_text}'
+        ],
+        ['Tujuan/ Diagnosis', ': ${detailReimburseData.purpose_text}'],
+        [
+          'Total Biaya',
+          ': ${Helper(context: context).formatCurrency(amount: detailReimburseData.totalPrice ?? 0)}'
+        ],
         ['Status Pengajuan', ': ${detailReimburseData.status_text}'],
-        ['Penanggung Jawab', ':  SIAPA (Admin/HRD) \\ BELUM ADA DATA DARI API'],
-        ['Rincian Biaya', ': '],
+        [
+          'Penanggung Jawab',
+          (detailReimburseData.approval_by != null)
+              ? ': ${detailReimburseData.approval_by} (${detailReimburseData.approval_by_role})'
+              : ': ${detailReimburseData.status_text}'
+        ],
+        ['Rincian Biaya', ': Terlampir di bawah ini'],
       ],
       cellStyle: const pw.TextStyle(fontSize: 12),
       cellHeight: 25,
@@ -237,7 +263,7 @@ class PdfRecapitulationApi {
     );
   }
 
-  pw.Widget buildTableOnly(DetailReimburseData detailReimburseData) {
+  pw.Widget buildTableDetailOnly(DetailReimburseData detailReimburseData) {
     return pw.TableHelper.fromTextArray(
       headers: [
         'No',
@@ -256,7 +282,7 @@ class PdfRecapitulationApi {
           item.detail_family_name ?? '-',
           item.detail_cost ?? '-',
           item.detail_desc ?? '-',
-          'Rp ${Helper(context: context).formatCurrency(amount: item.detail_cost ?? 0)}',
+          Helper(context: context).formatCurrency(amount: item.detail_cost ?? 0),
         ];
       }).toList(),
       cellStyle: const pw.TextStyle(fontSize: 10),
