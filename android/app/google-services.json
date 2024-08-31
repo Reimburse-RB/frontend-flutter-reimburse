@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "668503627967",
+    "project_id": "reimburse-rb",
+    "storage_bucket": "reimburse-rb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668503627967:android:7b7ea3845f4e138c0bce0a",
+        "android_client_info": {
+          "package_name": "com.yud.reimburse_rb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLp3FHU3ILBe5FYSwsBpUrR9yaQzwafdI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
