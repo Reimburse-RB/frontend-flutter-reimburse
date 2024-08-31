@@ -104,7 +104,7 @@ module.exports = {
             approval_date: null,
           };
 
-          if (item.purpose_id !== 0) {
+          if (item.purpose_id !== 0 && item.purpose_id !== 4) {
             const purposeText = allStatus.purposeId.find(
               (itemCat) => itemCat.purpose_id === item.purpose_id
             );
@@ -270,7 +270,7 @@ module.exports = {
           (itemCat) => itemCat.category_reimbursement_id === reimburse.category
         );
 
-        if (reimburse.purpose_id !== 0) {
+        if (reimburse.purpose_id !== 0 && reimburse.purpose_id !== 4) {
           const purposeText = allStatus.purposeId.find(
             (itemCat) => itemCat.purpose_id === reimburse.purpose_id
           );
@@ -360,16 +360,14 @@ module.exports = {
               where: { id: detail.intended_for },
             });
 
-            const detailTitleText = allStatus.titleId.find(
+            const detailTitleText = detail.id != 0 ? allStatus.titleId.find(
               (itemTitle) => itemTitle.detail_title_id === detail.title_id
-            );
+            ) : null;
 
             const temp = {
               detail_id: detail.id,
-              detail_title_id: detail.title_id,
-              detail_title_text: detailTitleText
-                ? detailTitleText.detail_title_text
-                : "",
+              detail_title_id: detailTitleText != null ? detail.title_id : null,
+              detail_title_text: detailTitleText != null ? detailTitleText.detail_title_text : detail.title_other,
               detail_family_id: detail.intended_for,
               detail_family_name: family ? family.fullname : "",
               detail_cost: detail.price,
