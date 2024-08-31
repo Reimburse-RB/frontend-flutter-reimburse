@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:reimburse_rb/models/common/modal_data.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/pdf_generator/api/pdf_api.dart';
+import 'package:reimburse_rb/utility/pdf_generator/api/pdf_recapitulation_api.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Helper {
@@ -260,80 +262,6 @@ class Helper {
     return formatCurrency.format(amount);
   }
 
-  void showModalReimbursement({
-    required BuildContext context,
-    required String title,
-    required List<ModalRegularData> listOptions,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16),
-        ),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 32),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight:
-                  MediaQuery.of(context).size.height * 0.8, // max height 80% of screen height
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Flexible(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: listOptions.length,
-                    itemBuilder: (context, index) {
-                      final option = listOptions[index];
-                      return GestureDetector(
-                        onTap: option.onTap,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            option.text,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Color getStatusColor({required int? statusId}) {
     return statusId == Constant.waitingStatusId
         ? Constant.waitingStatusColor
@@ -356,5 +284,54 @@ class Helper {
                 : statusId == Constant.rejectedStatusId
                     ? Constant.rejectedStatusAsset
                     : '';
+  }
+
+  Future<DateTime?> onChangeDate({
+    required BuildContext context,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+  }) async {
+    final DateTime now = DateTime.now();
+    final DateTime defaultFirstDate = firstDate ?? now.subtract(const Duration(days: 30));
+    final DateTime defaultLastDate = lastDate ?? now;
+    final DateTime defaultInitialDate = initialDate ?? now;
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: defaultInitialDate,
+      firstDate: defaultFirstDate,
+      lastDate: defaultLastDate,
+    );
+
+    return pickedDate;
+  }
+
+  Future<void> generateAndOpenPdfFormatAll({
+    required List<ItemUserReimburseData> listRecapitulation,
+  }) async {
+    try {
+      final pdfFile = await PdfRecapitulationApi(context: context).generatePdfAllRecap(
+        listRecapitulation: listRecapitulation,
+      );
+      log('Generated PDF: $pdfFile');
+      await PdfApi.openFile(pdfFile);
+    } catch (e) {
+      log('Error generating PDF: $e');
+    }
+  }
+
+  Future<void> generateAndOpenPdfFormatDetail({
+    required DetailReimburseData detailReimburseData,
+  }) async {
+    try {
+      final pdfFile = await PdfRecapitulationApi(context: context).generatePdfDetail(
+        detailReimburseData: detailReimburseData,
+      );
+      log('Generated PDF: $pdfFile');
+      await PdfApi.openFile(pdfFile);
+    } catch (e) {
+      log('Error generating PDF: $e');
+    }
   }
 }

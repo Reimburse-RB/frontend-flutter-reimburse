@@ -1,13 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
-import 'package:reimburse_rb/utility/pdf_generator/api/pdf_api.dart';
-import 'package:reimburse_rb/utility/pdf_generator/api/pdf_recapitulation_api.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/card_detail_cost.dart';
@@ -42,13 +39,9 @@ class DetailReimbursementView extends StatelessWidget {
         actions: [
           if (viewModel.detailReimburseData != null)
             InkWell(
-              onTap: () async {
-                final pdfFile = await PdfRecapitulationApi(context: context).generatePdfDetail(
-                  detailReimburseData: viewModel.detailReimburseData!,
-                );
-
-                log('generate pdf $pdfFile');
-                PdfApi.openFile(pdfFile);
+              onTap: () {
+                Helper(context: context).generateAndOpenPdfFormatDetail(
+                    detailReimburseData: viewModel.detailReimburseData!);
               },
               child: Icon(
                 Icons.print_rounded,

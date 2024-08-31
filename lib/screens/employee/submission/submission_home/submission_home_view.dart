@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
-import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
+import 'package:reimburse_rb/widgets/common/modal_list_option.dart';
 import 'package:reimburse_rb/widgets/employee/list_submission.dart';
 
 class SubmissionHomeScreen extends StatelessWidget {
@@ -84,11 +84,11 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
       floatingActionButton: (!userProvider.isAdmin)
           ? FloatingActionButtonGeneral(
               onPressed: () {
-                Helper(context: context).showModalReimbursement(
-                  context: context,
-                  title: viewModel.modalTitle,
-                  listOptions: viewModel.modalOptionList,
-                );
+                ModalListOption(
+                        context: context,
+                        title: viewModel.modalTitle,
+                        listOptions: viewModel.modalOptionList)
+                    .show();
               },
             )
           : null,

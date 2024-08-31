@@ -1,15 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_view_model.dart';
-import 'package:reimburse_rb/utility/constant.dart';
-import 'package:reimburse_rb/utility/pdf_generator/api/pdf_api.dart';
-import 'package:reimburse_rb/utility/pdf_generator/api/pdf_recapitulation_api.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/card_submission.dart';
+import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 
 class RecapitulationListScreen extends StatelessWidget {
@@ -38,24 +35,12 @@ class RecapitulationListView extends StatelessWidget {
         context: context,
         title: userProvider.selectedRecapitulationMonth ?? '',
       ),
-      floatingActionButton: SizedBox(
-        height: 64.0,
-        width: 64.0,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () async {
-              final pdfFile = await PdfRecapitulationApi(context: context).generatePdfAllRecap(
-                listRecapitulation: viewModel.listRecapitulation,
-              );
-
-              log('generate pdf $pdfFile');
-              PdfApi.openFile(pdfFile);
-            },
-            child: const Icon(Icons.print_rounded),
-            backgroundColor: Constant.green,
-            elevation: 8.0,
-          ),
-        ),
+      floatingActionButton: FloatingActionButtonGeneral(
+        onPressed: () {
+          Helper(context: context)
+              .generateAndOpenPdfFormatAll(listRecapitulation: viewModel.listRecapitulation);
+        },
+        icon: const Icon(Icons.print_rounded),
       ),
       body: LoadingFallback(
         isLoading: viewModel.isLoading,

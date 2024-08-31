@@ -354,16 +354,8 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
   }
 
   Future onChangeDate({required int index}) async {
-    final DateTime now = DateTime.now();
-    final DateTime firstDate = now.subtract(const Duration(days: 30));
-    final DateTime lastDate = now;
+    final DateTime? pickedDate = await Helper(context: context).onChangeDate(context: context);
 
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: now,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
     if (pickedDate != null) {
       _listControllerDetailCost[index].selectedDateTime = pickedDate;
       _listControllerDetailCost[index].dateController?.text =

@@ -96,6 +96,7 @@ class SubmissionHomeViewModel extends ChangeNotifier {
   }
 
   void dispose() {
+    super.dispose();
     _tabController.removeListener(_handleTabChange);
     _tabController.dispose();
   }

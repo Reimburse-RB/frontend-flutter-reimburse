@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
-import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_view_model.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/card_recapitulation_period.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
+import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
+import 'package:reimburse_rb/widgets/common/modal_date_range.dart';
 
 class RecapitulationListYearScreen extends StatelessWidget {
   const RecapitulationListYearScreen({super.key});
@@ -32,6 +33,12 @@ class RecapitulationListYearView extends StatelessWidget {
       appBar: AppBarGeneral(
         context: context,
         title: 'Rekapitulasi Reimbursement',
+      ),
+      floatingActionButton: FloatingActionButtonGeneral(
+        onPressed: () async {
+          ModalDateRange(context: context, title: 'Pilih Periode', onTapContinue: () {}).show();
+        },
+        icon: const Icon(Icons.print_rounded),
       ),
       body: LoadingFallback(
         isLoading: viewModel.isLoading,

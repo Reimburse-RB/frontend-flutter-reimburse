@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
-import 'package:reimburse_rb/provider/user_provider.dart';
-import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/detail_text.dart';
-import 'package:reimburse_rb/widgets/common/form_date_picker.dart';
-import 'package:reimburse_rb/widgets/common/form_dropdown_detail_cost.dart';
-import 'package:reimburse_rb/widgets/common/form_dropdown_family_member.dart';
-import 'package:reimburse_rb/widgets/common/form_field_text.dart';
-import 'package:reimburse_rb/widgets/common/form_small_note.dart';
 
 class CardDetailCost extends StatelessWidget {
   final ItemDetailReimburseData itemDetailReimburseData;
