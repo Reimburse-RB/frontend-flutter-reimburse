@@ -92,12 +92,12 @@ module.exports = {
               item.status == 1
                 ? "Menunggu Diproses"
                 : item.status == 2
-                ? "Diproses"
-                : item.status == 3
-                ? "Diterima"
-                : item.status == 4
-                ? "Ditolak"
-                : "",
+                  ? "Diproses"
+                  : item.status == 3
+                    ? "Diterima"
+                    : item.status == 4
+                      ? "Ditolak"
+                      : "",
             createdDate: formattedDate,
             approval_by: null,
             approval_by_role: null,
@@ -241,21 +241,25 @@ module.exports = {
       });
 
       if (reimburse) {
+        const userReimburse = await User.findOne({
+          where: { id: reimburse.user_id },
+        });
+
         const returnData = {
-          name: user.fullname,
-          email: user.email,
-          nik: user.identity_number,
+          name: userReimburse.fullname,
+          email: userReimburse.email,
+          nik: userReimburse.identity_number,
           status_id: reimburse.status,
           status_text:
             reimburse.status == 1
               ? "Menunggu Diproses"
               : reimburse.status == 2
-              ? "Diproses"
-              : reimburse.status == 3
-              ? "Diterima"
-              : reimburse.status == 4
-              ? "Ditolak"
-              : "",
+                ? "Diproses"
+                : reimburse.status == 3
+                  ? "Diterima"
+                  : reimburse.status == 4
+                    ? "Ditolak"
+                    : "",
           category_reimbursement_id: reimburse.category,
           approval_by: null,
           approval_by_role: null,
