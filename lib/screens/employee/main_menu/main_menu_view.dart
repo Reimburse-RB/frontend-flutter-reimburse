@@ -107,7 +107,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       : const Icon(
                           IconlyBroken.paper,
                         ),
-                  label: 'Pengajuan',
+                  label: userProvider.isAdmin?'Permintaan':'Pengajuan',
                 ),
                 BottomNavigationBarItem(
                   icon: userProvider.selectedMainMenuIndex == 2
