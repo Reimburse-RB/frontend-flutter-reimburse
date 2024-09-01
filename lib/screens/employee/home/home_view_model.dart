@@ -180,6 +180,7 @@ class HomeViewModel extends ChangeNotifier {
     String endpoint = 'reimburse/get-user-reimburse';
     Map body = {
       'status': [1, 2],
+      'isAdmin': context.read<UserProvider>().isAdmin,
     };
 
     await http.post(endpoint: endpoint, body: body).then((res) {

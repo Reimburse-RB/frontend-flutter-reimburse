@@ -45,6 +45,7 @@ class ProfileData {
   final String email;
   final int? role_id;
   final String role_text;
+  bool is_account_verified;
   String? img_url;
   List<FamilyMemberData> family_member_data;
 
@@ -53,6 +54,7 @@ class ProfileData {
     this.name = '',
     this.email = '',
     this.role_id,
+    this.is_account_verified = false,
     this.role_text = '',
     this.img_url,
     this.family_member_data = const [],

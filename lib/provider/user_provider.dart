@@ -10,6 +10,11 @@ class UserProvider extends ChangeNotifier {
   void setIsAdmin(bool value) => _isAdmin = value;
   void clearIsAdmin() => _isAdmin = false;
 
+  bool _isAccountVerified = false;
+  bool get isAccountVerified => _isAccountVerified;
+  void setIsAccountVerified(bool value) => _isAccountVerified = value;
+  void clearIsAccountVerified() => _isAccountVerified = false;
+
   int _selectedMainMenuIndex = 0;
   int get selectedMainMenuIndex => _selectedMainMenuIndex;
   void setSelectedMainMenuIndex(int value) {

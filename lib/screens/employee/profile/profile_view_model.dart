@@ -92,6 +92,7 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
       if (response.success) {
         final provider = context.read<UserProvider>();
         provider.setProfileData(response.data);
+        provider.setIsAccountVerified(response.data?.is_account_verified ?? false);
 
         _profile = response.data;
 

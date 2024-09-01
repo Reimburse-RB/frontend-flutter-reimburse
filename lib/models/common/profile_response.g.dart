@@ -44,6 +44,7 @@ ProfileData _$ProfileDataFromJson(Map<String, dynamic> json) => ProfileData(
       name: json['name'] as String? ?? '',
       email: json['email'] as String? ?? '',
       role_id: (json['role_id'] as num?)?.toInt(),
+      is_account_verified: json['is_account_verified'] as bool? ?? false,
       role_text: json['role_text'] as String? ?? '',
       img_url: json['img_url'] as String?,
       family_member_data: (json['family_member_data'] as List<dynamic>?)
@@ -59,6 +60,7 @@ Map<String, dynamic> _$ProfileDataToJson(ProfileData instance) =>
       'email': instance.email,
       'role_id': instance.role_id,
       'role_text': instance.role_text,
+      'is_account_verified': instance.is_account_verified,
       'img_url': instance.img_url,
       'family_member_data': instance.family_member_data,
     };
