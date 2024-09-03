@@ -8,6 +8,7 @@ import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_month_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 
 class NavigationProvider extends ChangeNotifier {
   NavigationProvider() {}
@@ -30,6 +31,12 @@ class NavigationProvider extends ChangeNotifier {
     required Function(dynamic) onReturn,
   }) {
     final userProvider = context.read<UserProvider>();
+
+    if (!userProvider.isAccountVerified) {
+      Helper(context: context).alertUnverifiedAccount();
+      return;
+    }
+
     userProvider.setSelectedDetailAccountVerificationId(id);
     Navigator.of(context)
         .push(CupertinoPageRoute(
@@ -48,6 +55,12 @@ class NavigationProvider extends ChangeNotifier {
     required Function(dynamic) onReturn,
   }) {
     final userProvider = context.read<UserProvider>();
+
+    if (!userProvider.isAccountVerified) {
+      Helper(context: context).alertUnverifiedAccount();
+      return;
+    }
+
     userProvider.setSelectedDetailReimbursementId(id);
     Navigator.of(context)
         .push(CupertinoPageRoute(
@@ -66,6 +79,12 @@ class NavigationProvider extends ChangeNotifier {
     required Function(dynamic) onReturn,
   }) {
     final userProvider = context.read<UserProvider>();
+
+    if (!userProvider.isAccountVerified) {
+      Helper(context: context).alertUnverifiedAccount();
+      return;
+    }
+
     userProvider.setSelectedReimbursementCategoryId(reimbursementCategory);
     Navigator.of(context)
         .push(CupertinoPageRoute(
@@ -96,8 +115,16 @@ class NavigationProvider extends ChangeNotifier {
   void navigateToMenuPage({
     required BuildContext context,
     required Widget page,
+    bool isAccountMustVerified = false,
     required Function(dynamic) onReturn,
   }) {
+    final userProvider = context.read<UserProvider>();
+
+    if (isAccountMustVerified && !userProvider.isAccountVerified) {
+      Helper(context: context).alertUnverifiedAccount();
+      return;
+    }
+
     Navigator.of(context)
         .push(CupertinoPageRoute(
       builder: (context) => page,

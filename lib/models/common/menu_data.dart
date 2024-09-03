@@ -15,12 +15,14 @@ class MenuItemData {
     required this.assetImage,
     required this.title,
     required this.page,
+    this.isAccountMustVerified = false,
     this.selectedReimbursementCategory,
     this.menuIndex,
   });
   late final String assetImage;
   late final String title;
   late final Widget page;
+  final bool isAccountMustVerified;
   final int? menuIndex;
   late final ReimbursementCategoryData? selectedReimbursementCategory;
 }

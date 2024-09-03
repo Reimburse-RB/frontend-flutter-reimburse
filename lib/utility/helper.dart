@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/pdf_generator/api/pdf_api.dart';
 import 'package:reimburse_rb/utility/pdf_generator/api/pdf_recapitulation_api.dart';
@@ -166,16 +168,18 @@ class Helper {
     }
   }
 
-  alertCloseGeneral() {
+  alertUnverifiedAccount() {
+    final userProvider = context.read<UserProvider>();
+
     alertClose(
-      title: 'Konfirmasi',
-      message: Constant.confirmUnsavedAlertClose,
+      alertType: AlertType.warning,
+      title: 'Warning',
+      message: userProvider.isAdmin
+          ? Constant.warningUnverifiedAdminAccount
+          : Constant.warningUnverifiedEmployeeAccount,
       context: context,
+      firstButtonLabel: 'Kembali',
       firstButtonOnTap: () {
-        Navigator.pop(context);
-        Navigator.pop(context);
-      },
-      secondButtonOnTap: () {
         Navigator.pop(context);
       },
     );
@@ -189,13 +193,13 @@ class Helper {
     String secondButtonLabel = 'Batal',
     AlertType? alertType,
     required Function() firstButtonOnTap,
-    required Function() secondButtonOnTap,
+    Function()? secondButtonOnTap,
   }) {
     Alert(
       context: context,
       type: alertType,
       style: const AlertStyle(
-        isCloseButton: false,
+        isCloseButton: true,
         titleStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         titlePadding: EdgeInsets.only(bottom: 8, top: 10),
       ),
@@ -220,21 +224,22 @@ class Helper {
             color: Constant.green,
           ),
         ),
-        DialogButton(
-          radius: BorderRadius.circular(12),
-          child: Text(
-            secondButtonLabel,
-            style: const TextStyle(
+        if (secondButtonOnTap != null)
+          DialogButton(
+            radius: BorderRadius.circular(12),
+            child: Text(
+              secondButtonLabel,
+              style: const TextStyle(
+                color: Constant.green,
+              ),
+            ),
+            onPressed: secondButtonOnTap,
+            color: Colors.white,
+            border: Border.all(
+              width: 1.5,
               color: Constant.green,
             ),
           ),
-          onPressed: secondButtonOnTap,
-          color: Colors.white,
-          border: Border.all(
-            width: 1.5,
-            color: Constant.green,
-          ),
-        ),
       ],
     ).show();
   }

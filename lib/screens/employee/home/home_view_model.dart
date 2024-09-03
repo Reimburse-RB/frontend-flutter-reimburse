@@ -49,6 +49,7 @@ class HomeViewModel extends ChangeNotifier {
           assetImage: 'assets/menu/icon-menu-rekapitulasi.png',
           title: 'Rekapitulasi Reimbursement',
           page: const RecapitulationListYearScreen(),
+          isAccountMustVerified: true,
         ),
       ],
     ),
@@ -65,6 +66,7 @@ class HomeViewModel extends ChangeNotifier {
           assetImage: 'assets/menu/icon-menu-verif-akun.png',
           title: 'Verifikasi Perubahan dan Akun Baru',
           page: const AccountVerificationListScreen(),
+          isAccountMustVerified: true,
         ),
       ],
     ),
@@ -83,6 +85,7 @@ class HomeViewModel extends ChangeNotifier {
           assetImage: 'assets/menu/icon-menu-rekapitulasi.png',
           title: 'Rekapitulasi Reimbursement',
           page: const RecapitulationListYearScreen(),
+          isAccountMustVerified: true,
         ),
       ],
     ),
@@ -94,12 +97,14 @@ class HomeViewModel extends ChangeNotifier {
           title: 'Reimbursement Kesehatan',
           page: const SubmissionFormScreen(),
           selectedReimbursementCategory: UserProvider().listReimbursementCategory[0],
+          isAccountMustVerified: true,
         ),
         MenuItemData(
           assetImage: 'assets/menu/icon-menu-transport.png',
           title: 'Reimbursement Transportasi',
           page: const SubmissionFormScreen(),
           selectedReimbursementCategory: UserProvider().listReimbursementCategory[1],
+          isAccountMustVerified: true,
         ),
       ],
     ),
@@ -116,6 +121,11 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future getAdminHrdSummary() async {
+    final userProvider = context.read<UserProvider>();
+    if (!userProvider.isAccountVerified) {
+      return;
+    }
+
     startLoading();
     notifyListeners();
 
@@ -124,8 +134,7 @@ class HomeViewModel extends ChangeNotifier {
     await http.post(endpoint: endpoint).then((res) {
       AdminSummaryResponse response = AdminSummaryResponse.fromJson(res);
       if (response.success) {
-        final provider = context.read<UserProvider>();
-        provider.setAdminSummaryData(response.data);
+        userProvider.setAdminSummaryData(response.data);
 
         notifyListeners();
       } else {
@@ -145,6 +154,11 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future getEmployeeSummary() async {
+    final userProvider = context.read<UserProvider>();
+    if (!userProvider.isAccountVerified) {
+      return;
+    }
+
     startLoading();
     notifyListeners();
 
@@ -153,8 +167,7 @@ class HomeViewModel extends ChangeNotifier {
     await http.post(endpoint: endpoint).then((res) {
       EmployeeSummaryResponse response = EmployeeSummaryResponse.fromJson(res);
       if (response.success) {
-        final provider = context.read<UserProvider>();
-        provider.setEmployeeSummaryData(response.data);
+        userProvider.setEmployeeSummaryData(response.data);
 
         notifyListeners();
       } else {
@@ -174,6 +187,11 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future getUserReimburse() async {
+    final userProvider = context.read<UserProvider>();
+    if (!userProvider.isAccountVerified) {
+      return;
+    }
+
     startLoading();
     notifyListeners();
 

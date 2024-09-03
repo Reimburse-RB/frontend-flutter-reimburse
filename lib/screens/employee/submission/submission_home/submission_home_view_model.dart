@@ -21,6 +21,7 @@ class SubmissionHomeViewModel extends ChangeNotifier {
         ModalRegularData(
           text: 'Reimburse ${reimbursementCategory.categoryReimbursementText}',
           onTap: () {
+            Navigator.of(context).pop();
             context.read<NavigationProvider>().navigateToFormReimbursement(
                 context: context,
                 reimbursementCategory: reimbursementCategory,
@@ -104,12 +105,17 @@ class SubmissionHomeViewModel extends ChangeNotifier {
   }
 
   Future getUserReimburse() async {
+    final userProvider = context.read<UserProvider>();
+    if (!userProvider.isAccountVerified) {
+      return;
+    }
+
     startLoading();
     notifyListeners();
 
     String endpoint = 'reimburse/get-user-reimburse';
     Map body = selectedBodyTab;
-    body['isAdmin'] = context.read<UserProvider>().isAdmin;
+    body['isAdmin'] = userProvider.isAdmin;
 
     await http.post(endpoint: endpoint, body: body).then((res) {
       ListUserReimburseResponse response = ListUserReimburseResponse.fromJson(res);

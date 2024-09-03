@@ -5,6 +5,23 @@ import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/models/employee/employee_summary_response.dart';
 
 class UserProvider extends ChangeNotifier {
+  void clearAllData() {
+    clearEmployeeSummaryData();
+    clearAdminSummaryData();
+    clearIsAccountVerified();
+    clearIsAdmin();
+    clearProfileData();
+    clearSelectedDetailAccountVerificationId();
+    clearSelectedDetailReimbursementId();
+    clearSelectedEndDateRangeRecap();
+    clearSelectedMainMenuindex();
+    clearSelectedRecapitulationMonth();
+    clearSelectedRecapitulationYear();
+    clearSelectedReimbursementCategoryId();
+    clearSelectedStartDateRangeRecap();
+    clearSelectedSubmissionTabIndex();
+  }
+
   bool _isAdmin = false;
   bool get isAdmin => _isAdmin;
   void setIsAdmin(bool value) => _isAdmin = value;
@@ -54,6 +71,8 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearEmployeeSummaryData() => _employeeSummaryData = null;
+
   AdminSummaryData? _adminSummaryData;
   AdminSummaryData? get adminSummaryData => _adminSummaryData;
   void setAdminSummaryData(AdminSummaryData? value) {
@@ -61,10 +80,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearEmployeeSummaryData() {
-    _employeeSummaryData = null;
-    notifyListeners();
-  }
+  void clearAdminSummaryData() => _adminSummaryData = null;
 
   ReimbursementCategoryData? _selectedReimbursementCategory;
   ReimbursementCategoryData? get selectedReimbursementCategory => _selectedReimbursementCategory;

@@ -6,6 +6,7 @@ import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/admin/card_summary_admin_hrd.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
+import 'package:reimburse_rb/widgets/common/form_small_note.dart';
 import 'package:reimburse_rb/widgets/common/list_horizontal_menu.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 import 'package:reimburse_rb/widgets/employee/card_submission_summary.dart';
@@ -109,6 +110,30 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  Widget buildUnverifiedAccountWarning(BuildContext context) {
+    final userProvider = context.read<UserProvider>();
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24),
+      child: FormSmallNote(
+        note: userProvider.isAdmin
+            ? Constant.warningUnverifiedAdminAccount
+            : Constant.warningUnverifiedEmployeeAccount,
+        isHasBackground: true,
+        backgroundBorder: Border.all(color: Constant.waitingStatusColor),
+        noteTextStyle: TextStyle(
+          color: Constant.waitingStatusColor,
+          fontWeight: Constant.warningNoteStyle.fontWeight,
+          fontSize: 13,
+          fontStyle: FontStyle.italic,
+        ),
+        prefixIcon: Icon(
+          Icons.timelapse_sharp,
+          color: Constant.waitingStatusColor,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
@@ -126,6 +151,12 @@ class HomeView extends StatelessWidget {
           child: ListView(
             children: [
               const SizedBox(height: 24),
+              if (!userProvider.isAccountVerified) ...[
+                buildUnverifiedAccountWarning(context),
+                SizedBox(
+                  height: 20,
+                )
+              ],
               buildSubmissionSummary(context),
               buildHorizontalMenu(context, viewModel),
               if (!userProvider.isAdmin) buildActiveSubmissionList(viewModel),

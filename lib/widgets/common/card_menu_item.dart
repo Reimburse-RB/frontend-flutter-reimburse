@@ -27,6 +27,7 @@ class CardMenuItem extends StatelessWidget {
           userProvider
               .setSelectedReimbursementCategoryId(menuItemData.selectedReimbursementCategory!);
         }
+
         if (menuItemData.menuIndex != null) {
           userProvider.setSelectedMainMenuIndex(menuItemData.menuIndex!);
         } else {
@@ -34,6 +35,7 @@ class CardMenuItem extends StatelessWidget {
             context: context,
             page: menuItemData.page,
             onReturn: onReturn,
+            isAccountMustVerified: menuItemData.isAccountMustVerified,
           );
         }
       },

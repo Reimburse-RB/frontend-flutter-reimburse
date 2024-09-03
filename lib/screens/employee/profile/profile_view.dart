@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -31,6 +32,7 @@ class ProfileView extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     final viewModel = context.watch<ProfileViewModel>();
+    final userProvider = context.read<UserProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
@@ -109,6 +111,7 @@ class ProfileView extends StatelessWidget {
                   message: 'Apakah Anda yakin ingin keluar akun?',
                   context: context,
                   firstButtonOnTap: () {
+                    userProvider.clearAllData();
                     viewModel.signOut();
                   },
                   secondButtonOnTap: () {

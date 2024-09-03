@@ -77,6 +77,10 @@ class Constant {
   static const String noteFormDateDetailTitle =
       'Catatan : Kuitansi harus bertanggal tidak lebih dari satu bulan yang lalu.';
   static const String warningFormIncomplete = 'Gagal Unggah! Mohon lengkapi formulir pengajuan';
+  static const String warningUnverifiedEmployeeAccount =
+      'Akun Anda belum diverifikasi oleh Admin. Mohon tunggu sebelum Anda dapat melakukan pengajuan';
+  static const String warningUnverifiedAdminAccount =
+      'Akun Anda belum diverifikasi oleh Admin. Mohon tunggu sebelum Anda dapat mengelola permintaan';
 
   static const TextStyle regularNoteStyle = TextStyle(
     color: greenDark,

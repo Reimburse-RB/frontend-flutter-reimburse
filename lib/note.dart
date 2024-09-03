@@ -316,7 +316,7 @@ class Note {
     ],
   };
 
-  // ENDPOINT : get-detail-reimbursement ****************
+  // ENDPOINT : get-detail-reimburse ****************
   // ROLE : ALL USER
   Map bodyGetDetailReimbursement = {
     'id': 126,

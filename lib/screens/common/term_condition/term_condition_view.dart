@@ -230,17 +230,18 @@ class TermConditionView extends StatelessWidget {
                 ),
               )
             : null,
-        floatingActionButton: (!viewModel.isEditing && userProvider.isAdmin)
-            ? FloatingActionButtonGeneral(
-                onPressed: () {
-                  viewModel.setChangeIsEditingValue();
-                },
-                icon: const Icon(
-                  Icons.edit_rounded,
-                  size: 32,
-                ),
-              )
-            : null,
+        floatingActionButton:
+            (!viewModel.isEditing && userProvider.isAdmin && userProvider.isAccountVerified)
+                ? FloatingActionButtonGeneral(
+                    onPressed: () {
+                      viewModel.setChangeIsEditingValue();
+                    },
+                    icon: const Icon(
+                      Icons.edit_rounded,
+                      size: 32,
+                    ),
+                  )
+                : null,
         body: LoadingFallback(
           isLoading: viewModel.isLoading,
           child: ListView(
