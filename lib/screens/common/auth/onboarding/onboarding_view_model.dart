@@ -14,7 +14,7 @@ class OnboardingViewModel extends ChangeNotifier {
   List tempData = [
     {
       'image': 'assets/onboarding/onboarding_1.png',
-      'desc': 'Selamat Datang di Reimbursa! Aplikasi Pengajuan Reimbursement RB Group'
+      'desc': 'Selamat Datang di ReimburseRB! Aplikasi Pengajuan Reimbursement RB Group'
     },
     {
       'image': 'assets/onboarding/onboarding_2.png',
