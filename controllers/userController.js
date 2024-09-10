@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
 const path = require("path");
-const { isNil } = require("ramda");
+const { isNil, isNotNil } = require("ramda");
 const UserFamily = require("../models/User-Family");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
@@ -57,23 +57,35 @@ module.exports = {
   },
 
   userLogin: async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, fcm_token } = req.body;
     try {
       const user = await User.findOne({ where: { email: email } });
 
-      const validpass = await bcrypt.compare(password, user.password);
-      if (!validpass) {
+      if (user) {
+        const validpass = await bcrypt.compare(password, user.password);
+        if (!validpass) {
+          return res.json({
+            success: false,
+            msg: "Password Anda Salah!!",
+          });
+        }
+
+        if (isNotNil(fcm_token)) {
+          user.fcm_token = fcm_token;
+          user.save();
+        }
+
         return res.json({
-          success: false,
-          msg: "Password Anda Salah!!",
+          success: true,
+          msg: "Anda Berhasil Login!!",
+          token: user.token,
+          user: user,
         });
       }
 
       return res.json({
-        success: true,
-        msg: "Anda Berhasil Login!!",
-        token: user.token,
-        user: user,
+        success: false,
+        msg: "Anda Belum Terdaftar!!",
       });
     } catch (error) {
       return res.json({ msg: error.message });
