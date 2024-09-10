@@ -16,7 +16,7 @@ const userRouter = require("./routes/user");
 const reimburseRouter = require("./routes/reimburse");
 const tncRouter = require("./routes/tnc");
 const admin = require("firebase-admin");
-const serviceAccount = require(process.env.PATH_FIREBASE_KEY);
+const serviceAccount = JSON.parse(process.env.FIREBASE_PRIVATE_KEY);
 
 var app = express();
 app.use(cors());
