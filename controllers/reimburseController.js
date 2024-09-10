@@ -616,7 +616,7 @@ module.exports = {
               price: `${totalPrice}`,
               dateReimburse: formattedCreatedDate,
             },
-            token: item.token ?? "",
+            token: item.fcm_token ?? "",
           };
           messaging.send(message);
 
@@ -632,7 +632,7 @@ module.exports = {
             price: totalPrice,
             date_reimburse: formattedCreatedDate,
             category: 1,
-            token_target: item.token ?? "",
+            token_target: item.fcm_token ?? "",
           });
         });
 
@@ -700,7 +700,7 @@ module.exports = {
             categoryReimbursement: cat ? cat.category_reimbursement_text : "",
             dateReimburse: formattedCreatedDate,
           },
-          token: userReimburse.token ?? "",
+          token: userReimburse.fcm_token ?? "",
         };
         messaging.send(message);
 
@@ -718,7 +718,7 @@ module.exports = {
           category_reimbursement: cat ? cat.category_reimbursement_text : "",
           date_reimburse: formattedCreatedDate,
           category: 2,
-          token_target: userReimburse.token ?? "",
+          token_target: userReimburse.fcm_token ?? "",
         });
 
         return res.json({
