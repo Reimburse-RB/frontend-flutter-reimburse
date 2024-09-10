@@ -1,46 +1,48 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const User = sequelize.define(
-  "user",
+const Notification = sequelize.define(
+  "notification",
   {
-    fullname: {
+    title: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    body: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    reimburse_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
-    email: {
+    category_reimbursement: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
+      allowNull: true,
     },
-    password: {
+    user: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     identity_number: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    role: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    token: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    fcm_token: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
-    },
-    image_url: {
+    price: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    date_reimburse: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    category: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    token_target: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
@@ -48,4 +50,4 @@ const User = sequelize.define(
   }
 );
 
-module.exports = User;
+module.exports = Notification;

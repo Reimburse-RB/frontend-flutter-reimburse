@@ -12,7 +12,8 @@ const fs = require("fs");
 
 module.exports = {
   userRegister: async (req, res) => {
-    const { name, identity_number, role, email, password } = req.body;
+    const { name, identity_number, role, email, password, fcm_token } =
+      req.body;
 
     try {
       const checkEmail = await User.findOne({
@@ -42,6 +43,7 @@ module.exports = {
         status: 2,
         role,
         token,
+        fcm_token,
       });
 
       return res.json({

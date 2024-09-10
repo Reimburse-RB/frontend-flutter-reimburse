@@ -6,6 +6,7 @@ const allStatus = require("../utils/allStatus");
 const UserFamily = require("../models/User-Family");
 const User = require("../models/User");
 const { Op } = require("sequelize");
+const Notification = require("../models/Notification");
 require("dotenv").config();
 
 module.exports = {
@@ -92,12 +93,12 @@ module.exports = {
               item.status == 1
                 ? "Menunggu Diproses"
                 : item.status == 2
-                  ? "Diproses"
-                  : item.status == 3
-                    ? "Diterima"
-                    : item.status == 4
-                      ? "Ditolak"
-                      : "",
+                ? "Diproses"
+                : item.status == 3
+                ? "Diterima"
+                : item.status == 4
+                ? "Ditolak"
+                : "",
             createdDate: formattedDate,
             approval_by: null,
             approval_by_role: null,
@@ -254,12 +255,12 @@ module.exports = {
             reimburse.status == 1
               ? "Menunggu Diproses"
               : reimburse.status == 2
-                ? "Diproses"
-                : reimburse.status == 3
-                  ? "Diterima"
-                  : reimburse.status == 4
-                    ? "Ditolak"
-                    : "",
+              ? "Diproses"
+              : reimburse.status == 3
+              ? "Diterima"
+              : reimburse.status == 4
+              ? "Ditolak"
+              : "",
           category_reimbursement_id: reimburse.category,
           approval_by: null,
           approval_by_role: null,
@@ -360,14 +361,20 @@ module.exports = {
               where: { id: detail.intended_for },
             });
 
-            const detailTitleText = detail.id != 0 ? allStatus.titleId.find(
-              (itemTitle) => itemTitle.detail_title_id === detail.title_id
-            ) : null;
+            const detailTitleText =
+              detail.id != 0
+                ? allStatus.titleId.find(
+                    (itemTitle) => itemTitle.detail_title_id === detail.title_id
+                  )
+                : null;
 
             const temp = {
               detail_id: detail.id,
               detail_title_id: detailTitleText != null ? detail.title_id : null,
-              detail_title_text: detailTitleText != null ? detailTitleText.detail_title_text : detail.title_other,
+              detail_title_text:
+                detailTitleText != null
+                  ? detailTitleText.detail_title_text
+                  : detail.title_other,
               detail_family_id: detail.intended_for,
               detail_family_name: family ? family.fullname : "",
               detail_cost: detail.price,
@@ -501,7 +508,7 @@ module.exports = {
     }
   },
 
-  addReimburse: async (req, res) => {
+  addReimburse: async (req, res, messaging) => {
     const {
       category_reimbursement_id,
       purpose_id,
@@ -549,6 +556,7 @@ module.exports = {
           }
         }
 
+        var totalPrice = 0;
         if (isNotNil(detail_reimburse) && isNotEmpty(detail_reimburse)) {
           detail_reimburse.forEach(async (item) => {
             const [day, month, year] = item.detail_date.split("/");
@@ -559,6 +567,7 @@ module.exports = {
               .slice(0, 19)
               .replace("T", " ");
 
+            totalPrice += item.detail_cost ? item.detail_cost : 0;
             const detailReimburse = await ReimburseDetail.create({
               title_id: item.detail_title_id,
               title_other: item.detail_title_other_text,
@@ -570,6 +579,62 @@ module.exports = {
             });
           });
         }
+
+        const cat = allStatus.listCategoryReimbursement.find(
+          (itemCat) =>
+            itemCat.category_reimbursement_id === category_reimbursement_id
+        );
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, "0"); // Pastikan dua digit
+        const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
+        const year = now.getFullYear();
+        const formattedCreatedDate = `${year}-${month}-${day} ${now
+          .toTimeString()
+          .slice(0, 8)}`;
+
+        const userAdmin = await User.findAll({
+          where: {
+            role: {
+              [Op.in]: [2, 3],
+            },
+          },
+        });
+
+        userAdmin.forEach(async (item) => {
+          const message = {
+            notification: {
+              title: `Reimburse Oleh User ${user.fullname} telah diajukan`,
+              body: `User ${user.fullname} telah membuat ${
+                cat ? cat.category_reimbursement_text : ""
+              } dengan total Rp. ${totalPrice}`,
+            },
+            data: {
+              reimburseId: `${reimburse.id}`,
+              categoryReimbursement: cat ? cat.category_reimbursement_text : "",
+              user: user.fullname,
+              identity_number: user.identity_number,
+              price: `${totalPrice}`,
+              dateReimburse: formattedCreatedDate,
+            },
+            token: item.token ?? "",
+          };
+          messaging.send(message);
+
+          await Notification.create({
+            title: `Reimburse Oleh User ${user.fullname} telah diajukan`,
+            body: `User ${user.fullname} telah membuat ${
+              cat ? cat.category_reimbursement_text : ""
+            } dengan total Rp. ${totalPrice}`,
+            reimburse_id: reimburse.id,
+            category_reimbursement: cat ? cat.category_reimbursement_text : "",
+            user: user.fullname,
+            identity_number: user.identity_number,
+            price: totalPrice,
+            date_reimburse: formattedCreatedDate,
+            category: 1,
+            token_target: item.token ?? "",
+          });
+        });
 
         return res.json({
           success: true,
@@ -587,7 +652,7 @@ module.exports = {
     }
   },
 
-  changeStatusReimburse: async (req, res) => {
+  changeStatusReimburse: async (req, res, messaging) => {
     const { id, change_status_id } = req.body;
     const user = req.userAuth;
 
@@ -613,6 +678,48 @@ module.exports = {
         reimburse.approval_by = user.id;
         reimburse.approval_date = Date.now();
         reimburse.save();
+
+        const userReimburse = await User.findOne({
+          where: { id: reimburse.user_id },
+        });
+
+        const message = {
+          notification: {
+            title:
+              change_status_id == 3
+                ? "Pengajuan Berhasil"
+                : change_status_id == 4
+                ? "Pengajuan Gagal!"
+                : "",
+            body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${
+              change_status_id == 3 ? "anda berhasil" : "anda gagal"
+            }`,
+          },
+          data: {
+            reimburseId: `${reimburse.id}`,
+            categoryReimbursement: cat ? cat.category_reimbursement_text : "",
+            dateReimburse: formattedCreatedDate,
+          },
+          token: userReimburse.token ?? "",
+        };
+        messaging.send(message);
+
+        await Notification.create({
+          title:
+            change_status_id == 3
+              ? "Pengajuan Berhasil"
+              : change_status_id == 4
+              ? "Pengajuan Gagal!"
+              : "",
+          body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${
+            change_status_id == 3 ? "anda berhasil" : "anda gagal"
+          }`,
+          reimburse_id: reimburse.id,
+          category_reimbursement: cat ? cat.category_reimbursement_text : "",
+          date_reimburse: formattedCreatedDate,
+          category: 2,
+          token_target: userReimburse.token ?? "",
+        });
 
         return res.json({
           success: true,

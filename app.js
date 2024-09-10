@@ -7,6 +7,7 @@ var cors = require("cors");
 const helmet = require("helmet");
 const sequelize = require("./config/database");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -14,6 +15,8 @@ var usersRouter = require("./routes/users");
 const userRouter = require("./routes/user");
 const reimburseRouter = require("./routes/reimburse");
 const tncRouter = require("./routes/tnc");
+const admin = require("firebase-admin");
+const serviceAccount = require(process.env.PATH_FIREBASE_KEY);
 
 var app = express();
 app.use(cors());
@@ -30,10 +33,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json({ limit: "50mb" }));
 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+const messaging = admin.messaging();
+
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/user", userRouter);
-app.use("/reimburse", reimburseRouter);
+app.use("/reimburse", reimburseRouter(messaging));
 app.use("/tnc", tncRouter);
 
 // catch 404 and forward to error handler
