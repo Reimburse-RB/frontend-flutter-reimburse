@@ -13,6 +13,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 const userRouter = require("./routes/user");
+const notificationRouter = require("./routes/notification");
 const reimburseRouter = require("./routes/reimburse");
 const tncRouter = require("./routes/tnc");
 const admin = require("firebase-admin");
@@ -42,6 +43,7 @@ const messaging = admin.messaging();
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/user", userRouter);
+app.use("/notification", notificationRouter);
 app.use("/reimburse", reimburseRouter(messaging));
 app.use("/tnc", tncRouter);
 
