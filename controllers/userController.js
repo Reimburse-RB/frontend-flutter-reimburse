@@ -92,6 +92,47 @@ module.exports = {
     }
   },
 
+  changePassword: async (req, res) => {
+    const user = req.userAuth;
+    const { oldPassword, newPassword } = req.body;
+    try {
+      if (isNil(oldPassword) || isNil(newPassword)) {
+        return res.json({
+          success: false,
+          msg: "All fields are required!!",
+        });
+      }
+
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      if (!isPasswordValid) {
+        return res.json({
+          success: false,
+          msg: "Old Password not match!!",
+        });
+      }
+
+      if (newPassword === oldPassword) {
+        return res.json({
+          success: false,
+          msg: "New password cannot be the same as old password!",
+        });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(newPassword, salt);
+
+      user.password = hashPassword;
+      user.save();
+
+      return res.json({
+        success: true,
+        msg: "Anda Berhasil Mengubah Password",
+      });
+    } catch (error) {
+      return res.json({ msg: error.message });
+    }
+  },
+
   getVerificationAccount: async (req, res) => {
     const user = req.userAuth;
 

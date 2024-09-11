@@ -7,6 +7,7 @@ router.post("/register", userController.userRegister);
 router.post("/login", userController.userLogin);
 router.post("/get-profile", authLogin, userController.getProfile);
 router.post("/edit-profile", authLogin, uploadImage, userController.editUser);
+router.post("/change-password", authLogin, userController.changePassword);
 router.post(
   "/get-user-verification",
   authLogin,
