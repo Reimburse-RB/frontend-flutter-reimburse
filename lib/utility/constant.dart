@@ -63,6 +63,7 @@ class Constant {
   static const FontWeight lightWeightText = FontWeight.w300;
   static const FontWeight extraLightWeightText = FontWeight.w200;
 
+  static const String defaulErrorMessage = 'Terjadi kesahalan!';
   static const String confirmUnsavedAlertClose =
       'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.';
   static const String warningPasswordMatchString = 'Password tidak cocok';

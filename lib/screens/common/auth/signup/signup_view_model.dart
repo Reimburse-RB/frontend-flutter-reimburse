@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +16,15 @@ import 'package:reimburse_rb/utility/http_service.dart';
 class SignUpViewModel extends ChangeNotifier {
   SignUpViewModel({
     required this.context,
-  }) {}
+  }) {
+    getFcmToken();
+  }
 
   final LocalStorage localStorage = LocalStorage('reimburse_rb');
   HttpService http = HttpService();
   late BuildContext context;
+
+  String? fcmToken;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -85,13 +90,27 @@ class SignUpViewModel extends ChangeNotifier {
     Navigator.of(context).pop();
   }
 
+  Future getFcmToken() async {
+    fcmToken = await FirebaseMessaging.instance.getToken();
+
+    log('fcm token $fcmToken');
+    return Future.value(true);
+  }
+
   Future submitSignUp() async {
+    log('=== register form test fcm token ${fcmToken}');
     log('=== register form test name ${nameController.text}');
     log('=== register form test email ${emailController.text}');
     log('=== register form test nik ${nikController.text}');
     log('=== register form test pass ${passwordController.text}');
     log('=== register form test confirm pass ${confirmPasswordController.text}');
     log('=== register form test selectedroleid ${selectedRole?.roleId ?? 0}');
+
+    if (fcmToken == null) {
+      Helper(context: context).showToast(message: Constant.defaulErrorMessage + " Harap coba lagi");
+      getFcmToken();
+      return;
+    }
 
     startLoading();
     notifyListeners();
@@ -103,6 +122,7 @@ class SignUpViewModel extends ChangeNotifier {
       'password': passwordController.text,
       'role': selectedRole?.roleId,
       'identity_number': nikController.text,
+      'fcm_token': fcmToken,
     };
 
     await http.post(endpoint: endpoint, body: body).then((res) {

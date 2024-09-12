@@ -10,7 +10,6 @@ import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
-import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 import 'package:reimburse_rb/utility/image_picker_handler.dart';
@@ -93,6 +92,7 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
         final provider = context.read<UserProvider>();
         provider.setProfileData(response.data);
         provider.setIsAccountVerified(response.data?.is_account_verified ?? false);
+        log('isAccountVerified${provider.isAccountVerified}');
 
         _profile = response.data;
 

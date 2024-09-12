@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,8 @@ class SignInViewModel extends ChangeNotifier {
   HttpService http = HttpService();
   final LocalStorage localStorage = LocalStorage('reimburse_rb');
   late BuildContext context;
+
+  String? fcmToken;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -58,7 +61,20 @@ class SignInViewModel extends ChangeNotifier {
     ));
   }
 
+  Future getFcmToken() async {
+    fcmToken = await FirebaseMessaging.instance.getToken();
+
+    log('fcm token $fcmToken');
+    return Future.value(true);
+  }
+
   Future submitSignIn() async {
+    if (fcmToken == null) {
+      Helper(context: context).showToast(message: Constant.defaulErrorMessage + " Harap coba lagi");
+      getFcmToken();
+      return;
+    }
+
     startLoading();
     notifyListeners();
 
@@ -66,6 +82,7 @@ class SignInViewModel extends ChangeNotifier {
     Map body = {
       'email': emailController.text,
       'password': passwordController.text,
+      'fcm_token': fcmToken,
     };
 
     await http.post(endpoint: endpoint, body: body).then((res) {
