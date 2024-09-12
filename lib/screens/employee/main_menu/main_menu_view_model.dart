@@ -7,9 +7,7 @@ import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 
 class MainMenuViewModel extends ChangeNotifier {
-  MainMenuViewModel({required this.context}) {
-    ProfileViewModel(context: context).getProfile();
-  }
+  MainMenuViewModel({required this.context}) {}
 
   BuildContext context;
 

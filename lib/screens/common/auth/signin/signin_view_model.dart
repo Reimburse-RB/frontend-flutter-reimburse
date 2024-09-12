@@ -16,7 +16,9 @@ import 'package:reimburse_rb/utility/http_service.dart';
 class SignInViewModel extends ChangeNotifier {
   SignInViewModel({
     required this.context,
-  }) {}
+  }) {
+    getFcmToken();
+  }
 
   HttpService http = HttpService();
   final LocalStorage localStorage = LocalStorage('reimburse_rb');
@@ -70,7 +72,10 @@ class SignInViewModel extends ChangeNotifier {
 
   Future submitSignIn() async {
     if (fcmToken == null) {
-      Helper(context: context).showToast(message: Constant.defaulErrorMessage + " Harap coba lagi");
+      Helper(context: context).showToast(
+        message: Constant.defaultErrorMessage + " Harap coba lagi",
+        isSuccess: false,
+      );
       getFcmToken();
       return;
     }

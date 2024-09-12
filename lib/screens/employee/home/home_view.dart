@@ -137,7 +137,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
-    final userProvider = context.read<UserProvider>();
+    final userProvider = context.watch<UserProvider>();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,

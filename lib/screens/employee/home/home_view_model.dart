@@ -11,6 +11,7 @@ import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/admin/account_verification/account_verification_view.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
 import 'package:reimburse_rb/screens/employee/home/home_view.dart';
+import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_year_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
 import 'package:reimburse_rb/utility/constant.dart';
@@ -22,6 +23,7 @@ class HomeViewModel extends ChangeNotifier {
     required this.context,
   }) {
     getData();
+    ProfileViewModel(context: context).getProfile();
   }
 
   HttpService http = HttpService();

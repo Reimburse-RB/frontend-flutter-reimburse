@@ -107,7 +107,10 @@ class SignUpViewModel extends ChangeNotifier {
     log('=== register form test selectedroleid ${selectedRole?.roleId ?? 0}');
 
     if (fcmToken == null) {
-      Helper(context: context).showToast(message: Constant.defaulErrorMessage + " Harap coba lagi");
+      Helper(context: context).showToast(
+        message: Constant.defaultErrorMessage + " Harap coba lagi",
+        isSuccess: false,
+      );
       getFcmToken();
       return;
     }

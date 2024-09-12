@@ -29,7 +29,11 @@ class UserProvider extends ChangeNotifier {
 
   bool _isAccountVerified = false;
   bool get isAccountVerified => _isAccountVerified;
-  void setIsAccountVerified(bool value) => _isAccountVerified = value;
+  void setIsAccountVerified(bool value) {
+    _isAccountVerified = value;
+    notifyListeners();
+  }
+
   void clearIsAccountVerified() => _isAccountVerified = false;
 
   int _selectedMainMenuIndex = 0;
