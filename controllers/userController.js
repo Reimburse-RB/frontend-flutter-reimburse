@@ -133,6 +133,29 @@ module.exports = {
     }
   },
 
+  updateFcmToken: async (req, res) => {
+    const user = req.userAuth;
+    const { fcmToken } = req.body;
+    try {
+      if (isNil(fcmToken)) {
+        return res.json({
+          success: false,
+          msg: "All fields are required!!",
+        });
+      }
+
+      user.fcm_token = fcmToken;
+      user.save();
+
+      return res.json({
+        success: true,
+        msg: "Anda Berhasil Mengubah FCM Token",
+      });
+    } catch (error) {
+      return res.json({ msg: error.message });
+    }
+  },
+
   getVerificationAccount: async (req, res) => {
     const user = req.userAuth;
 
@@ -232,6 +255,7 @@ module.exports = {
         role_id: user.role,
         role_text: roleUser ? roleUser.role_text : "",
         is_account_verified: user.status == 1 ? true : false,
+        fcm_token: user.fcm_token,
         img_url:
           user.image_url != null ? `${process.env.URL}${user.image_url}` : null,
       };
