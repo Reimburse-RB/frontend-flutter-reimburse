@@ -8,6 +8,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
+import 'package:reimburse_rb/screens/common/auth/change_password/change_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -274,7 +275,7 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
 
   void navigateToForgotPasswordScreen() {
     Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) => const ForgotPasswordScreen(),
+      builder: (context) => const ChangePasswordScreen(),
     ));
   }
 

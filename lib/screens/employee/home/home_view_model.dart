@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +14,7 @@ import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/admin/account_verification/account_verification_view.dart';
 import 'package:reimburse_rb/screens/common/term_condition/term_condition_view.dart';
 import 'package:reimburse_rb/screens/employee/home/home_view.dart';
+import 'package:reimburse_rb/screens/employee/notification/notification_view_model.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_year_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
@@ -22,12 +26,23 @@ class HomeViewModel extends ChangeNotifier {
   HomeViewModel({
     required this.context,
   }) {
-    getData();
     ProfileViewModel(context: context).getProfile();
+    getFcmToken();
+    getData();
+  }
+
+  @override
+  void dispose() {
+    _tokenStream?.cancel();
+    super.dispose();
   }
 
   HttpService http = HttpService();
   late BuildContext context;
+
+  String fcmToken = '';
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  StreamSubscription? _tokenStream;
 
   // loading page
   bool _isLoading = false;
@@ -120,6 +135,15 @@ class HomeViewModel extends ChangeNotifier {
       getEmployeeSummary();
       getUserReimburse();
     }
+  }
+
+  Future<void> getFcmToken() async {
+    _tokenStream = _fcm.onTokenRefresh.listen((fcmToken) async {
+      if (kDebugMode) {
+        print("firebase token: $fcmToken");
+      }
+      await NotificationViewModel().updateFcmToken(fcmToken);
+    });
   }
 
   Future getAdminHrdSummary() async {

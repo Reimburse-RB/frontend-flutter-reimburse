@@ -46,4 +46,18 @@ class NotificationViewModel extends ChangeNotifier {
     notifyListeners();
     return Future.value(true);
   }
+
+  Future updateFcmToken(String fcmToken) async {
+    String endpoint = 'user/change-fcm-token';
+    Map body = {
+      'fcmToken': fcmToken,
+    };
+
+    await http.post(endpoint: endpoint, body: body).then((res) {}).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+    });
+
+    return Future.value(true);
+  }
 }

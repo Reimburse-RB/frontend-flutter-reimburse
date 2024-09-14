@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/screens/employee/notification/notification_view_model.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
@@ -258,14 +259,14 @@ class _MyAppState extends State<MyApp> {
                 permissionIOS.authorizationStatus == AuthorizationStatus.authorized ||
             permissionIOS?.authorizationStatus == AuthorizationStatus.provisional) ||
         Platform.isAndroid) {
-      _fcm.getToken().then((token) async {
+      _fcm.getToken().then((fcmToken) async {
         if (kDebugMode) {
-          print("firebase token: $token");
+          print("firebase token: $fcmToken");
         }
         var authToken = await localStorage.getItem('auth_token');
 
         if (authToken != null) {
-          // await UserRepository().updateFcmToken(fcmToken: token ?? '');
+          await NotificationViewModel().updateFcmToken(fcmToken ?? '');
         }
       });
 

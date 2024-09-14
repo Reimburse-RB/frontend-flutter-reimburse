@@ -33,6 +33,7 @@ class TermConditionView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: ListView.builder(
         itemCount: viewModel.termConditionCategoryList.length,
+        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           TermConditionCategoryData termCategory = viewModel.termConditionCategoryList[index];
