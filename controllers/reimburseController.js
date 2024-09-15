@@ -683,6 +683,10 @@ module.exports = {
           where: { id: reimburse.user_id },
         });
 
+        const cat = allStatus.listCategoryReimbursement.find(
+          (itemCat) => itemCat.category_reimbursement_id === reimburse.category
+        );
+
         const message = {
           notification: {
             title:

@@ -9,6 +9,7 @@ const UserFamily = require("../models/User-Family");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 const fs = require("fs");
+const crypto = require("crypto");
 
 module.exports = {
   userRegister: async (req, res) => {
@@ -30,8 +31,20 @@ module.exports = {
         });
       }
 
+      // AES Encryption
+      const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
+      const iv = Buffer.from(process.env.IV_KEY, "hex");
+
+      const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+      let encryptedPassword = cipher.update(password, "utf8", "hex");
+      encryptedPassword += cipher.final("hex");
+
+      // const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
+      // let decryptedPassword = decipher.update(encryptedPassword, "hex", "utf8");
+      // decryptedPassword += decipher.final("utf8");
+
       const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(password, salt);
+      const hashPassword = await bcrypt.hash(encryptedPassword, salt);
 
       const token = jwt.sign({ email: email }, process.env.SECRET_KEY);
 
@@ -62,7 +75,18 @@ module.exports = {
       const user = await User.findOne({ where: { email: email } });
 
       if (user) {
-        const validpass = await bcrypt.compare(password, user.password);
+        // AES Encryption
+        const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
+        const iv = Buffer.from(process.env.IV_KEY, "hex");
+
+        const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+        let encryptedPassword = cipher.update(password, "utf8", "hex");
+        encryptedPassword += cipher.final("hex");
+
+        const validpass = await bcrypt.compare(
+          encryptedPassword,
+          user.password
+        );
         if (!validpass) {
           return res.json({
             success: false,
@@ -103,7 +127,18 @@ module.exports = {
         });
       }
 
-      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      // AES Encryption
+      const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
+      const iv = Buffer.from(process.env.IV_KEY, "hex");
+
+      const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+      let encryptedPassword = cipher.update(oldPassword, "utf8", "hex");
+      encryptedPassword += cipher.final("hex");
+
+      const isPasswordValid = await bcrypt.compare(
+        encryptedPassword,
+        user.password
+      );
       if (!isPasswordValid) {
         return res.json({
           success: false,
@@ -118,8 +153,12 @@ module.exports = {
         });
       }
 
+      const cipherNew = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+      let encryptedPasswordNew = cipherNew.update(newPassword, "utf8", "hex");
+      encryptedPasswordNew += cipherNew.final("hex");
+
       const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(newPassword, salt);
+      const hashPassword = await bcrypt.hash(encryptedPasswordNew, salt);
 
       user.password = hashPassword;
       user.save();
