@@ -686,6 +686,12 @@ module.exports = {
         const cat = allStatus.listCategoryReimbursement.find(
           (itemCat) => itemCat.category_reimbursement_id === reimburse.category
         );
+        const day = now.getDate().toString().padStart(2, "0"); // Pastikan dua digit
+        const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
+        const year = now.getFullYear();
+        const formattedCreatedDate = `${year}-${month}-${day} ${now
+          .toTimeString()
+          .slice(0, 8)}`;
 
         const message = {
           notification: {
