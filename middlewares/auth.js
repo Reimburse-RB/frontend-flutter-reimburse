@@ -7,14 +7,14 @@ const authLogin = async (req, res, next) => {
   if (!token)
     return res.json({
       success: false,
-      message: "Access Denied !",
+      msg: "Access Denied !",
     });
 
   const user = await User.findOne({ where: { token: token } });
   if (!user)
     return res.json({
       success: false,
-      message: "Access Denied !",
+      msg: "Access Denied !",
     });
 
   try {
@@ -26,7 +26,7 @@ const authLogin = async (req, res, next) => {
   } catch (err) {
     return res.json({
       success: false,
-      message: "Invalid Token !",
+      msg: "Invalid Token !",
     });
   }
 };
