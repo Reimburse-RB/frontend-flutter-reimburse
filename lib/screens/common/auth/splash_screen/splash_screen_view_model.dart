@@ -37,14 +37,8 @@ class SplashScreenViewModel extends ChangeNotifier {
                 );
         }
       } else {
-        startOnboard(context: context);
+        NavigationProvider().navigateToOnboardScreen(context: context);
       }
     });
-  }
-
-  static void startOnboard({required BuildContext context}) {
-    Navigator.of(context).pushReplacement(CupertinoPageRoute(
-      builder: (context) => const OnboardingScreen(),
-    ));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/button_text.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';
@@ -27,6 +28,7 @@ class SignInView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<SignInViewModel>();
+    final navigationProvider = context.read<NavigationProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -100,7 +102,7 @@ class SignInView extends StatelessWidget {
                         ),
                         ButtonText(
                           onTap: () {
-                            viewModel.navigateToForgotPasswordScreen();
+                            navigationProvider.navigateToForgotPasswordScreen(context: context);
                           },
                           text: 'Ubah Password',
                         )
@@ -118,7 +120,7 @@ class SignInView extends StatelessWidget {
                         ),
                         ButtonText(
                           onTap: () {
-                            viewModel.navigateToSignUpScreen();
+                            navigationProvider.navigateToSignUpScreen(context: context);
                           },
                           text: 'Daftar Akun',
                         )

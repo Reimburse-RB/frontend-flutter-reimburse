@@ -3,6 +3,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
@@ -121,6 +122,7 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
     double width = MediaQuery.of(context).size.width;
 
     final viewModel = context.watch<ProfileViewModel>();
+    final navigationProvider = context.read<NavigationProvider>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -270,7 +272,7 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: ButtonGeneral(
                   onTap: () {
-                    viewModel.navigateToForgotPasswordScreen();
+                    navigationProvider.navigateToForgotPasswordScreen(context: context);
                   },
                   text: 'Ubah Password',
                   prefixIcon: const Iconify(

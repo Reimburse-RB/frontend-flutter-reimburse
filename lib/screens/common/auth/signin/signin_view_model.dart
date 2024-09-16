@@ -51,18 +51,6 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void navigateToSignUpScreen() {
-    Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) => const SignUpScreen(),
-    ));
-  }
-
-  void navigateToForgotPasswordScreen() {
-    Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) => const ForgotPasswordScreen(),
-    ));
-  }
-
   Future getFcmToken() async {
     fcmToken = await FirebaseMessaging.instance.getToken();
 

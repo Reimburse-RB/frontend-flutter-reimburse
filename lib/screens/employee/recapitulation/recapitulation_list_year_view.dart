@@ -36,28 +36,30 @@ class RecapitulationListYearView extends StatelessWidget {
         context: context,
         title: 'Rekapitulasi Reimbursement',
       ),
-      floatingActionButton: FloatingActionButtonGeneral(
-        onPressed: () async {
-          ModalDateRange(
-            context: context,
-            title: 'Pilih Periode',
-            onTapContinue: (startValue, endValue) {
-              Navigator.of(context).pop();
+      floatingActionButton: viewModel.listPeriod.isNotEmpty
+          ? FloatingActionButtonGeneral(
+              onPressed: () async {
+                ModalDateRange(
+                  context: context,
+                  title: 'Pilih Periode',
+                  onTapContinue: (startValue, endValue) {
+                    Navigator.of(context).pop();
 
-              userProvider.setSelectedStartDateRangeRecap(startValue);
-              userProvider.setSelectedEndDateRangeRecap(endValue);
+                    userProvider.setSelectedStartDateRangeRecap(startValue);
+                    userProvider.setSelectedEndDateRangeRecap(endValue);
 
-              viewModel.getRecapitulationList(
-                isShowPrint: true,
-                isRangePicked: true,
-                startDate: startValue,
-                endDate: endValue,
-              );
-            },
-          ).show();
-        },
-        icon: const Icon(Icons.print_rounded),
-      ),
+                    viewModel.getRecapitulationList(
+                      isShowPrint: true,
+                      isRangePicked: true,
+                      startDate: startValue,
+                      endDate: endValue,
+                    );
+                  },
+                ).show();
+              },
+              icon: const Icon(Icons.print_rounded),
+            )
+          : null,
       body: LoadingFallback(
         isLoading: viewModel.isLoading,
         child: viewModel.listPeriod.isEmpty

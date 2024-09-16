@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_view_model.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
@@ -28,34 +29,37 @@ class RecapitulationListMonthView extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<RecapitulationViewModel>();
     final userProvider = context.read<UserProvider>();
+    final navigationProvider = context.read<NavigationProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
         context: context,
         title: userProvider.selectedRecapitulationYear ?? '',
       ),
-      floatingActionButton: FloatingActionButtonGeneral(
-        onPressed: () async {
-          ModalDateRange(
-            context: context,
-            title: 'Pilih Periode',
-            onTapContinue: (startValue, endValue) {
-              Navigator.of(context).pop();
+      floatingActionButton: viewModel.listPeriod.isNotEmpty
+          ? FloatingActionButtonGeneral(
+              onPressed: () async {
+                ModalDateRange(
+                  context: context,
+                  title: 'Pilih Periode',
+                  onTapContinue: (startValue, endValue) {
+                    Navigator.of(context).pop();
 
-              userProvider.setSelectedStartDateRangeRecap(startValue);
-              userProvider.setSelectedEndDateRangeRecap(endValue);
+                    userProvider.setSelectedStartDateRangeRecap(startValue);
+                    userProvider.setSelectedEndDateRangeRecap(endValue);
 
-              viewModel.getRecapitulationList(
-                isShowPrint: true,
-                isRangePicked: true,
-                startDate: startValue,
-                endDate: endValue,
-              );
-            },
-          ).show();
-        },
-        icon: const Icon(Icons.print_rounded),
-      ),
+                    viewModel.getRecapitulationList(
+                      isShowPrint: true,
+                      isRangePicked: true,
+                      startDate: startValue,
+                      endDate: endValue,
+                    );
+                  },
+                ).show();
+              },
+              icon: const Icon(Icons.print_rounded),
+            )
+          : null,
       body: LoadingFallback(
         isLoading: viewModel.isLoading,
         child: viewModel.listPeriod.isEmpty
@@ -79,7 +83,7 @@ class RecapitulationListMonthView extends StatelessWidget {
                         value: item,
                         onTap: () {
                           userProvider.setSelectedRecapitulationMonth(item);
-                          viewModel.navigateToRecapitulationList();
+                          navigationProvider.navigateToRecapitulationList(context: context);
                         },
                       );
                     },

@@ -148,11 +148,11 @@ class SignUpViewModel extends ChangeNotifier {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);
       }
     }).catchError((err) {
-      log('===> error $endpoint $err');
-      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
-
       stopLoading();
       notifyListeners();
+
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
     });
 
     stopLoading();

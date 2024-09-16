@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/form_small_note.dart';
 
@@ -134,6 +135,10 @@ class _FormFieldTextState extends State<FormFieldText> {
                 onTapOutside: (event) {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
+                inputFormatters: [
+                  if (widget.isCost) FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  if (widget.isCost) FilteringTextInputFormatter.digitsOnly,
+                ],
                 decoration: InputDecoration(
                   fillColor: Colors.white,
                   filled: true,

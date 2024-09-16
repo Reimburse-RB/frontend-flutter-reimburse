@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/change_password/change_password_view.dart';
-import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
@@ -93,7 +92,7 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
         final provider = context.read<UserProvider>();
         provider.setProfileData(response.data);
         provider.setIsAccountVerified(response.data?.is_account_verified ?? false);
-        log('isAccountVerified${provider.isAccountVerified}');
+        log('isAccountVerified ${provider.isAccountVerified}');
 
         _profile = response.data;
 
@@ -273,14 +272,9 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
     return Future.value(true);
   }
 
-  void navigateToForgotPasswordScreen() {
-    Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) => const ChangePasswordScreen(),
-    ));
-  }
-
   void signOut() {
     localStorage.clear();
+    context.read<UserProvider>().clearAllData();
 
     Navigator.of(context).pushAndRemoveUntil(
       CupertinoPageRoute(builder: (context) => const SignInScreen()),

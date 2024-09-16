@@ -43,7 +43,7 @@ class Helper {
 
   showToast({
     bool isSuccess = true,
-    required String message,
+    required String? message,
     Color backgroundColor = Constant.acceptedStatusIconColor,
     Color messageColor = Colors.white,
     Color borderColor = Colors.white,
@@ -57,7 +57,7 @@ class Helper {
       flushbarPosition: FlushbarPosition.TOP,
       borderColor: borderColor,
       borderRadius: BorderRadius.circular(20),
-      message: message,
+      message: message ?? Constant.defaultErrorMessage,
       messageColor: messageColor,
       duration: Duration(seconds: seconds),
       backgroundColor: isSuccess ? backgroundColor : Constant.rejectedStatusColor,

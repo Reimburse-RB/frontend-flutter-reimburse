@@ -129,10 +129,4 @@ class RecapitulationViewModel extends ChangeNotifier {
     notifyListeners();
     return Future.value(true);
   }
-
-  void navigateToRecapitulationList() {
-    Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) => const RecapitulationListScreen(),
-    ));
-  }
 }

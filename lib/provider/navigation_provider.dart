@@ -3,10 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/admin/account_verification/account_verification_detail_view.dart';
+import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
+import 'package:reimburse_rb/screens/common/auth/onboarding/onboarding_view.dart';
+import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
+import 'package:reimburse_rb/screens/common/auth/signup/signup_view.dart';
 import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view.dart';
 import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
 import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
 import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_month_view.dart';
+import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 
@@ -22,6 +27,12 @@ class NavigationProvider extends ChangeNotifier {
 
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => const RecapitulationListMonthScreen(),
+    ));
+  }
+
+  void navigateToRecapitulationList({required BuildContext context}) {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const RecapitulationListScreen(),
     ));
   }
 
@@ -140,6 +151,30 @@ class NavigationProvider extends ChangeNotifier {
   void navigateToMainMenuPage({required BuildContext context}) {
     Navigator.of(context).pushReplacement(CupertinoPageRoute(
       builder: (context) => const MainMenuScreen(),
+    ));
+  }
+
+  void navigateToSignInScreen({required BuildContext context}) {
+    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+      builder: (context) => const SignInScreen(),
+    ));
+  }
+
+  void navigateToSignUpScreen({required BuildContext context}) {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const SignUpScreen(),
+    ));
+  }
+
+  void navigateToForgotPasswordScreen({required BuildContext context}) {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const ForgotPasswordScreen(),
+    ));
+  }
+
+  void navigateToOnboardScreen({required BuildContext context}) {
+    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+      builder: (context) => const OnboardingScreen(),
     ));
   }
 }
