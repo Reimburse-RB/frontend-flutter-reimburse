@@ -18,7 +18,7 @@ const uploadImage = async (req, res, next) => {
       } else {
         return res.json({
           success: false,
-          message: "Must an Image jpg or png",
+          msg: "Must an Image jpg or png",
         });
       }
 
@@ -44,7 +44,7 @@ const uploadImage = async (req, res, next) => {
     } catch (e) {
       return res.json({
         success: false,
-        message: e.message,
+        msg: e.message,
       });
     }
   }
@@ -69,7 +69,7 @@ const uploadMultipleImage = async (req, res, next) => {
         } else {
           return res.json({
             success: false,
-            message: "Must an Image jpg or png",
+            msg: "Must an Image jpg or png",
           });
         }
       }
@@ -89,7 +89,7 @@ const uploadMultipleImage = async (req, res, next) => {
         } else {
           return res.json({
             success: false,
-            message: "Must an Image jpg or png",
+            msg: "Must an Image jpg or png",
           });
         }
 
@@ -117,7 +117,7 @@ const uploadMultipleImage = async (req, res, next) => {
     } catch (e) {
       return res.json({
         success: false,
-        message: e.message,
+        msg: e.message,
       });
     }
   }
