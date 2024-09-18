@@ -13,7 +13,8 @@ class HttpService {
   Map<String, String> headers = {};
   final JsonDecoder _decoder = const JsonDecoder();
 
-  static const String baseUrl = 'https://reimburse-server.koyeb.app/';
+  // static const String baseUrl = 'https://reimburse-server.koyeb.app/';
+  static const String baseUrl = 'http://103.174.114.172:3000/';
 
   Future<dynamic> post({
     required String endpoint,
