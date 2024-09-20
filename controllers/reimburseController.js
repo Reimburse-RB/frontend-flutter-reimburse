@@ -11,7 +11,7 @@ require("dotenv").config();
 
 module.exports = {
   getUserReimburse: async (req, res) => {
-    const { dateReimburse, status, isAdmin, startDate, endDate } = req.body;
+    const { dateReimburse, status, isAdmin, startDate, endDate, isSortByLatest = true } = req.body;
     const user = req.userAuth;
 
     try {
@@ -35,9 +35,11 @@ module.exports = {
         };
       }
 
+      const order = isSortByLatest ? [['createdAt', 'DESC']] : [['createdAt', 'ASC']];
+
       const reimburse = await Reimburse.findAll({
         where: whereParam,
-        order: [['createdAt', 'DESC']],
+        order: order,
       });
 
       const returnData = [];

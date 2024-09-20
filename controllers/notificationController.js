@@ -19,6 +19,7 @@ module.exports = {
 
       const notification = await Notification.findAll({
         where: whereParam,
+        order: [['createdAt', 'DESC']],
       });
 
       const returnData = [];
