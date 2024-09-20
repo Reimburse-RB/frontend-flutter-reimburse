@@ -37,6 +37,7 @@ module.exports = {
 
       const reimburse = await Reimburse.findAll({
         where: whereParam,
+        order: [['createdAt', 'DESC']],
       });
 
       const returnData = [];
