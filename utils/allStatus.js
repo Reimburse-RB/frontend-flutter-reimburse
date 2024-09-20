@@ -47,19 +47,83 @@ module.exports = {
   purposeId: [
     {
       purpose_id: 1,
-      purpose_text: "Flu Batuk",
+      purpose_text: "Lainnya"
     },
     {
       purpose_id: 2,
-      purpose_text: "Demam",
+      purpose_text: "Demam"
     },
     {
       purpose_id: 3,
-      purpose_text: "Masuk Angin",
+      purpose_text: "Masuk Angin"
     },
     {
       purpose_id: 4,
-      purpose_text: "Lainnya",
+      purpose_text: "Flu Batuk"
+    },
+    {
+      purpose_id: 5,
+      purpose_text: "Sakit Kepala"
+    },
+    {
+      purpose_id: 6,
+      purpose_text: "Mual"
+    },
+    {
+      purpose_id: 7,
+      purpose_text: "Nyeri Otot"
+    },
+    {
+      purpose_id: 8,
+      purpose_text: "Sakit Perut"
+    },
+    {
+      purpose_id: 9,
+      purpose_text: "Kelelahan"
+    },
+    {
+      purpose_id: 10,
+      purpose_text: "Batuk Kering"
+    },
+    {
+      purpose_id: 11,
+      purpose_text: "Kunjungan klien untuk konsultasi pajak"
+    },
+    {
+      purpose_id: 12,
+      purpose_text: "Inspeksi lokasi tour & travel"
+    },
+    {
+      purpose_id: 13,
+      purpose_text: "Negosiasi dengan vendor e-commerce"
+    },
+    {
+      purpose_id: 14,
+      purpose_text: "Pelatihan TI di luar kota"
+    },
+    {
+      purpose_id: 15,
+      purpose_text: "Kunjungan ke konferensi industri pajak"
+    },
+    {
+      purpose_id: 16,
+      purpose_text: "Kunjungan cabang tour & travel"
+    },
+    {
+      purpose_id: 17,
+      purpose_text: "Rapat dengan mitra bisnis e-commerce"
+    },
+    {
+      purpose_id: 18,
+      purpose_text: "Pertemuan dengan regulator pajak"
+    },
+    {
+      purpose_id: 19,
+      purpose_text: "Survei pasar untuk solusi TI"
+    },
+    {
+      purpose_id: 20,
+      purpose_text: "Kegiatan promosi layanan baru"
     },
   ],
 

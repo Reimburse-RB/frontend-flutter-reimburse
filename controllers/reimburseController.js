@@ -108,7 +108,7 @@ module.exports = {
             approval_date: null,
           };
 
-          if (item.purpose_id !== 0 && item.purpose_id !== 4) {
+          if (item.purpose_id !== 0 && item.purpose_id !== 1) {
             const purposeText = allStatus.purposeId.find(
               (itemCat) => itemCat.purpose_id === item.purpose_id
             );
@@ -274,7 +274,7 @@ module.exports = {
           (itemCat) => itemCat.category_reimbursement_id === reimburse.category
         );
 
-        if (reimburse.purpose_id !== 0 && reimburse.purpose_id !== 4) {
+        if (reimburse.purpose_id !== 0 && reimburse.purpose_id !== 1) {
           const purposeText = allStatus.purposeId.find(
             (itemCat) => itemCat.purpose_id === reimburse.purpose_id
           );
@@ -798,10 +798,23 @@ module.exports = {
   },
 
   getListPurpose: async (req, res) => {
+    const { category_reimbursement_id } = req.body; // Ambil category_reimbursement_id dari body
     const user = req.userAuth;
 
     try {
-      const allPurpose = allStatus.purposeId;
+      let allPurpose;
+
+      if (category_reimbursement_id === 1) {
+        allPurpose = [allStatus.purposeId[0], ...allStatus.purposeId.slice(1, 10)];
+      } else if (category_reimbursement_id === 2) {
+        allPurpose = [allStatus.purposeId[0], ...allStatus.purposeId.slice(10, 20)];
+
+      } else {
+        return res.json({
+          success: false,
+          msg: "Invalid category_reimbursement_id",
+        });
+      }
 
       return res.json({
         success: true,
@@ -812,6 +825,7 @@ module.exports = {
       return res.json({ msg: e.message });
     }
   },
+
 
   getListDetailTitle: async (req, res) => {
     const user = req.userAuth;
