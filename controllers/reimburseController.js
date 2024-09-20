@@ -798,7 +798,7 @@ module.exports = {
   },
 
   getListPurpose: async (req, res) => {
-    const { category_reimbursement_id } = req.body; // Ambil category_reimbursement_id dari body
+    const { category_reimbursement_id } = req.body;
     const user = req.userAuth;
 
     try {
@@ -826,12 +826,23 @@ module.exports = {
     }
   },
 
-
   getListDetailTitle: async (req, res) => {
+    const { category_reimbursement_id } = req.body;
     const user = req.userAuth;
 
     try {
-      const allTitle = allStatus.titleId;
+      let allTitle;
+
+      if (category_reimbursement_id === 1) {
+        allTitle = [allStatus.titleId[0], ...allStatus.titleId.slice(1, 10)];
+      } else if (category_reimbursement_id === 2) {
+        allTitle = [allStatus.titleId[10], ...allStatus.titleId.slice(10, 20)];
+      } else {
+        return res.json({
+          success: false,
+          msg: "Invalid category_reimbursement_id",
+        });
+      }
 
       return res.json({
         success: true,
@@ -842,4 +853,5 @@ module.exports = {
       return res.json({ msg: e.message });
     }
   },
+
 };
