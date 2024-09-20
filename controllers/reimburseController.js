@@ -93,12 +93,12 @@ module.exports = {
               item.status == 1
                 ? "Menunggu Diproses"
                 : item.status == 2
-                ? "Diproses"
-                : item.status == 3
-                ? "Diterima"
-                : item.status == 4
-                ? "Ditolak"
-                : "",
+                  ? "Diproses"
+                  : item.status == 3
+                    ? "Diterima"
+                    : item.status == 4
+                      ? "Ditolak"
+                      : "",
             createdDate: formattedDate,
             approval_by: null,
             approval_by_role: null,
@@ -255,12 +255,12 @@ module.exports = {
             reimburse.status == 1
               ? "Menunggu Diproses"
               : reimburse.status == 2
-              ? "Diproses"
-              : reimburse.status == 3
-              ? "Diterima"
-              : reimburse.status == 4
-              ? "Ditolak"
-              : "",
+                ? "Diproses"
+                : reimburse.status == 3
+                  ? "Diterima"
+                  : reimburse.status == 4
+                    ? "Ditolak"
+                    : "",
           category_reimbursement_id: reimburse.category,
           approval_by: null,
           approval_by_role: null,
@@ -364,8 +364,8 @@ module.exports = {
             const detailTitleText =
               detail.id != 0
                 ? allStatus.titleId.find(
-                    (itemTitle) => itemTitle.detail_title_id === detail.title_id
-                  )
+                  (itemTitle) => itemTitle.detail_title_id === detail.title_id
+                )
                 : null;
 
             const temp = {
@@ -604,9 +604,8 @@ module.exports = {
           const message = {
             notification: {
               title: `Reimburse Oleh User ${user.fullname} telah diajukan`,
-              body: `User ${user.fullname} telah membuat ${
-                cat ? cat.category_reimbursement_text : ""
-              } dengan total Rp. ${totalPrice}`,
+              body: `User ${user.fullname} telah membuat ${cat ? cat.category_reimbursement_text : ""
+                } dengan total Rp. ${totalPrice}`,
             },
             data: {
               reimburseId: `${reimburse.id}`,
@@ -622,9 +621,8 @@ module.exports = {
 
           await Notification.create({
             title: `Reimburse Oleh User ${user.fullname} telah diajukan`,
-            body: `User ${user.fullname} telah membuat ${
-              cat ? cat.category_reimbursement_text : ""
-            } dengan total Rp. ${totalPrice}`,
+            body: `User ${user.fullname} telah membuat ${cat ? cat.category_reimbursement_text : ""
+              } dengan total Rp. ${totalPrice}`,
             reimburse_id: reimburse.id,
             category_reimbursement: cat ? cat.category_reimbursement_text : "",
             user: user.fullname,
@@ -686,6 +684,8 @@ module.exports = {
         const cat = allStatus.listCategoryReimbursement.find(
           (itemCat) => itemCat.category_reimbursement_id === reimburse.category
         );
+
+        const now = new Date();
         const day = now.getDate().toString().padStart(2, "0"); // Pastikan dua digit
         const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
         const year = now.getFullYear();
@@ -699,11 +699,10 @@ module.exports = {
               change_status_id == 3
                 ? "Pengajuan Berhasil"
                 : change_status_id == 4
-                ? "Pengajuan Gagal!"
-                : "",
-            body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${
-              change_status_id == 3 ? "anda berhasil" : "anda gagal"
-            }`,
+                  ? "Pengajuan Gagal!"
+                  : "",
+            body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${change_status_id == 3 ? "anda berhasil" : "anda gagal"
+              }`,
           },
           data: {
             reimburseId: `${reimburse.id}`,
@@ -719,11 +718,10 @@ module.exports = {
             change_status_id == 3
               ? "Pengajuan Berhasil"
               : change_status_id == 4
-              ? "Pengajuan Gagal!"
-              : "",
-          body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${
-            change_status_id == 3 ? "anda berhasil" : "anda gagal"
-          }`,
+                ? "Pengajuan Gagal!"
+                : "",
+          body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${change_status_id == 3 ? "anda berhasil" : "anda gagal"
+            }`,
           reimburse_id: reimburse.id,
           category_reimbursement: cat ? cat.category_reimbursement_text : "",
           date_reimburse: formattedCreatedDate,
