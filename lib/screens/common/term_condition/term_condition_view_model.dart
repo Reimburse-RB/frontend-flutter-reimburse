@@ -47,8 +47,6 @@ class TermConditionViewModel extends ChangeNotifier {
   void updateCondition(
       {required int categoryIndex, required int conditionIndex, required String newCondition}) {
     _termConditionCategoryList[categoryIndex].list_tnc[conditionIndex].tnc = newCondition;
-
-    notifyListeners();
   }
 
   Future cancelEdit() {

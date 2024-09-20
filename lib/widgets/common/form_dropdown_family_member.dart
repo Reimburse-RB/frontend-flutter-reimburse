@@ -33,6 +33,7 @@ class FormDropdownFamilyMember extends StatelessWidget {
             ),
           ),
         DropdownButtonFormField<FamilyMemberData>(
+          isExpanded: true,
           borderRadius: BorderRadius.circular(24),
           value: value,
           decoration: InputDecoration(

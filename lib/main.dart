@@ -266,7 +266,7 @@ class _MyAppState extends State<MyApp> {
         var authToken = await localStorage.getItem('auth_token');
 
         if (authToken != null) {
-          await NotificationViewModel().updateFcmToken(fcmToken ?? '');
+          await NotificationViewModel(context: context).updateFcmToken(fcmToken ?? '');
         }
       });
 

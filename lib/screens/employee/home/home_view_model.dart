@@ -142,7 +142,7 @@ class HomeViewModel extends ChangeNotifier {
       if (kDebugMode) {
         print("firebase token: $fcmToken");
       }
-      await NotificationViewModel().updateFcmToken(fcmToken);
+      await NotificationViewModel(context: context).updateFcmToken(fcmToken);
     });
   }
 

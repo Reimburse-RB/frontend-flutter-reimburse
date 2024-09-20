@@ -32,6 +32,7 @@ class FormDropdownString extends StatelessWidget {
             ),
           ),
         DropdownButtonFormField<String>(
+          isExpanded: true,
           borderRadius: BorderRadius.circular(24),
           value: value,
           decoration: InputDecoration(

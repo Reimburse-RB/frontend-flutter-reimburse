@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:reimburse_rb/models/common/notification_response.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 
 class CardNotification extends StatelessWidget {
-  const CardNotification({super.key});
+  const CardNotification({super.key, required this.notificationData});
+
+  final ItemNotificationData notificationData;
 
   @override
   Widget build(BuildContext context) {
@@ -11,36 +14,40 @@ class CardNotification extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: 12,
+          vertical: 16,
           horizontal: 20,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Reimbursement Kesehatan',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: Constant.lightWeightText,
+                Expanded(
+                  child: Text(
+                    (notificationData.categoryReimbursement ?? '') + 'akdbasbkjdsad',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: Constant.lightWeightText,
+                    ),
                   ),
                 ),
+                SizedBox(width: 12),
                 Text(
-                  '21 Februari 2024',
+                  notificationData.dateReimburse ?? '',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: Constant.lightWeightText,
+                    color: Constant.darkGrey,
                   ),
                 ),
               ],
             ),
             SizedBox(height: 8),
             Text(
-              'Pengajuan Berhasil',
+              notificationData.title ?? '',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,
@@ -49,9 +56,9 @@ class CardNotification extends StatelessWidget {
             ),
             SizedBox(height: 4.0),
             Text(
-              'Pengajuan reimburse kesehatan Anda berhasil, silakan cek saldo rekening Anda',
+              notificationData.body ?? '',
               style: TextStyle(
-                fontSize: 12.0,
+                fontSize: 13.0,
                 fontWeight: Constant.lightWeightText,
               ),
             ),

@@ -33,6 +33,7 @@ class FormDropdownRole extends StatelessWidget {
             ),
           ),
         DropdownButtonFormField<RoleData>(
+          isExpanded: true,
           borderRadius: BorderRadius.circular(24),
           value: value,
           decoration: InputDecoration(

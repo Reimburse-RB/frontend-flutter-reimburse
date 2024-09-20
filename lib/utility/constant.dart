@@ -19,6 +19,7 @@ class Constant {
   static const Color greenMoreVeryLight = Color(0xFFF6FFF5);
 
   static const Color grey = Color(0xFFA8A8A8);
+  static const Color darkGrey = Color.fromARGB(255, 114, 114, 114);
 
   static const int employeeRoleId = 1;
   static const int adminRoleId = 2;

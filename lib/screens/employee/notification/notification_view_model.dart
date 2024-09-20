@@ -1,11 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:reimburse_rb/models/common/notification_response.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
 class NotificationViewModel extends ChangeNotifier {
-  NotificationViewModel() {
+  NotificationViewModel({
+    required this.context,
+  }) {
     getNotificationList();
   }
 
@@ -18,6 +21,9 @@ class NotificationViewModel extends ChangeNotifier {
   void startLoading() => _isLoading = true;
   void stopLoading() => _isLoading = false;
 
+  List<ItemNotificationData> _listNotification = [];
+  List<ItemNotificationData> get listNotification => _listNotification;
+
   Future getNotificationList() async {
     startLoading();
     notifyListeners();
@@ -26,14 +32,14 @@ class NotificationViewModel extends ChangeNotifier {
 
     await http.post(endpoint: endpoint).then((res) {
       log('response notification $res');
-      // AdminSummaryResponse response = AdminSummaryResponse.fromJson(res);
-      // if (response.success) {
-      //   userProvider.setAdminSummaryData(response.data);
+      ListNotificationResponse response = ListNotificationResponse.fromJson(res);
+      if (response.success) {
+        _listNotification = response.data;
 
-      //   notifyListeners();
-      // } else {
-      //   Helper(context: context).showToast(message: response.msg, isSuccess: false);
-      // }
+        notifyListeners();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
     }).catchError((err) {
       log('===> error $endpoint $err');
       Helper(context: context).showToast(message: err.toString(), isSuccess: false);

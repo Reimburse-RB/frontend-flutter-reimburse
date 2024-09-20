@@ -33,6 +33,7 @@ class FormDropdownDetailCost extends StatelessWidget {
             ),
           ),
         DropdownButtonFormField<DetailCostOptionData>(
+          isExpanded: true,
           borderRadius: BorderRadius.circular(24),
           value: value,
           decoration: InputDecoration(

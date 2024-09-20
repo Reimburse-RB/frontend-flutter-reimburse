@@ -107,9 +107,15 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
     startLoading();
     notifyListeners();
 
-    String endpoint = 'reimburse/get-list-purpose-option';
+    final userProvider = context.read<UserProvider>();
 
-    await http.post(endpoint: endpoint).then((res) {
+    String endpoint = 'reimburse/get-list-purpose-option';
+    Map body = {
+      'category_reimbursement_id':
+          userProvider.selectedReimbursementCategory?.categoryReimbursementId,
+    };
+
+    await http.post(endpoint: endpoint, body: body).then((res) {
       PurposeOptionResponse response = PurposeOptionResponse.fromJson(res);
       if (response.success) {
         _listPurposeOption = response.data;
@@ -134,10 +140,14 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
   Future getListDetailOption() async {
     startLoading();
     notifyListeners();
+    final userProvider = context.read<UserProvider>();
 
     String endpoint = 'reimburse/get-list-detail-title-option';
-
-    await http.post(endpoint: endpoint).then((res) {
+    Map body = {
+      'category_reimbursement_id':
+          userProvider.selectedReimbursementCategory?.categoryReimbursementId,
+    };
+    await http.post(endpoint: endpoint, body: body).then((res) {
       DetailCostOptionResponse response = DetailCostOptionResponse.fromJson(res);
       if (response.success) {
         _listDetailOption = response.data;
