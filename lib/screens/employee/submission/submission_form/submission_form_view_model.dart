@@ -171,10 +171,12 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
 
   bool checkFormCompleteness() {
     // Cek kondisi khusus untuk purpose_id dan purpose_other_text
-    bool purposeCondition =
-        bodySubmission.containsKey('purpose_id') && bodySubmission['purpose_id'] != 0 ||
-            bodySubmission.containsKey('purpose_other_text') &&
-                bodySubmission['purpose_other_text'] != null;
+    bool purposeCondition = (bodySubmission.containsKey('purpose_id') &&
+            bodySubmission['purpose_id'] != null &&
+            bodySubmission['purpose_id'] != 1) ||
+        (bodySubmission.containsKey('purpose_other_text') &&
+            bodySubmission['purpose_other_text'] != null &&
+            bodySubmission['purpose_other_text'] != '');
 
     // Cek kondisi khusus untuk detail_title_id dan detail_title_other_text
     bool detailCondition = true;
@@ -182,9 +184,12 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
     if (bodySubmission.containsKey('detail_reimburse') &&
         bodySubmission['detail_reimburse'] is List) {
       for (var detail in bodySubmission['detail_reimburse']) {
-        if (detail.containsKey('detail_title_id') && detail['detail_title_id'] != null ||
-            detail.containsKey('detail_title_other_text') &&
-                detail['detail_title_other_text'].toString().isNotEmpty) {
+        if ((detail.containsKey('detail_title_id') &&
+                detail['detail_title_id'] != null &&
+                detail['detail_title_id'] != 1) ||
+            (detail.containsKey('detail_title_other_text') &&
+                detail['detail_title_other_text'] != null &&
+                detail['detail_title_other_text'] != '')) {
           continue;
         } else {
           detailCondition = false;
@@ -218,7 +223,7 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
     if (bodySubmission['purpose_other_text'] != null &&
         bodySubmission['purpose_other_text'] != '') {
       // default value when other purpose field is filled
-      _bodySubmission['purpose_id'] = 0;
+      _bodySubmission['purpose_id'] = 1;
     }
 
     _bodySubmission['image'] = listAttachmentImageBase64;
@@ -264,6 +269,11 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
   }
 
   Future initRequestBody() {
+    totalCostController.text = Helper(context: context).formatCurrency(
+      amount: totalCost,
+      symbol: '',
+    );
+
     final userProvider = context.read<UserProvider>();
 
     _bodySubmission['category_reimbursement_id'] =
@@ -409,12 +419,13 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
 
   @override
   void userImage(File image) {
-    // String base64Image = base64Encode(image.readAsBytesSync());
+    String base64Image = base64Encode(image.readAsBytesSync());
     String fileName = image.path.split("/").last;
     // Uint8List byestsImg = const Base64Decoder().convert(base64Image);
 
     addImage(imageFile: image);
 
+    log('===> imagepicker base64 cropped $base64Image');
     log('===> imagepicker fileName $fileName');
   }
 }

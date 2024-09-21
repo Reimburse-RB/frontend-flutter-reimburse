@@ -93,19 +93,25 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
                         viewModel.onChangePurpose(newSelectedPurpose: newValue);
                       },
                     ),
-                    const SizedBox(height: 8),
-                    FormFieldText(
-                      controllerName: viewModel.otherPurposeController,
-                      hintText:
-                          userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
-                                  Constant.healthCategoryReimbursementId
-                              ? 'Diagnosis Lainnya'
-                              : 'Tujuan Lainnya',
-                      note: userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
-                              Constant.healthCategoryReimbursementId
-                          ? Constant.noteFormPurposeHealth
-                          : Constant.noteFormPurposeTransport,
-                    ),
+                    if (viewModel.selectedPurpose?.purpose_id == 1) ...[
+                      const SizedBox(height: 8),
+                      FormFieldText(
+                        controllerName: viewModel.otherPurposeController,
+                        hintText:
+                            userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                                    Constant.healthCategoryReimbursementId
+                                ? 'Masukkan Diagnosis Lain'
+                                : 'Masukkan Tujuan Lain',
+                        // note: userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                        //         Constant.healthCategoryReimbursementId
+                        //     ? Constant.noteFormPurposeHealth
+                        //     : Constant.noteFormPurposeTransport,
+                        // prefixIconNote: Icon(
+                        //   Icons.info_rounded,
+                        //   color: Constant.waitingStatusColor,
+                        // ),
+                      ),
+                    ],
                     const SizedBox(height: 16),
                     FormFieldText(
                       placeholder: "Total Biaya",
@@ -114,7 +120,11 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
                       keyboardType: TextInputType.number,
                       controllerName: viewModel.totalCostController,
                       isCost: true,
-                      note: "Catatan: Total Biaya akan terisi otomatis oleh sistem",
+                      note: Constant.noteFormTotalCost,
+                      prefixIconNote: Icon(
+                        Icons.info_rounded,
+                        color: Constant.waitingStatusColor,
+                      ),
                       noteStyle: Constant.regularNoteStyle,
                     ),
                     const SizedBox(height: 16),

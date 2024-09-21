@@ -167,6 +167,7 @@ class _FormFieldTextState extends State<FormFieldText> {
                   prefixIcon: widget.prefixIcon,
                   suffixIcon: widget.suffixIcon,
                   hintText: widget.hintText,
+                  hintStyle: TextStyle(color: Constant.darkGrey),
                 ),
               ),
             ),

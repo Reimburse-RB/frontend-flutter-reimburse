@@ -61,6 +61,7 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
         height: 126,
         bottomWidget: TabBar(
           padding: const EdgeInsets.symmetric(horizontal: 16),
+          tabAlignment: TabAlignment.center,
           isScrollable: true,
           labelStyle: GoogleFonts.poppins(
             fontWeight: Constant.extraBoldText,

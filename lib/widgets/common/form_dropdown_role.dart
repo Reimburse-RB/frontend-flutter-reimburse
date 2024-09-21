@@ -36,6 +36,12 @@ class FormDropdownRole extends StatelessWidget {
           isExpanded: true,
           borderRadius: BorderRadius.circular(24),
           value: value,
+          hint: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              hintText,
+            ),
+          ),
           decoration: InputDecoration(
             fillColor: Colors.white,
             filled: true,

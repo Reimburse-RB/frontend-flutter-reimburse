@@ -44,10 +44,8 @@ class ImagePickerHandler {
 
   Future cropImage(File image) async {
     final croppedFile = await ImageCropper().cropImage(
-      compressFormat: ImageCompressFormat.png,
-      compressQuality: 100,
+      // compressQuality: 100,
       sourcePath: image.path,
-
       // aspectRatioPresets: [
       //   CropAspectRatioPreset.square,
       //   CropAspectRatioPreset.ratio3x2,

@@ -72,7 +72,7 @@ class CardFormDetailCost extends StatelessWidget {
               children: [
                 FormSmallNote(
                   prefixIcon: const Icon(
-                    Icons.info_rounded,
+                    Icons.warning_amber_rounded,
                     color: Constant.waitingStatusColor,
                   ),
                   note: Constant.infoFormDetailCost,
@@ -108,22 +108,30 @@ class CardFormDetailCost extends StatelessWidget {
                     }
                   },
                 ),
-                const SizedBox(height: 8),
-                FormFieldText(
-                  controllerName: viewModel
-                      .listControllerDetailCost[detailCostIndex].otherDetailTitleController,
-                  hintText: userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
-                          Constant.healthCategoryReimbursementId
-                      ? 'Rincian Perawatan Lainnya'
-                      : 'Rincian Perjalanan Lainnya',
-                  note: Constant.noteFormDetailTitle,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      viewModel.onChangeOtherDetailTitle(
-                          index: detailCostIndex, newValue: newValue);
-                    }
-                  },
-                ),
+                if (viewModel.listControllerDetailCost[detailCostIndex].selectedDetailTitle
+                        ?.detail_title_id ==
+                    1) ...[
+                  const SizedBox(height: 8),
+                  FormFieldText(
+                    controllerName: viewModel
+                        .listControllerDetailCost[detailCostIndex].otherDetailTitleController,
+                    hintText: userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                            Constant.healthCategoryReimbursementId
+                        ? 'Masukkan Rincian Perawatan Lain'
+                        : 'Masukkan Rincian Perjalanan Lain',
+                    // note: Constant.noteFormDetailTitle,
+                    // prefixIconNote: Icon(
+                    //   Icons.info_rounded,
+                    //   color: Constant.waitingStatusColor,
+                    // ),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        viewModel.onChangeOtherDetailTitle(
+                            index: detailCostIndex, newValue: newValue);
+                      }
+                    },
+                  ),
+                ],
                 const SizedBox(height: 16),
                 if (userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
                     Constant.healthCategoryReimbursementId) ...[
@@ -163,6 +171,10 @@ class CardFormDetailCost extends StatelessWidget {
                     viewModel.onChangeDate(index: detailCostIndex);
                   },
                   note: Constant.noteFormDateDetailTitle,
+                  prefixIconNote: Icon(
+                    Icons.info_rounded,
+                    color: Constant.waitingStatusColor,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -190,7 +202,7 @@ class CardFormDetailCost extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'Keterangan',
+                  'Keterangan (Opsional)',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,

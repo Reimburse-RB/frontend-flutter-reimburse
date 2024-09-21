@@ -17,6 +17,8 @@ class BottomAppBarGeneral extends StatelessWidget implements PreferredSizeWidget
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      height: height,
+      padding: EdgeInsets.zero,
       child: Container(
         decoration: BoxDecoration(
           border: Border(
