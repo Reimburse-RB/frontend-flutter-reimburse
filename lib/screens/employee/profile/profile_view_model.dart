@@ -25,7 +25,6 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
     getProfile();
   }
   HttpService http = HttpService();
-  final LocalStorage localStorage = LocalStorage('reimburse_rb');
 
   late ImagePickerHandler imagePicker;
 

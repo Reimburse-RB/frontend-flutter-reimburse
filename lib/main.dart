@@ -63,6 +63,7 @@ Future<void> inBackgroundNotification(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initLocalStorage();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -146,7 +147,6 @@ class _MyAppState extends State<MyApp> {
   RemoteMessage? notificationDetail;
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   // final storage = const FlutterSecureStorage();
-  final LocalStorage localStorage = LocalStorage('reimburse_rb');
 
   Future<void> _isAndroidPermissionGranted() async {
     if (Platform.isAndroid) {
@@ -265,7 +265,7 @@ class _MyAppState extends State<MyApp> {
         }
         var authToken = await localStorage.getItem('auth_token');
 
-        if (authToken != null) {
+        if (authToken != null && authToken.isNotEmpty) {
           await NotificationViewModel(context: context).updateFcmToken(fcmToken ?? '');
         }
       });

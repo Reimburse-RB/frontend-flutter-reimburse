@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/auth_response.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
-import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
-import 'package:reimburse_rb/screens/common/auth/signup/signup_view.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
@@ -21,7 +19,6 @@ class SignInViewModel extends ChangeNotifier {
   }
 
   HttpService http = HttpService();
-  final LocalStorage localStorage = LocalStorage('reimburse_rb');
   late BuildContext context;
 
   String? fcmToken;
@@ -87,8 +84,8 @@ class SignInViewModel extends ChangeNotifier {
             response.user?.role == Constant.hrdRoleId;
 
         localStorage.setItem('auth-token', response.token);
-        localStorage.setItem('role', response.user?.role);
-        localStorage.setItem('is-admin-or-hrd', isAdmin);
+        localStorage.setItem('role', response.user?.role?.toString() ?? '');
+        localStorage.setItem('is-admin-or-hrd', isAdmin.toString());
 
         context.read<UserProvider>().setIsAdmin(isAdmin);
         context.read<NavigationProvider>().navigateToMainMenuPage(context: context);

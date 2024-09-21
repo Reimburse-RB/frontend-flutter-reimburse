@@ -33,6 +33,7 @@ class FormDropdownPurpose extends StatelessWidget {
             ),
           ),
         DropdownButtonFormField<PurposeOptionData>(
+          padding: EdgeInsets.zero,
           isExpanded: true,
           borderRadius: BorderRadius.circular(24),
           value: value,

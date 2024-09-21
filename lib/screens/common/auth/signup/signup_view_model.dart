@@ -20,7 +20,6 @@ class SignUpViewModel extends ChangeNotifier {
     getFcmToken();
   }
 
-  final LocalStorage localStorage = LocalStorage('reimburse_rb');
   HttpService http = HttpService();
   late BuildContext context;
 
@@ -136,9 +135,9 @@ class SignUpViewModel extends ChangeNotifier {
         bool isAdmin = response.data?.role == Constant.adminRoleId ||
             response.data?.role == Constant.hrdRoleId;
 
-        localStorage.setItem('auth-token', response.data?.token);
-        localStorage.setItem('role', response.data?.role);
-        localStorage.setItem('is-admin-or-hrd', isAdmin);
+        localStorage.setItem('auth-token', response.data?.token ?? '');
+        localStorage.setItem('role', response.data?.role?.toString() ?? '');
+        localStorage.setItem('is-admin-or-hrd', isAdmin.toString());
 
         postEditProfile(response);
 

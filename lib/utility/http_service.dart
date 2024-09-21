@@ -9,7 +9,6 @@ class HttpService {
   HttpService.internal();
   factory HttpService() => instance;
 
-  final LocalStorage storage = LocalStorage('reimburse_rb');
   Map<String, String> headers = {};
   final JsonDecoder _decoder = const JsonDecoder();
 
@@ -25,7 +24,7 @@ class HttpService {
     Map<String, String> requestHeaders = {
       "Content-type": "application/json",
       "Accept": "application/json",
-      "auth-token": storage.getItem('auth-token') ?? '',
+      "auth-token": localStorage.getItem('auth-token') ?? '',
     };
     try {
       http.Response response = await http.post(
