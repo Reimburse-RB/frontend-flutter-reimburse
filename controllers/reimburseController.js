@@ -696,16 +696,20 @@ module.exports = {
           .toTimeString()
           .slice(0, 8)}`;
 
+        const titleMessageNotification = change_status_id == 2
+          ? "Pengajuan Diproses" :
+          change_status_id == 3
+            ? "Pengajuan Berhasil"
+            : change_status_id == 4
+              ? "Pengajuan Gagal!"
+              : "";
+
+        const bodyMessageNotification = `Pengajuan ${cat ? cat.category_reimbursement_text : ""} Anda ${change_status_id == 2 ? "sedang diproses" : change_status_id == 3 ? "berhasil" : change_status_id == 4 ? "gagal" : ""}`;
+
         const message = {
           notification: {
-            title:
-              change_status_id == 3
-                ? "Pengajuan Berhasil"
-                : change_status_id == 4
-                  ? "Pengajuan Gagal!"
-                  : "",
-            body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${change_status_id == 3 ? "anda berhasil" : "anda gagal"
-              }`,
+            title: titleMessageNotification,
+            body: bodyMessageNotification,
           },
           data: {
             reimburseId: `${reimburse.id}`,
@@ -717,14 +721,8 @@ module.exports = {
         messaging.send(message);
 
         await Notification.create({
-          title:
-            change_status_id == 3
-              ? "Pengajuan Berhasil"
-              : change_status_id == 4
-                ? "Pengajuan Gagal!"
-                : "",
-          body: `Pengajuan ${cat ? cat.category_reimbursement_text : ""} ${change_status_id == 3 ? "anda berhasil" : "anda gagal"
-            }`,
+          title: titleMessageNotification,
+          body: bodyMessageNotification,
           reimburse_id: reimburse.id,
           category_reimbursement: cat ? cat.category_reimbursement_text : "",
           date_reimburse: formattedCreatedDate,
