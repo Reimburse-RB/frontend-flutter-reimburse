@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
@@ -42,8 +43,9 @@ class ImagePickerHandler {
   }
 
   Future cropImage(File image) async {
-    log('asu 1');
     final croppedFile = await ImageCropper().cropImage(
+      compressFormat: ImageCompressFormat.png,
+      compressQuality: 100,
       sourcePath: image.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
@@ -72,7 +74,6 @@ class ImagePickerHandler {
       File files = File(croppedFile.path);
       imagePickerListener?.userImage(files);
     }
-    log('asu 2');
   }
 
   void showDialog(BuildContext context) {
