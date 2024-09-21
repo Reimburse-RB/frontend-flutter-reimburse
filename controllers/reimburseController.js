@@ -108,7 +108,7 @@ module.exports = {
             approval_date: null,
           };
 
-          if (item.purpose_id !== 0 && item.purpose_id !== 1) {
+          if (item.purpose_id !== null && item.purpose_id !== 1) {
             const purposeText = allStatus.purposeId.find(
               (itemCat) => itemCat.purpose_id === item.purpose_id
             );
@@ -119,7 +119,7 @@ module.exports = {
               : null;
           } else {
             dataCard.purposeId = null;
-            dataCard.purpose_text = item.purpose_other;
+            dataCard.purpose_text = item.purpose_other ?? purposeText;
           }
 
           if (!isNil(item.approval_date)) {
@@ -274,7 +274,7 @@ module.exports = {
           (itemCat) => itemCat.category_reimbursement_id === reimburse.category
         );
 
-        if (reimburse.purpose_id !== 0 && reimburse.purpose_id !== 1) {
+        if (reimburse.purpose_id !== null && reimburse.purpose_id !== 1) {
           const purposeText = allStatus.purposeId.find(
             (itemCat) => itemCat.purpose_id === reimburse.purpose_id
           );
@@ -285,7 +285,7 @@ module.exports = {
             : null;
         } else {
           returnData.purposeId = null;
-          returnData.purpose_text = reimburse.purpose_other;
+          returnData.purpose_text = reimburse.purpose_other ?? reimburse.purposeText;
         }
 
         if (!isNil(reimburse.approval_date)) {
@@ -375,9 +375,9 @@ module.exports = {
               detail_id: detail.id,
               detail_title_id: detailTitleText != null ? detail.title_id : null,
               detail_title_text:
-                detailTitleText != null
+                detailTitleText != null && detailTitleText.detail_title_id != 1
                   ? detailTitleText.detail_title_text
-                  : detail.title_other,
+                  : detail.title_other ?? detailTitleText.detail_title_text,
               detail_family_id: detail.intended_for,
               detail_family_name: family ? family.fullname : "",
               detail_cost: detail.price,
@@ -535,10 +535,10 @@ module.exports = {
         });
       }
 
-      if (purpose_id == 0 && purpose_other_text == null) {
+      if (purpose_id == 1 && purpose_other_text == null) {
         return res.json({
           success: false,
-          msg: "diagnosiss or destination must be filled",
+          msg: "other diagnosiss or destination must be filled",
         });
       }
 
@@ -805,9 +805,9 @@ module.exports = {
       let allPurpose;
 
       if (category_reimbursement_id === 1) {
-        allPurpose = [allStatus.purposeId[0], ...allStatus.purposeId.slice(1, 10)];
+        allPurpose = [...allStatus.purposeId.slice(1, 10), allStatus.purposeId[0]];
       } else if (category_reimbursement_id === 2) {
-        allPurpose = [allStatus.purposeId[0], ...allStatus.purposeId.slice(10, 20)];
+        allPurpose = [...allStatus.purposeId.slice(10, 20), allStatus.purposeId[0]];
 
       } else {
         return res.json({
@@ -834,9 +834,9 @@ module.exports = {
       let allTitle;
 
       if (category_reimbursement_id === 1) {
-        allTitle = [allStatus.titleId[0], ...allStatus.titleId.slice(1, 10)];
+        allTitle = [...allStatus.titleId.slice(1, 10), allStatus.titleId[0]];
       } else if (category_reimbursement_id === 2) {
-        allTitle = [allStatus.titleId[10], ...allStatus.titleId.slice(10, 20)];
+        allTitle = [...allStatus.titleId.slice(10, 20), allStatus.titleId[0]];
       } else {
         return res.json({
           success: false,

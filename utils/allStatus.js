@@ -47,7 +47,7 @@ module.exports = {
   purposeId: [
     {
       purpose_id: 1,
-      purpose_text: "Lainnya"
+      purpose_text: "Lainnya..."
     },
     {
       purpose_id: 2,
@@ -130,7 +130,7 @@ module.exports = {
   titleId: [
     {
       detail_title_id: 1,
-      detail_title_text: "Lainnya"
+      detail_title_text: "Lainnya..."
     },
     {
       detail_title_id: 2,
