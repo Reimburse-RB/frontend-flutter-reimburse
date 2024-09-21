@@ -25,9 +25,10 @@ class OnboardingScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<OnboardingViewModel>();
-    return WillPopScope(
-        onWillPop: () {
-          return viewModel.onBoardingClose(context: context);
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          viewModel.onBoardingClose(context: context);
         },
         child: Scaffold(
           backgroundColor: Colors.white,

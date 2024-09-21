@@ -48,8 +48,9 @@ class _MainMenuViewState extends State<MainMenuView> {
       // const MainProfileScreen(),
     ];
 
-    return WillPopScope(
-      onWillPop: () => viewModel.onWillPop(context),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) => viewModel.onWillPop(context),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -107,7 +108,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       : const Icon(
                           IconlyBroken.paper,
                         ),
-                  label: userProvider.isAdmin?'Permintaan':'Pengajuan',
+                  label: userProvider.isAdmin ? 'Permintaan' : 'Pengajuan',
                 ),
                 BottomNavigationBarItem(
                   icon: userProvider.selectedMainMenuIndex == 2

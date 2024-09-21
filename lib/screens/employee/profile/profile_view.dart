@@ -106,16 +106,15 @@ class ProfileView extends StatelessWidget {
             const SizedBox(height: 96),
             ButtonGeneral(
               onTap: () {
-                Helper(context: context).alertClose(
+                Helper(context: context).showCustomDialog(
                   title: 'Konfirmasi',
                   message: 'Apakah Anda yakin ingin keluar akun?',
                   context: context,
                   firstButtonOnTap: () {
-                    userProvider.clearAllData();
-                    viewModel.signOut();
+                    Navigator.pop(context);
                   },
                   secondButtonOnTap: () {
-                    Navigator.pop(context);
+                    viewModel.signOut();
                   },
                 );
               },

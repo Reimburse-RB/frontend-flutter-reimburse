@@ -124,26 +124,26 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
     final viewModel = context.watch<ProfileViewModel>();
     final navigationProvider = context.read<NavigationProvider>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (viewModel.isEditing) {
-          await Helper(context: context).alertClose(
-            title: 'Konfirmasi',
-            message:
-                'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
-            context: context,
-            firstButtonOnTap: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            secondButtonOnTap: () {
-              Navigator.pop(context);
-            },
-          );
-          return false; // return false if alertClose is shown
-        } else {
+    return PopScope(
+      canPop: !viewModel.isEditing,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) result;
+        final bool shouldPop = await Helper(context: context).showCustomDialog(
+              title: 'Anda Yakin?',
+              message:
+                  'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
+              context: context,
+              firstButtonOnTap: () {
+                Navigator.pop(context, false);
+              },
+              secondButtonOnTap: () {
+                Navigator.pop(context, true);
+              },
+            ) ??
+            false;
+
+        if (context.mounted && shouldPop) {
           Navigator.pop(context);
-          return true; // return true if not editing
         }
       },
       child: Scaffold(
@@ -159,16 +159,16 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
                     Flexible(
                       child: ButtonGeneral(
                         onTap: () {
-                          Helper(context: context).alertClose(
+                          Helper(context: context).showCustomDialog(
                             title: 'Konfirmasi',
                             message: Constant.confirmUnsavedAlertClose,
                             context: context,
                             firstButtonOnTap: () {
                               Navigator.of(context).pop();
-                              viewModel.cancelEdit();
                             },
                             secondButtonOnTap: () {
                               Navigator.of(context).pop();
+                              viewModel.cancelEdit();
                             },
                           );
                         },

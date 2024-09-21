@@ -244,6 +244,42 @@ class Helper {
     ).show();
   }
 
+  Future<bool?> showCustomDialog({
+    required String title,
+    required String message,
+    required BuildContext context,
+    String firstButtonLabel = 'Batal',
+    String secondButtonLabel = 'Lanjutkan',
+    required Function() firstButtonOnTap,
+    Function()? secondButtonOnTap,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: Text(firstButtonLabel),
+              onPressed: firstButtonOnTap,
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: Text(secondButtonLabel),
+              onPressed: secondButtonOnTap,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   ImageProvider _getImageProvider({required source, bool isImageFile = false}) {
     if (isImageFile && source is File) {
       return FileImage(source);

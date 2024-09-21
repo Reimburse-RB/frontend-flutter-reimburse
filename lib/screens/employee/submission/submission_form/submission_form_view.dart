@@ -53,21 +53,27 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
   Widget build(BuildContext context) {
     final viewModel = context.watch<SubmissionFormViewModel>();
     final userProvider = context.read<UserProvider>();
-    return WillPopScope(
-      onWillPop: () async {
-        await Helper(context: context).alertClose(
-          title: 'Konfirmasi',
-          message: 'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
-          context: context,
-          firstButtonOnTap: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
-          secondButtonOnTap: () {
-            Navigator.pop(context);
-          },
-        );
-        return false; // return false if alertClose is shown
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) result;
+        final bool shouldPop = await Helper(context: context).showCustomDialog(
+              title: 'Anda Yakin?',
+              message:
+                  'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
+              context: context,
+              firstButtonOnTap: () {
+                Navigator.pop(context, false);
+              },
+              secondButtonOnTap: () {
+                Navigator.pop(context, true);
+              },
+            ) ??
+            false;
+
+        if (context.mounted && shouldPop) {
+          Navigator.pop(context);
+        }
       },
       child: Scaffold(
         backgroundColor: Colors.white,
