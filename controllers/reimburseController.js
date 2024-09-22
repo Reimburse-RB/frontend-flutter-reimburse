@@ -614,13 +614,13 @@ module.exports = {
               body: bodyMessageNotification,
             },
             data: {
-              categoryNotification: categoryNotification,
+              categoryNotification: `${categoryNotification}`,
               reimburseId: `${reimburse.id}`,
               categoryReimbursement: cat ? cat.category_reimbursement_text : "",
-              user: user.fullname,
-              identityNumber: user.identity_number,
+              user: `${user.fullname}`,
+              identityNumber: `${user.identity_number}`,
               price: `${totalPrice}`,
-              date: formattedCreatedDate,
+              date: `${formattedCreatedDate}`,
             },
             token: item.fcm_token ?? "",
           };
@@ -718,10 +718,10 @@ module.exports = {
             body: bodyMessageNotification,
           },
           data: {
-            categoryNotification: categoryNotification,
+            categoryNotification: `${categoryNotification}`,
             reimburseId: `${reimburse.id}`,
-            categoryReimbursement: cat ? cat.category_reimbursement_text : "",
-            date: formattedCreatedDate,
+            categoryReimbursement: `${cat ? cat.category_reimbursement_text : ""}`,
+            date: `${formattedCreatedDate}`,
           },
           token: userReimburse.fcm_token ?? "",
         };

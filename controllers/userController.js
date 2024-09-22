@@ -89,9 +89,9 @@ module.exports = {
             body: bodyMessageNotification,
           },
           data: {
-            categoryNotification: categoryNotification,
+            categoryNotification: `${categoryNotification}`,
             userId: `${user.id}`,
-            date: formattedCreatedDate,
+            date: `${formattedCreatedDate}`,
           },
           token: item.fcm_token ?? '',
         };
