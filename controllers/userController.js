@@ -11,6 +11,8 @@ require("dotenv").config();
 const fs = require("fs");
 const crypto = require("crypto");
 const { title } = require("process");
+const { Op } = require("sequelize");
+const Notification = require("../models/Notification");
 
 module.exports = {
   userRegister: async (req, res, messaging) => {
