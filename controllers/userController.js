@@ -90,7 +90,7 @@ module.exports = {
           },
           data: {
             categoryNotification: categoryNotification,
-            userId: user.id,
+            userId: `${user.id}`,
             date: formattedCreatedDate,
           },
           token: item.fcm_token ?? '',
