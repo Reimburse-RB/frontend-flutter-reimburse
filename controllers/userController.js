@@ -10,9 +10,10 @@ const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 const fs = require("fs");
 const crypto = require("crypto");
+const { title } = require("process");
 
 module.exports = {
-  userRegister: async (req, res) => {
+  userRegister: async (req, res, messaging) => {
     const { name, identity_number, role, email, password, fcm_token } =
       req.body;
 
@@ -57,6 +58,52 @@ module.exports = {
         role,
         token,
         fcm_token,
+      });
+
+      const now = new Date();
+      const day = now.getDate().toString().padStart(2, "0"); // Pastikan dua digit
+      const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
+      const year = now.getFullYear();
+      const formattedCreatedDate = `${year}-${month}-${day} ${now
+        .toTimeString()
+        .slice(0, 8)}`;
+
+      const userAdmin = await User.findAll({
+        where: {
+          role: {
+            [Op.in]: [2, 3],
+          },
+        },
+      });
+
+      userAdmin.forEach(async (item) => {
+        const categoryNotification = 'account_verification';
+        const titleMessageNotification = `Pengguna Baru ${user.fullname} Menunggu Verifikasi`;
+        const bodyMessageNotification = `Pengguna ${user.fullname} dengan Nomor Induk Karyawan ${user.identity_number} telah mendaftar dan membutuhkan verifikasi.`
+
+        const message = {
+          notification: {
+            title: titleMessageNotification,
+            body: bodyMessageNotification,
+          },
+          data: {
+            categoryNotification: categoryNotification,
+            userId: user.id,
+            date: formattedCreatedDate,
+          },
+          token: item.fcm_token ?? ''
+        };
+        messaging.send(message);
+
+        await Notification.create({
+          category_notification: categoryNotification,
+          title: titleMessageNotification,
+          body: bodyMessageNotification,
+          user_id: user.id,
+          category: 1, //admin/hrd
+          token_target: item.fcm_token ?? '',
+          date: formattedCreatedDate,
+        })
       });
 
       return res.json({

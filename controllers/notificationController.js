@@ -30,16 +30,18 @@ module.exports = {
             returnData.push({
               title: item.title,
               body: item.body,
+              categoryNotification: item.category_notification,
               categoryReimbursement: item.category_reimbursement,
-              dateReimburse: item.date_reimburse,
+              date: item.date,
               reimburseId: item.reimburse_id,
             });
           } else {
             returnData.push({
               title: item.title,
               body: item.body,
+              categoryNotification: item.category_notification,
               categoryReimbursement: item.category_reimbursement,
-              dateReimburse: item.date_reimburse,
+              date: item.date,
               reimburseId: item.reimburse_id,
               user: item.user,
               identityNumber: item.identity_number,

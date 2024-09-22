@@ -42,7 +42,7 @@ const messaging = admin.messaging();
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/user", userRouter);
+app.use("/user", userRouter(messaging));
 app.use("/notification", notificationRouter);
 app.use("/reimburse", reimburseRouter(messaging));
 app.use("/tnc", tncRouter);

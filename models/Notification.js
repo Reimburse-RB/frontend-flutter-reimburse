@@ -12,9 +12,17 @@ const Notification = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    category_notification: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     reimburse_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     category_reimbursement: {
       type: DataTypes.STRING,
@@ -32,7 +40,7 @@ const Notification = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    date_reimburse: {
+    date: {
       type: DataTypes.STRING,
       allowNull: true,
     },

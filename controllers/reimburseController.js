@@ -604,35 +604,40 @@ module.exports = {
         });
 
         userAdmin.forEach(async (item) => {
+          const categoryNotification = 'reimburse';
+          const titleMessageNotification = `Reimburse oleh User ${user.fullname} telah diajukan`;
+          const bodyMessageNotification = `User ${user.fullname} telah membuat ${cat ? cat.category_reimbursement_text : ""} dengan total Rp ${totalPrice}.`;
+
           const message = {
             notification: {
-              title: `Reimburse Oleh User ${user.fullname} telah diajukan`,
-              body: `User ${user.fullname} telah membuat ${cat ? cat.category_reimbursement_text : ""
-                } dengan total Rp. ${totalPrice}`,
+              title: titleMessageNotification,
+              body: bodyMessageNotification,
             },
             data: {
+              categoryNotification: categoryNotification,
               reimburseId: `${reimburse.id}`,
               categoryReimbursement: cat ? cat.category_reimbursement_text : "",
               user: user.fullname,
-              identity_number: user.identity_number,
+              identityNumber: user.identity_number,
               price: `${totalPrice}`,
-              dateReimburse: formattedCreatedDate,
+              date: formattedCreatedDate,
             },
             token: item.fcm_token ?? "",
           };
           messaging.send(message);
 
           await Notification.create({
-            title: `Reimburse Oleh User ${user.fullname} telah diajukan`,
-            body: `User ${user.fullname} telah membuat ${cat ? cat.category_reimbursement_text : ""
-              } dengan total Rp. ${totalPrice}`,
+            category_notification: categoryNotification,
+            title: titleMessageNotification,
+            body: bodyMessageNotification,
             reimburse_id: reimburse.id,
             category_reimbursement: cat ? cat.category_reimbursement_text : "",
+            user_id: user.id,
             user: user.fullname,
             identity_number: user.identity_number,
             price: totalPrice,
-            date_reimburse: formattedCreatedDate,
-            category: 1,
+            date: formattedCreatedDate,
+            category: 1, // admin/hrd
             token_target: item.fcm_token ?? "",
           });
         });
@@ -696,6 +701,7 @@ module.exports = {
           .toTimeString()
           .slice(0, 8)}`;
 
+        const categoryNotification = 'reimburse';
         const titleMessageNotification = change_status_id == 2
           ? "Pengajuan Diproses" :
           change_status_id == 3
@@ -704,7 +710,7 @@ module.exports = {
               ? "Pengajuan Gagal!"
               : "";
 
-        const bodyMessageNotification = `Pengajuan ${cat ? cat.category_reimbursement_text : ""} Anda ${change_status_id == 2 ? "sedang diproses" : change_status_id == 3 ? "berhasil" : change_status_id == 4 ? "gagal" : ""}`;
+        const bodyMessageNotification = `Pengajuan ${cat ? cat.category_reimbursement_text : ""} Anda ${change_status_id == 2 ? "sedang diproses" : change_status_id == 3 ? "berhasil" : change_status_id == 4 ? "gagal" : ""}.`;
 
         const message = {
           notification: {
@@ -712,20 +718,22 @@ module.exports = {
             body: bodyMessageNotification,
           },
           data: {
+            categoryNotification: categoryNotification,
             reimburseId: `${reimburse.id}`,
             categoryReimbursement: cat ? cat.category_reimbursement_text : "",
-            dateReimburse: formattedCreatedDate,
+            date: formattedCreatedDate,
           },
           token: userReimburse.fcm_token ?? "",
         };
         messaging.send(message);
 
         await Notification.create({
+          category_notification: categoryNotification,
           title: titleMessageNotification,
           body: bodyMessageNotification,
           reimburse_id: reimburse.id,
           category_reimbursement: cat ? cat.category_reimbursement_text : "",
-          date_reimburse: formattedCreatedDate,
+          date: formattedCreatedDate,
           category: 2,
           token_target: userReimburse.fcm_token ?? "",
         });
