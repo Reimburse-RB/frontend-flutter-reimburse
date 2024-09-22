@@ -284,7 +284,7 @@ module.exports = {
     }
   },
 
-  verificationAccount: async (req, res) => {
+  verificationAccount: async (req, res, messaging) => {
     const { userId } = req.body;
     const user = req.userAuth;
 
@@ -312,6 +312,40 @@ module.exports = {
       if (userDetail) {
         userDetail.status = 1;
         userDetail.save();
+
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, "0"); // Pastikan dua digit
+        const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
+        const year = now.getFullYear();
+        const formattedCreatedDate = `${year}-${month}-${day} ${now
+          .toTimeString()
+          .slice(0, 8)}`;
+
+        const categoryNotification = 'verified_account';
+        const titleMessageNotification = "Akun Anda Telah Diverifikasi";
+        const bodyMessageNotification = `Akun Anda telah diverifikasi oleh Admin. Kini Anda dapat mulai menggunakan seluruh fitur yang tersedia di aplikasi.`;
+
+        const message = {
+          notification: {
+            title: titleMessageNotification,
+            body: bodyMessageNotification,
+          },
+          data: {
+            categoryNotification: `${categoryNotification}`,
+            date: `${formattedCreatedDate}`,
+          },
+          token: userDetail.fcm_token ?? '',
+        };
+        messaging.send(message);
+
+        await Notification.create({
+          category_notification: categoryNotification,
+          title: titleMessageNotification,
+          body: bodyMessageNotification,
+          date: formattedCreatedDate,
+          category: 1,
+          token_target: userDetail.fcm_token ?? '',
+        });
 
         return res.json({
           success: true,

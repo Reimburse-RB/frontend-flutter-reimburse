@@ -18,7 +18,7 @@ const userRoutes = (messaging) => {
   router.post(
     "/verification-account",
     authLogin,
-    userController.verificationAccount
+    (req, res) => userController.verificationAccount(req, res, messaging)
   );
   router.post(
     "/get-detail-user-verification",
