@@ -81,7 +81,7 @@ module.exports = {
       userAdmin.forEach(async (item) => {
         const categoryNotification = 'account_verification';
         const titleMessageNotification = `Pengguna Baru ${user.fullname} Menunggu Verifikasi`;
-        const bodyMessageNotification = `Pengguna ${user.fullname} dengan Nomor Induk Karyawan ${user.identity_number} telah mendaftar dan membutuhkan verifikasi.`
+        const bodyMessageNotification = `Pengguna ${user.fullname} dengan Nomor Induk Karyawan ${user.identity_number} telah mendaftar dan membutuhkan verifikasi.`;
 
         const message = {
           notification: {
@@ -93,7 +93,7 @@ module.exports = {
             userId: user.id,
             date: formattedCreatedDate,
           },
-          token: item.fcm_token ?? ''
+          token: item.fcm_token ?? '',
         };
         messaging.send(message);
 
@@ -105,7 +105,7 @@ module.exports = {
           category: 1, //admin/hrd
           token_target: item.fcm_token ?? '',
           date: formattedCreatedDate,
-        })
+        });
       });
 
       return res.json({

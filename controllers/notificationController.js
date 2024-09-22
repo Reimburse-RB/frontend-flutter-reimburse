@@ -43,7 +43,8 @@ module.exports = {
               categoryReimbursement: item.category_reimbursement,
               date: item.date,
               reimburseId: item.reimburse_id,
-              user: item.user,
+              userId: item.user.id,
+              userName: item.user,
               identityNumber: item.identity_number,
               price: item.price,
             });
