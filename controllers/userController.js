@@ -257,7 +257,7 @@ module.exports = {
     const user = req.userAuth;
 
     try {
-      if (user.role != 2) {
+      if (user.role != 2 && user.role != 3) {
         return res.json({
           success: false,
           msg: "you're not using admin account",
@@ -305,7 +305,7 @@ module.exports = {
         });
       }
 
-      if (user.role != 2) {
+      if (user.role != 2 && user.role != 3) {
         return res.json({
           success: false,
           msg: "you're not using admin account",
@@ -438,7 +438,7 @@ module.exports = {
         });
       }
 
-      if (user.role != 2) {
+      if (user.role != 2 && user.role != 3) {
         return res.json({
           success: false,
           msg: "you're not using admin account",
