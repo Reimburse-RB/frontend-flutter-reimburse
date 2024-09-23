@@ -352,7 +352,10 @@ module.exports = {
           title: titleMessageNotification,
           body: bodyMessageNotification,
           date: formattedCreatedDate,
-          category: 2, //karyawan
+          user: userDetail.fullname,
+          user_id: userDetail.id,
+          identity_number: userDetail.identity_number,
+          category: 3, //general
           token_target: userDetail.fcm_token ?? '',
         });
 

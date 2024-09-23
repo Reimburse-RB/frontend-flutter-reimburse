@@ -1,6 +1,7 @@
 const { isNotNil } = require("ramda");
 const Notification = require("../models/Notification");
 require("dotenv").config();
+const { Op } = require("sequelize");
 
 module.exports = {
   getListNotification: async (req, res) => {
@@ -10,9 +11,9 @@ module.exports = {
       const whereParam = {};
 
       if (user.role == 1) {
-        whereParam.category = 2;
+        whereParam.category = { [Op.in]: [2, 3], };
       } else {
-        whereParam.category = 1;
+        whereParam.category = { [Op.in]: [1, 3], };
       }
 
       whereParam.token_target = user.fcm_token;
@@ -26,6 +27,9 @@ module.exports = {
 
       if (isNotNil(notification)) {
         notification.forEach((item) => {
+          if (item.category == 3 && item.user_id != user.id) {
+            return;
+          }
           if (user.role == 1) {
             returnData.push({
               title: item.title,
