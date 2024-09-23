@@ -168,26 +168,28 @@ class TermConditionView extends StatelessWidget {
     final userProvider = context.read<UserProvider>();
     return PopScope(
       canPop: !viewModel.isEditing,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) result;
-        final bool shouldPop = await Helper(context: context).showCustomDialog(
-              title: 'Anda Yakin?',
-              message:
-                  'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
-              context: context,
-              firstButtonOnTap: () {
-                Navigator.pop(context, false);
-              },
-              secondButtonOnTap: () {
-                Navigator.pop(context, true);
-              },
-            ) ??
-            false;
+      onPopInvokedWithResult: (viewModel.isEditing)
+          ? (didPop, result) async {
+              if (didPop) result;
+              final bool shouldPop = await Helper(context: context).showCustomDialog(
+                    title: 'Anda Yakin?',
+                    message:
+                        'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
+                    context: context,
+                    firstButtonOnTap: () {
+                      Navigator.pop(context, false);
+                    },
+                    secondButtonOnTap: () {
+                      Navigator.pop(context, true);
+                    },
+                  ) ??
+                  false;
 
-        if (context.mounted && shouldPop) {
-          Navigator.pop(context);
-        }
-      },
+              if (context.mounted && shouldPop) {
+                Navigator.pop(context);
+              }
+            }
+          : null,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBarGeneral(

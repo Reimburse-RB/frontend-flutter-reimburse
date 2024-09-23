@@ -92,22 +92,22 @@ class SignInView extends StatelessWidget {
                         viewModel.checkAllField();
                       },
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text(
-                          "Lupa password? ",
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-                        ),
-                        ButtonText(
-                          onTap: () {
-                            navigationProvider.navigateToForgotPasswordScreen(context: context);
-                          },
-                          text: 'Ubah Password',
-                        )
-                      ],
-                    ),
+                    // const SizedBox(height: 8),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     const Text(
+                    //       "Lupa password? ",
+                    //       style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                    //     ),
+                    //     ButtonText(
+                    //       onTap: () {
+                    //         navigationProvider.navigateToForgotPasswordScreen(context: context);
+                    //       },
+                    //       text: 'Ubah Password',
+                    //     )
+                    //   ],
+                    // ),
                     const SizedBox(
                       height: 64,
                     ),
