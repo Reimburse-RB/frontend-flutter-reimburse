@@ -352,7 +352,7 @@ module.exports = {
           title: titleMessageNotification,
           body: bodyMessageNotification,
           date: formattedCreatedDate,
-          category: 1,
+          category: 2, //karyawan
           token_target: userDetail.fcm_token ?? '',
         });
 

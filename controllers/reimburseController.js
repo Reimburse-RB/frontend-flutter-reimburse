@@ -734,7 +734,7 @@ module.exports = {
           reimburse_id: reimburse.id,
           category_reimbursement: cat ? cat.category_reimbursement_text : "",
           date: formattedCreatedDate,
-          category: 2,
+          category: 2, //karyawan
           token_target: userReimburse.fcm_token ?? "",
         });
 
