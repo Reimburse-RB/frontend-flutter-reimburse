@@ -48,6 +48,7 @@ class TermConditionView extends StatelessWidget {
               const SizedBox(height: 16),
               ListView.builder(
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: termCategory.list_tnc.length,
                 itemBuilder: (context, index) {
                   String term = termCategory.list_tnc[index].tnc;
