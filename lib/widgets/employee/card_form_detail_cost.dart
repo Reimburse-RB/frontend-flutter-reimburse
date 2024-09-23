@@ -75,7 +75,10 @@ class CardFormDetailCost extends StatelessWidget {
                     Icons.warning_amber_rounded,
                     color: Constant.waitingStatusColor,
                   ),
-                  note: Constant.infoFormDetailCost,
+                  note: userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
+                          Constant.healthCategoryReimbursementId
+                      ? Constant.infoFormDetailCostHealth
+                      : Constant.infoFormDetailCostTransport,
                   noteTextStyle: TextStyle(
                     color: Constant.waitingStatusColor,
                     fontWeight: Constant.regularNoteStyle.fontWeight,

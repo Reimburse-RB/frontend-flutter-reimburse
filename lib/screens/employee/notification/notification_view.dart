@@ -5,7 +5,7 @@ import 'package:reimburse_rb/screens/employee/notification/notification_view_mod
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
-import 'package:reimburse_rb/widgets/employee/card_notification.dart';
+import 'package:reimburse_rb/widgets/common/card_notification.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});

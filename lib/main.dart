@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/screens/employee/notification/notification_view_model.dart';
+import 'package:reimburse_rb/utility/constant.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
@@ -219,6 +220,8 @@ class _MyAppState extends State<MyApp> {
     String imgBitMapIOS = '';
     String imgBitMapAndroid = '@mipmap/launcher_icon';
 
+    log('show notif ${data.notification?.title} ${data.data['categoryNotification']}');
+
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'reimburse-rb',
       'REIMBURSERB',
@@ -296,7 +299,31 @@ class _MyAppState extends State<MyApp> {
   }
 
   void handleDeepLink(RemoteMessage message) {
-    Navigator.of(navigatorKey.currentContext!).pushNamed('/notification');
+    final navigationProvider = context.read<NavigationProvider>();
+
+    if (message.data.isNotEmpty && message.data['categoryNotification'] != null) {
+      String categoryNotification = message.data['categoryNotification'];
+      if (categoryNotification == Constant.categoryNotificationReimburse) {
+        int? reimburseId = message.data['reimburseId'];
+        if (reimburseId != null)
+          navigationProvider.navigateToDetailReimbursement(
+            context: context,
+            id: reimburseId,
+            onReturn: (value) {},
+          );
+      }
+
+      if (categoryNotification == Constant.categoryNotificationAccountVerif) {
+        int? userId = message.data['userId'];
+        if (userId != null)
+          navigationProvider.navigateToDetailAccountVerification(
+            context: context,
+            id: userId,
+            onReturn: (value) {},
+          );
+      }
+    }
+    // Navigator.of(navigatorKey.currentContext!).pushNamed('/notification');
   }
 
   Map<String, Widget Function(BuildContext)> routes = {

@@ -107,7 +107,7 @@ class ProfileView extends StatelessWidget {
             ButtonGeneral(
               onTap: () {
                 Helper(context: context).showCustomDialog(
-                  title: 'Konfirmasi',
+                  title: 'Anda Yakin?',
                   message: 'Apakah Anda yakin ingin keluar akun?',
                   context: context,
                   firstButtonOnTap: () {

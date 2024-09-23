@@ -41,7 +41,7 @@ class ThemeNotifier with ChangeNotifier {
               accentColor: Constant.greenDark,
               brightness: Brightness.light)
           .copyWith(
-        background: Colors.white,
+        surface: Colors.white,
         brightness: Brightness.light,
       ),
       datePickerTheme: const DatePickerThemeData(

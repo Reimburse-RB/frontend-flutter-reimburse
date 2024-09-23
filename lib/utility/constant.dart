@@ -68,8 +68,10 @@ class Constant {
   static const String confirmUnsavedAlertClose =
       'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.';
   static const String warningPasswordMatchString = 'Password tidak cocok';
-  static const String infoFormDetailCost =
+  static const String infoFormDetailCostHealth =
       'Mohon inputkan biaya penggantian sesuai dengan detail perawatan yang tertera pada kuitansi.';
+  static const String infoFormDetailCostTransport =
+      'Mohon inputkan biaya penggantian sesuai dengan detail perjalanan yang tertera pada kuitansi.';
   static const String noteFormPurposeHealth =
       'Catatan : Masukkan Diagnosis lainnya hanya jika tidak terdapat di dalam opsi.';
   static const String noteFormPurposeTransport =
@@ -79,11 +81,16 @@ class Constant {
   static const String noteFormDateDetailTitle =
       'Catatan : Kuitansi harus bertanggal tidak lebih dari satu bulan yang lalu.';
   static const String noteFormTotalCost = 'Catatan: Total Biaya akan terisi otomatis oleh sistem.';
-  static const String warningFormIncomplete = 'Gagal Unggah! Mohon lengkapi formulir pengajuan';
+  static const String warningFormIncomplete =
+      'Gagal Unggah! Mohon lengkapi formulir pengajuan Anda';
   static const String warningUnverifiedEmployeeAccount =
       'Akun Anda belum diverifikasi oleh Admin. Mohon tunggu sebelum Anda dapat melakukan pengajuan';
   static const String warningUnverifiedAdminAccount =
       'Akun Anda belum diverifikasi oleh Admin. Mohon tunggu sebelum Anda dapat mengelola permintaan';
+
+  static const String categoryNotificationReimburse = 'reimburse';
+  static const String categoryNotificationAccountVerif = 'account_verification';
+  static const String categoryNotificationVerifiedAccount = 'verified_account';
 
   static const TextStyle regularNoteStyle = TextStyle(
     color: greenDark,

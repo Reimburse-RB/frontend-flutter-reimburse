@@ -184,14 +184,26 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
     if (bodySubmission.containsKey('detail_reimburse') &&
         bodySubmission['detail_reimburse'] is List) {
       for (var detail in bodySubmission['detail_reimburse']) {
-        if ((detail.containsKey('detail_title_id') &&
+        bool titleCondition = (detail.containsKey('detail_title_id') &&
                 detail['detail_title_id'] != null &&
                 detail['detail_title_id'] != 1) ||
             (detail.containsKey('detail_title_other_text') &&
                 detail['detail_title_other_text'] != null &&
-                detail['detail_title_other_text'] != '')) {
-          continue;
-        } else {
+                detail['detail_title_other_text'] != '');
+
+        bool familyCondition =
+            detail.containsKey('detail_family_id') && detail['detail_family_id'] != null;
+
+        bool costCondition = detail.containsKey('detail_cost') &&
+            detail['detail_cost'] != null &&
+            detail['detail_cost'] != 0;
+
+        bool dateCondition = detail.containsKey('detail_date') &&
+            detail['detail_date'] != null &&
+            detail['detail_date'].toString().isNotEmpty;
+
+        // Jika salah satu kondisi gagal, hentikan loop dan tandai sebagai tidak valid
+        if (!titleCondition || !familyCondition || !costCondition || !dateCondition) {
           detailCondition = false;
           break;
         }

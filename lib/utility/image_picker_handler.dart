@@ -26,7 +26,9 @@ class ImagePickerHandler {
 
   openCamera() async {
     imagePicker?.dismissDialog();
-    XFile? images = await ImagePicker().pickImage(source: ImageSource.camera);
+    XFile? images = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
     if (images != null) {
       final File image = File(images.path);
       cropImage(image);
@@ -35,16 +37,23 @@ class ImagePickerHandler {
 
   openGallery() async {
     imagePicker?.dismissDialog();
-    XFile? images = await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? images = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 100,
+    );
     if (images != null) {
       final File image = File(images.path);
+
+      String base64Image = base64Encode(image.readAsBytesSync());
+      log('===> imagepicker base64 uncropped $base64Image');
+
       cropImage(image);
     }
   }
 
   Future cropImage(File image) async {
     final croppedFile = await ImageCropper().cropImage(
-      // compressQuality: 100,
+      compressQuality: 100,
       sourcePath: image.path,
       // aspectRatioPresets: [
       //   CropAspectRatioPreset.square,

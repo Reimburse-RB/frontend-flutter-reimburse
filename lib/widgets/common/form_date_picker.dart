@@ -101,6 +101,7 @@ class FormDatePicker extends StatelessWidget {
                   prefixIcon: prefixIcon,
                   suffixIcon: suffixIcon,
                   hintText: hintText,
+                  hintStyle: TextStyle(color: Constant.darkGrey),
                 ),
               ),
             ),

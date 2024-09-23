@@ -202,7 +202,7 @@ class TermConditionView extends StatelessWidget {
                       child: ButtonGeneral(
                         onTap: () {
                           Helper(context: context).showCustomDialog(
-                            title: 'Konfirmasi',
+                            title: 'Anda Yakin?',
                             message: Constant.confirmUnsavedAlertClose,
                             context: context,
                             firstButtonOnTap: () {

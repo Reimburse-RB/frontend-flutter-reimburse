@@ -160,7 +160,7 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
                       child: ButtonGeneral(
                         onTap: () {
                           Helper(context: context).showCustomDialog(
-                            title: 'Konfirmasi',
+                            title: 'Anda Yakin?',
                             message: Constant.confirmUnsavedAlertClose,
                             context: context,
                             firstButtonOnTap: () {

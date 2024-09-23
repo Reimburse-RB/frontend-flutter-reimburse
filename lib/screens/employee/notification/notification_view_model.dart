@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/models/common/notification_response.dart';
+import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
@@ -25,6 +27,10 @@ class NotificationViewModel extends ChangeNotifier {
   List<ItemNotificationData> get listNotification => _listNotification;
 
   Future getNotificationList() async {
+    final userProvider = context.read<UserProvider>();
+    if (!userProvider.isAccountVerified) {
+      return;
+    }
     startLoading();
     notifyListeners();
 

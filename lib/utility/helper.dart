@@ -48,12 +48,13 @@ class Helper {
     Color messageColor = Colors.white,
     Color borderColor = Colors.white,
     int seconds = 3,
+    EdgeInsets margin = const EdgeInsets.fromLTRB(24, 24, 24, 72),
     Widget? icon,
   }) {
     Flushbar(
       icon: icon,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      margin: const EdgeInsets.fromLTRB(24, 24, 24, 72),
+      margin: margin,
       flushbarPosition: FlushbarPosition.TOP,
       borderColor: borderColor,
       borderRadius: BorderRadius.circular(20),
@@ -151,7 +152,7 @@ class Helper {
   Future<bool> handleWillPop(BuildContext context, bool isEditing) async {
     if (isEditing) {
       await Helper(context: context).alertClose(
-        title: 'Konfirmasi',
+        title: 'Anda Yakin?',
         message: 'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
         context: context,
         firstButtonOnTap: () {

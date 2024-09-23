@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/screens/admin/account_verification/account_verification_view_model.dart';
+import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
+import 'package:reimburse_rb/widgets/common/card_detail_family_member.dart';
 import 'package:reimburse_rb/widgets/common/detail_text.dart';
 import 'package:reimburse_rb/widgets/common/image_circle_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
@@ -43,6 +46,15 @@ class DetailAccountVerificationView extends StatelessWidget {
               imageUrl: viewModel.detailAccount?.img_url,
             ),
             DetailText(
+              title: 'Status Akun',
+              textValue: (viewModel.detailAccount?.is_account_verified ?? false)
+                  ? 'Akun sudah terverifikasi'
+                  : 'Akun belum terverifikasi',
+              valueColor: (viewModel.detailAccount?.is_account_verified ?? false)
+                  ? Constant.greenMedium
+                  : Constant.rejectedStatusColor,
+            ),
+            DetailText(
               title: 'Nama Karyawan',
               textValue: viewModel.detailAccount?.name ?? '',
             ),
@@ -58,8 +70,24 @@ class DetailAccountVerificationView extends StatelessWidget {
               title: 'Role',
               textValue: viewModel.detailAccount?.role_text ?? '',
             ),
+            const SizedBox(height: 20),
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              shrinkWrap: true,
+              itemCount: viewModel.detailAccount?.family_member_data.length ?? 0,
+              itemBuilder: (context, index) {
+                FamilyMemberData? item = viewModel.detailAccount?.family_member_data[index];
+                if (item != null) {
+                  return CardDetailFamilyMember(itemFamilyMemberData: item, index: index);
+                } else {
+                  return Container();
+                }
+              },
+            ),
             const SizedBox(height: 32),
-            if (viewModel.detailAccount != null)
+            if (viewModel.detailAccount != null &&
+                !(viewModel.detailAccount?.is_account_verified ?? false))
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 child: ButtonGeneral(
@@ -68,6 +96,7 @@ class DetailAccountVerificationView extends StatelessWidget {
                     },
                     text: 'Terima'),
               ),
+            const SizedBox(height: 48),
           ],
         ),
       ),

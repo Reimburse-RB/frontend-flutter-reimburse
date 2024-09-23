@@ -24,20 +24,24 @@ class ListNotificationResponse {
 class ItemNotificationData {
   final String? title;
   final String? body;
+  final String? categoryNotification;
   final String? categoryReimbursement;
-  final String? dateReimburse;
+  final String? date;
   final int? reimburseId;
-  final String? user;
+  final int? userId;
+  final String? userName;
   final String? identityNumber;
   final String? price;
 
   ItemNotificationData({
     this.title,
     this.body,
+    this.categoryNotification,
     this.categoryReimbursement,
-    this.dateReimburse,
+    this.date,
     this.reimburseId,
-    this.user,
+    this.userId,
+    this.userName,
     this.identityNumber,
     this.price,
   });
