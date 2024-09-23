@@ -129,8 +129,8 @@ class SignUpView extends StatelessWidget {
                         viewModel.checkIsPasswordMatch();
                         viewModel.checkAllField();
                       },
-                      note: viewModel.isPasswordMatch ? '' : Constant.warningPasswordMatchString,
-                      noteStyle: Constant.warningNoteStyle,
+                      // note: viewModel.isPasswordMatch ? '' : Constant.warningPasswordMatchString,
+                      // noteStyle: Constant.warningNoteStyle,
                     ),
                     const SizedBox(
                       height: 16,
