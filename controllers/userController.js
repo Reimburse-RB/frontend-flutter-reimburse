@@ -144,6 +144,10 @@ module.exports = {
         }
 
         if (isNotNil(fcm_token)) {
+          await Notification.update(
+            { token_target: fcm_token },
+            { where: { token_target: user.fcm_token } }
+          );
           user.fcm_token = fcm_token;
           user.save();
         }
@@ -231,6 +235,11 @@ module.exports = {
           msg: "All fields are required!!",
         });
       }
+
+      await Notification.update(
+        { token_target: fcmToken },
+        { where: { token_target: user.fcm_token } }
+      );
 
       user.fcm_token = fcmToken;
       user.save();
