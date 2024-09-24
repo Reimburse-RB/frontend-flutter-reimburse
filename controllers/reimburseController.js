@@ -676,11 +676,14 @@ module.exports = {
           msg: 'reimburse_id is required',
         });
       }
+
+      const reimburseIdInt = parseInt(reimburse_id, 10);
+
       // Pastikan ada file yang diunggah
       if (req.files && req.files.length > 0) {
         for (let i = 0; i < req.files.length; i++) {
           const imageSave = await ImageReimburse.create({
-            reimburse_id: reimburse_id,
+            reimburse_id: reimburseIdInt,
             image: `images/upload/${req.files[i].filename}`, // Sesuaikan dengan path penyimpanan gambar
           });
         }
