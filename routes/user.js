@@ -9,8 +9,8 @@ const userRoutes = (messaging) => {
   router.post("/login", userController.userLogin);
   router.post("/get-profile", authLogin, userController.getProfile);
   router.post("/edit-profile", authLogin, uploadImage, userController.editUser);
-  // router.post("/edit-profile", authLogin, uploadMulter.single('image'), userController.editUser);
-  router.post("/edit-image-profile", authLogin, uploadMulter.single('image'), userController.editImageUser);
+  // router.post("/edit-profile", authLogin, uploadMulter.single('file'), userController.editUser);
+  router.post("/edit-image-profile", authLogin, uploadMulter.single('file'), userController.editImageUser);
   router.post("/change-password", authLogin, userController.changePassword);
   router.post("/change-fcm-token", authLogin, userController.updateFcmToken);
   router.post(
