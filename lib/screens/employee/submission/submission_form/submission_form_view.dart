@@ -57,19 +57,8 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (didPop) result;
-        final bool shouldPop = await Helper(context: context).showCustomDialog(
-              title: 'Anda Yakin?',
-              message:
-                  'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
-              context: context,
-              firstButtonOnTap: () {
-                Navigator.pop(context, false);
-              },
-              secondButtonOnTap: () {
-                Navigator.pop(context, true);
-              },
-            ) ??
-            false;
+        final bool shouldPop =
+            await Helper(context: context).showCustomDialog(context: context) ?? false;
 
         if (context.mounted && shouldPop) {
           Navigator.pop(context);
@@ -81,6 +70,16 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
           context: context,
           title:
               'Reimburse ${userProvider.selectedReimbursementCategory?.categoryReimbursementText}',
+          onBack: () async {
+            final bool shouldPop = await Helper(context: context).showCustomDialog(
+                  context: context,
+                ) ??
+                false;
+
+            if (context.mounted && shouldPop) {
+              Navigator.pop(context);
+            }
+          },
         ),
         body: LoadingFallback(
           isLoading: viewModel.isLoading,

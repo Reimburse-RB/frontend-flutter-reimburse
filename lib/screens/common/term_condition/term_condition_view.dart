@@ -172,19 +172,8 @@ class TermConditionView extends StatelessWidget {
       onPopInvokedWithResult: (viewModel.isEditing)
           ? (didPop, result) async {
               if (didPop) result;
-              final bool shouldPop = await Helper(context: context).showCustomDialog(
-                    title: 'Anda Yakin?',
-                    message:
-                        'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
-                    context: context,
-                    firstButtonOnTap: () {
-                      Navigator.pop(context, false);
-                    },
-                    secondButtonOnTap: () {
-                      Navigator.pop(context, true);
-                    },
-                  ) ??
-                  false;
+              final bool shouldPop =
+                  await Helper(context: context).showCustomDialog(context: context) ?? false;
 
               if (context.mounted && shouldPop) {
                 Navigator.pop(context);
@@ -196,6 +185,20 @@ class TermConditionView extends StatelessWidget {
         appBar: AppBarGeneral(
           context: context,
           title: 'Syarat & Ketentuan',
+          onBack: viewModel.isEditing
+              ? () async {
+                  final bool shouldPop =
+                      await Helper(context: context).showCustomDialog(context: context) ?? false;
+
+                  if (context.mounted && shouldPop) {
+                    Navigator.pop(context);
+                  }
+                }
+              : () {
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                },
         ),
         bottomNavigationBar: (viewModel.isEditing)
             ? BottomAppBarGeneral(

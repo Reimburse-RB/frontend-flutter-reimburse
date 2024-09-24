@@ -128,19 +128,8 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
       canPop: !viewModel.isEditing,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) result;
-        final bool shouldPop = await Helper(context: context).showCustomDialog(
-              title: 'Anda Yakin?',
-              message:
-                  'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
-              context: context,
-              firstButtonOnTap: () {
-                Navigator.pop(context, false);
-              },
-              secondButtonOnTap: () {
-                Navigator.pop(context, true);
-              },
-            ) ??
-            false;
+        final bool shouldPop =
+            await Helper(context: context).showCustomDialog(context: context) ?? false;
 
         if (context.mounted && shouldPop) {
           Navigator.pop(context);
@@ -151,6 +140,18 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
         appBar: AppBarGeneral(
           context: context,
           title: 'Informasi Pribadi ${viewModel.profile?.role_text}',
+          onBack: viewModel.isEditing
+              ? () async {
+                  final bool shouldPop =
+                      await Helper(context: context).showCustomDialog(context: context) ?? false;
+
+                  if (context.mounted && shouldPop) {
+                    Navigator.pop(context);
+                  }
+                }
+              : () {
+                  if (context.mounted) Navigator.pop(context);
+                },
         ),
         bottomNavigationBar: (viewModel.isEditing)
             ? BottomAppBarGeneral(

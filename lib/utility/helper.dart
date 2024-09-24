@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -246,12 +247,13 @@ class Helper {
   }
 
   Future<bool?> showCustomDialog({
-    required String title,
-    required String message,
+    String title = 'Anda Yakin?',
+    String message =
+        'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.',
     required BuildContext context,
     String firstButtonLabel = 'Batal',
     String secondButtonLabel = 'Lanjutkan',
-    required Function() firstButtonOnTap,
+    Function()? firstButtonOnTap,
     Function()? secondButtonOnTap,
   }) {
     return showDialog<bool>(
@@ -266,14 +268,20 @@ class Helper {
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: Text(firstButtonLabel),
-              onPressed: firstButtonOnTap,
+              onPressed: firstButtonOnTap ??
+                  () {
+                    Navigator.pop(context, false);
+                  },
             ),
             TextButton(
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: Text(secondButtonLabel),
-              onPressed: secondButtonOnTap,
+              onPressed: secondButtonOnTap ??
+                  () {
+                    Navigator.pop(context, true);
+                  },
             ),
           ],
         );
