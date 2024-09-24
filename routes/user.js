@@ -2,12 +2,15 @@ const router = require("express").Router();
 const userController = require("../controllers/userController");
 const authLogin = require("../middlewares/auth");
 const { uploadImage } = require("../middlewares/base64");
+const uploadMulter = require('../middlewares/multer');
 
 const userRoutes = (messaging) => {
   router.post("/register", (req, res) => userController.userRegister(req, res, messaging));
   router.post("/login", userController.userLogin);
   router.post("/get-profile", authLogin, userController.getProfile);
   router.post("/edit-profile", authLogin, uploadImage, userController.editUser);
+  // router.post("/edit-profile", authLogin, uploadMulter.single('image'), userController.editUser);
+  router.post("/edit-image-profile", authLogin, uploadMulter.single('image'), userController.editImageUser);
   router.post("/change-password", authLogin, userController.changePassword);
   router.post("/change-fcm-token", authLogin, userController.updateFcmToken);
   router.post(

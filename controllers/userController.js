@@ -515,18 +515,18 @@ module.exports = {
       const { email, name, identity_number, family_member_data } = req.body;
       const user = req.userAuth;
 
-      if (req.fileName !== undefined) {
-        if (
-          user.image_url == undefined ||
-          user.image_url == null ||
-          user.image_url == ""
-        ) {
-          user.image_url = `images/upload/${req.fileName}`;
-        } else {
-          await fs.promises.unlink(path.join(`public/${user.image_url}`));
-          user.image_url = `images/upload/${req.fileName}`;
-        }
-      }
+      // if (req.fileName !== undefined) {
+      //   if (
+      //     user.image_url == undefined ||
+      //     user.image_url == null ||
+      //     user.image_url == ""
+      //   ) {
+      //     user.image_url = `images/upload/${req.fileName}`;
+      //   } else {
+      //     await fs.promises.unlink(path.join(`public/${user.image_url}`));
+      //     user.image_url = `images/upload/${req.fileName}`;
+      //   }
+      // }
 
       user.fullname = name;
       user.email = email;
@@ -570,7 +570,7 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "success update data",
+        msg: "Success update data",
         data: user,
       });
     } catch (e) {
@@ -580,4 +580,36 @@ module.exports = {
       });
     }
   },
+
+  editImageUser: async (req, res) => {
+    try {
+      const user = req.userAuth;
+
+      // Memeriksa apakah ada file yang diunggah
+      if (req.file) {
+        // Jika pengguna sudah memiliki gambar, hapus gambar yang lama
+        if (user.image_url) {
+          await fs.promises.unlink(path.join(`public/${user.image_url}`));
+        }
+
+        // Simpan path gambar baru
+        user.image_url = `images/upload/${req.file.filename}`;
+      }
+
+      // Simpan perubahan ke database
+      await user.save();
+
+      return res.json({
+        success: true,
+        msg: "Success update data",
+        data: user,
+      });
+    } catch (e) {
+      return res.json({
+        success: false,
+        msg: e.message,
+      });
+    }
+  }
+
 };

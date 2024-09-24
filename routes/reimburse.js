@@ -2,10 +2,20 @@ const router = require("express").Router();
 const reimburseController = require("../controllers/reimburseController");
 const authLogin = require("../middlewares/auth");
 const { uploadMultipleImage } = require("../middlewares/base64");
+const uploadMulter = require("../middlewares/multer");
 
 const reimburseRoutes = (messaging) => {
+
   router.post("/add-reimburse", authLogin, uploadMultipleImage, (req, res) =>
     reimburseController.addReimburse(req, res, messaging)
+  );
+
+  // router.post("/add-reimburse", authLogin, uploadMulter.array('images', 10), (req, res) =>
+  //   reimburseController.addReimburse(req, res, messaging)
+  // );
+
+  router.post("/add-image-reimburse", authLogin, uploadMulter.array('images', 10), (req, res) =>
+    reimburseController.addImageReimburse(req, res)
   );
 
   router.post(

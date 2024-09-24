@@ -550,14 +550,14 @@ module.exports = {
       });
 
       if (reimburse) {
-        if (isNotNil(req.fileName)) {
-          for (let i = 0; i < req.fileName.length; i++) {
-            const imageSave = await ImageReimburse.create({
-              reimburse_id: reimburse.id,
-              image: `images/upload/${req.fileName[i]}`,
-            });
-          }
-        }
+        // if (isNotNil(req.fileName)) {
+        //   for (let i = 0; i < req.fileName.length; i++) {
+        //     const imageSave = await ImageReimburse.create({
+        //       reimburse_id: reimburse.id,
+        //       image: `images/upload/${req.fileName[i]}`,
+        //     });
+        //   }
+        // }
 
         var totalPrice = 0;
         if (isNotNil(detail_reimburse) && isNotEmpty(detail_reimburse)) {
@@ -653,6 +653,49 @@ module.exports = {
         success: false,
         msg: "failed create data",
       });
+    } catch (e) {
+      return res.json({ msg: e.message });
+    }
+  },
+
+  addImageReimburse: async (req, res) => {
+    const { reimburse_id } = req.body;
+    const user = req.userAuth;
+
+    try {
+      if (user.status == 2) {
+        return res.json({
+          success: false,
+          msg: "User not verified",
+        });
+      }
+
+      if (!reimburse_id) {
+        return res.status(400).json({
+          success: false,
+          msg: 'reimburse_id is required',
+        });
+      }
+      // Pastikan ada file yang diunggah
+      if (req.files && req.files.length > 0) {
+        for (let i = 0; i < req.files.length; i++) {
+          const imageSave = await ImageReimburse.create({
+            reimburse_id: reimburse_id,
+            image: `images/upload/${req.files[i].filename}`, // Sesuaikan dengan path penyimpanan gambar
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          msg: 'success create data',
+          data: req.files.map(file => file.filename), // Mengembalikan nama file yang diunggah
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          msg: 'No files uploaded',
+        });
+      }
     } catch (e) {
       return res.json({ msg: e.message });
     }
