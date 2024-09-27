@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/form_reimbursement_data.dart';
+import 'package:reimburse_rb/models/common/general_response.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
@@ -238,7 +239,7 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
       _bodySubmission['purpose_id'] = 1;
     }
 
-    _bodySubmission['image'] = listAttachmentImageBase64;
+    // _bodySubmission['image'] = listAttachmentImageBase64;
 
     _bodySubmission['detail_reimburse'] = listBodyDetailCost;
 
@@ -261,8 +262,8 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
       await http.post(endpoint: endpoint, body: bodySubmission).then((res) {
         AddReimburseResponse response = AddReimburseResponse.fromJson(res);
         if (response.success) {
-          Navigator.pop(context);
-          Helper(context: context).showToast(message: response.msg);
+          postUploadImageSubmission(reimburseId: response.data?.id);
+          // Helper(context: context).showToast(message: response.msg);
         } else {
           Helper(context: context).showToast(message: response.msg, isSuccess: false);
         }
@@ -277,6 +278,43 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
       stopLoading();
       notifyListeners();
     }
+    return Future.value(true);
+  }
+
+  Future postUploadImageSubmission({required int? reimburseId}) async {
+    startLoading();
+    notifyListeners();
+
+    String endpoint = 'reimburse/add-image-reimburse';
+    Map<String, String> body = {
+      'reimburse_id': reimburseId.toString(),
+    };
+
+    await http
+        .postMultipart(
+      endpoint: endpoint,
+      body: body,
+      files: listAttachmentImageFile,
+    )
+        .then((res) {
+      GeneralResponse response = GeneralResponse.fromJson(res);
+      if (response.success) {
+        Navigator.pop(context);
+        Helper(context: context).showToast(message: response.msg);
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
+
     return Future.value(true);
   }
 

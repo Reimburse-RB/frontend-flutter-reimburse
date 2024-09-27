@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reimburse_rb/utility/image_picker_dialog.dart';
+import 'package:mime/mime.dart';
 
 import 'constant.dart';
 
@@ -55,6 +56,7 @@ class ImagePickerHandler {
   Future cropImage(File image) async {
     final croppedFile = await ImageCropper().cropImage(
       // compressQuality: 100,
+      compressFormat: ImageCompressFormat.jpg,
       sourcePath: image.path,
       // aspectRatioPresets: [
       //   CropAspectRatioPreset.square,
@@ -76,8 +78,8 @@ class ImagePickerHandler {
           minimumAspectRatio: 1.0,
         ),
       ],
-      maxWidth: 1600,
-      maxHeight: 1600,
+      maxWidth: 2000,
+      maxHeight: 2000,
     );
     if (croppedFile != null) {
       File files = File(croppedFile.path);
@@ -96,23 +98,35 @@ mixin ImagePickerListener {
 }
 
 void checkImageSize(File file) async {
-  final imageBytes = await file.readAsBytes();
+  // Detect MIME type
+  final mimeType = lookupMimeType(file.path);
 
-  // Decode the image
-  final codec = await ui.instantiateImageCodec(imageBytes);
-  final frame = await codec.getNextFrame();
-  final image = frame.image;
+  // Log the file's MIME type
+  log('File MIME type: $mimeType');
 
-  // Get width and height
-  final width = image.width;
-  final height = image.height;
+  // Check if the file is an image based on its MIME type
+  if (mimeType != null && mimeType.startsWith('image/')) {
+    final imageBytes = await file.readAsBytes();
 
-  // Get file size in bytes
-  final fileSizeInBytes = await file.length();
-  final fileSizeInKB = fileSizeInBytes / 1024; // Size in KB
-  final fileSizeInMB = fileSizeInKB / 1024; // Size in MB
+    // Decode the image
+    final codec = await ui.instantiateImageCodec(imageBytes);
+    final frame = await codec.getNextFrame();
+    final image = frame.image;
 
-  // Log image details
-  log('check Image width: $width Image height: $height');
-  log('check image File size: ${fileSizeInBytes} bytes (${fileSizeInKB.toStringAsFixed(2)} KB, ${fileSizeInMB.toStringAsFixed(2)} MB)');
+    // Get width and height
+    final width = image.width;
+    final height = image.height;
+
+    // Get file size in bytes
+    final fileSizeInBytes = await file.length();
+    final fileSizeInKB = fileSizeInBytes / 1024; // Size in KB
+    final fileSizeInMB = fileSizeInKB / 1024; // Size in MB
+
+    // Log image details
+    log('Image width: $width Image height: $height');
+    log('Image file size: ${fileSizeInBytes} bytes (${fileSizeInKB.toStringAsFixed(2)} KB, ${fileSizeInMB.toStringAsFixed(2)} MB)');
+    log('Image type: $mimeType');
+  } else {
+    log('The file is not an image. MIME type: $mimeType');
+  }
 }

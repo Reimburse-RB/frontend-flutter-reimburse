@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
 
@@ -47,36 +49,115 @@ class HttpService {
     }
   }
 
-  // Future<dynamic> get(String desturl, {Map<String, String> headers = const {}}) async {
+  Future<dynamic> postMultipart({
+    required String endpoint,
+    Map headers = const {},
+    Map<String, String> body = const {},
+    dynamic encoding,
+    required dynamic files, // Ubah file menjadi dynamic agar bisa menerima List<File> atau File
+  }) async {
+    Map<String, String> requestHeaders = {
+      "Accept": "application/json",
+      "auth-token": localStorage.getItem('auth-token') ?? '',
+    };
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(baseUrl + endpoint),
+      );
+
+      // Add headers to the request
+      request.headers.addAll(requestHeaders);
+
+      // Add text fields to the request
+      request.fields.addAll(body);
+
+      // Periksa apakah 'files' adalah List atau File tunggal
+      if (files is List<File>) {
+        // Jika files adalah list, tambahkan setiap file ke request
+        for (File file in files) {
+          var stream = http.ByteStream(file.openRead());
+          var length = await file.length();
+
+          // Tentukan tipe MIME menggunakan package mime
+          String? mimeType = lookupMimeType(file.path);
+          if (mimeType == null ||
+              !(mimeType.startsWith('image/jpeg') || mimeType.startsWith('image/png'))) {
+            throw Exception(
+                'Invalid file type: ${file.path}. Only .jpg, .jpeg, and .png are allowed.');
+          }
+
+          var multipartFile = http.MultipartFile(
+            'files', // Nama field untuk file multipart, sesuaikan jika perlu
+            stream,
+            length,
+            filename: file.path.split('/').last,
+            contentType: MediaType.parse(mimeType), // Set MIME type
+          );
+          request.files.add(multipartFile);
+        }
+      } else if (files is File) {
+        var stream = http.ByteStream(files.openRead());
+        var length = await files.length();
+
+        // Tentukan tipe MIME menggunakan package mime
+        String? mimeType = lookupMimeType(files.path);
+        if (mimeType == null ||
+            !(mimeType.startsWith('image/jpeg') || mimeType.startsWith('image/png'))) {
+          throw Exception(
+              'Invalid file type: ${files.path}. Only .jpg, .jpeg, and .png are allowed.');
+        }
+
+        var multipartFile = http.MultipartFile(
+          'file', // Nama field untuk file multipart, sesuaikan jika perlu
+          stream,
+          length,
+          filename: files.path.split('/').last,
+          contentType: MediaType.parse(mimeType), // Set MIME type
+        );
+        request.files.add(multipartFile);
+      } else {
+        throw Exception("Invalid file input. Expected File or List<File>.");
+      }
+
+      // Send the request
+      var response = await request.send();
+
+      // Read the response
+      var responseBody = await response.stream.bytesToString();
+
+      log("res ==============> ${baseUrl + endpoint} \n===> body : $body \n===> response : ${responseBody}");
+
+      if (response.statusCode < 200 || response.statusCode > 400) {
+        throw Exception(
+            "Error ${response.statusCode} while fetching endpoint ${baseUrl + endpoint}");
+      }
+
+      return _decoder.convert(responseBody);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  // Future<dynamic> postMultipart({
+  //   required String endpoint,
+  //   Map headers = const {},
+  //   Map<String, String> body = const {},
+  //   dynamic encoding,
+  //   required dynamic files, // Ubah file menjadi dynamic agar bisa menerima List<File> atau File
+  // }) async {
   //   Map<String, String> requestHeaders = {
-  //     "Content-type": "application/json",
-  //     "Accept": "*/*",
-  //   };
-  //   try {
-  //     http.Response response = await http.get(Uri.parse(desturl), headers: requestHeaders);
-  //     log("res ==============> $desturl == ${response.body}");
-  //     final int statusCode = response.statusCode;
-
-  //     if (statusCode < 200 || statusCode > 400) {
-  //       throw Exception("Error ${response.statusCode} while fetching endpoint $desturl");
-  //     }
-
-  //     return _decoder.convert(response.body);
-  //   } catch (e) {
-  //     throw Exception(e.toString());
-  //   }
-  // }
-
-  // Future<dynamic> postMultipart(String desturl,
-  //     {Map headers = const {}, Map<String, String> body = const {}, required File file}) async {
-  //   Map<String, String> requestHeaders = {
-  //     "Content-type": "application/json",
+  //     // "Content-type": "application/json",
   //     "Accept": "application/json",
+  //     "auth-token": localStorage.getItem('auth-token') ?? '',
   //   };
-  //   // requestHeaders.addAll(headers);
 
   //   try {
-  //     var request = http.MultipartRequest('POST', Uri.parse(desturl));
+  //     var request = http.MultipartRequest(
+  //       'POST',
+  //       Uri.parse(baseUrl + endpoint),
+  //     );
 
   //     // Add headers to the request
   //     request.headers.addAll(requestHeaders);
@@ -84,12 +165,36 @@ class HttpService {
   //     // Add text fields to the request
   //     request.fields.addAll(body);
 
-  //     // Add the file to the request
-  //     var stream = http.ByteStream(file.openRead());
-  //     var length = await file.length();
-  //     var multipartFile =
-  //         http.MultipartFile('file', stream, length, filename: file.path.split('/').last);
-  //     request.files.add(multipartFile);
+  //     // Periksa apakah 'files' adalah List atau File tunggal
+  //     if (files is List<File>) {
+  //       // Jika files adalah list, tambahkan setiap file ke request
+  //       for (File file in files) {
+  //         log('tipe image list');
+  //         var stream = http.ByteStream(file.openRead());
+  //         var length = await file.length();
+  //         var multipartFile = http.MultipartFile(
+  //           'files', // Nama field untuk file multipart, sesuaikan jika perlu
+  //           stream,
+  //           length,
+  //           filename: file.path.split('/').last,
+  //         );
+  //         request.files.add(multipartFile);
+  //       }
+  //     } else if (files is File) {
+  //       log('tipe image file');
+  //       // Jika hanya ada satu file, tambahkan ke request
+  //       var stream = http.ByteStream(files.openRead());
+  //       var length = await files.length();
+  //       var multipartFile = http.MultipartFile(
+  //         'file', // Nama field untuk file multipart, sesuaikan jika perlu
+  //         stream,
+  //         length,
+  //         filename: files.path.split('/').last,
+  //       );
+  //       request.files.add(multipartFile);
+  //     } else {
+  //       throw Exception("Invalid file input. Expected File or List<File>.");
+  //     }
 
   //     // Send the request
   //     var response = await request.send();
@@ -97,10 +202,11 @@ class HttpService {
   //     // Read the response
   //     var responseBody = await response.stream.bytesToString();
 
-  //     log("res ==============> $desturl == $responseBody");
+  //     log("res ==============> ${baseUrl + endpoint} \n===> body : $body \n===> response : ${responseBody}");
 
   //     if (response.statusCode < 200 || response.statusCode > 400) {
-  //       throw Exception("Error ${response.statusCode} while fetching endpoint $desturl");
+  //       throw Exception(
+  //           "Error ${response.statusCode} while fetching endpoint ${baseUrl + endpoint}");
   //     }
 
   //     return _decoder.convert(responseBody);

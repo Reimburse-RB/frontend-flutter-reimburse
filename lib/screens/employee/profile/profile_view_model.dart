@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/models/common/general_response.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/auth/change_password/change_password_view.dart';
@@ -127,6 +128,37 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
     await http.post(endpoint: endpoint, body: body).then((res) {
       EditProfileResponse response = EditProfileResponse.fromJson(res);
       if (response.success) {
+        postEditImageProfile();
+        // _isEditing = false;
+        // _newProfileImageFile = null;
+        // _newProfileImageBase64 = null;
+        // Helper(context: context).showToast(message: response.msg, isSuccess: true);
+        // getProfile();
+      } else {
+        Helper(context: context).showToast(message: response.msg, isSuccess: false);
+      }
+    }).catchError((err) {
+      log('===> error $endpoint $err');
+      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
+
+      stopLoading();
+      notifyListeners();
+    });
+
+    stopLoading();
+    notifyListeners();
+    return Future.value(true);
+  }
+
+  Future postEditImageProfile() async {
+    startLoading();
+    notifyListeners();
+
+    String endpoint = 'user/edit-image-profile';
+
+    await http.postMultipart(endpoint: endpoint, files: newProfileImageFile).then((res) {
+      GeneralResponse response = GeneralResponse.fromJson(res);
+      if (response.success) {
         _isEditing = false;
         _newProfileImageFile = null;
         _newProfileImageBase64 = null;
@@ -193,7 +225,7 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
     _bodyEditProfile['name'] = nameController.text;
     _bodyEditProfile['identity_number'] = nikController.text;
     _bodyEditProfile['email'] = emailController.text;
-    _bodyEditProfile['image'] = newProfileImageBase64;
+    // _bodyEditProfile['image'] = newProfileImageBase64;
     _bodyEditProfile['family_member_data'] = listEditFamilyMemberData;
 
     log('===> save body edit profile ${bodyEditProfile}');
