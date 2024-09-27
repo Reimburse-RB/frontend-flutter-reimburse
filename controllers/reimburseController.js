@@ -1,5 +1,6 @@
 const { isNil, isNotEmpty, isNotNil, update } = require("ramda");
 const { Op } = require("sequelize");
+const { formatDateTime } = require('../utils/utils');
 const moment = require('moment-timezone');
 const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
@@ -266,7 +267,7 @@ module.exports = {
                     ? "Ditolak"
                     : "",
           category_reimbursement_id: reimburse.category,
-          date: reimburse.createdAt,
+          date: formatDateTime(reimburse.createdAt, true),
           approval_by: null,
           approval_by_role: null,
           approval_date: null,
@@ -522,8 +523,6 @@ module.exports = {
     } = req.body;
     const user = req.userAuth;
 
-    // Ambil waktu WIB
-    const wibTime = moment().tz("Asia/Jakarta").format('YYYY-MM-DD HH:mm:ss');
 
     try {
       if (user.status == 2) {
@@ -552,8 +551,6 @@ module.exports = {
         purpose_other: purpose_other_text,
         user_id: user.id,
         category: category_reimbursement_id,
-        createdAt: wibTime,
-        updateAt: wibTime,
       });
 
       if (reimburse) {
