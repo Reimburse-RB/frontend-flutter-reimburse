@@ -79,12 +79,6 @@ module.exports = {
         }
 
         for (const item of filteredData) {
-          const date = new Date(item.createdAt);
-          const options = { year: "numeric", month: "long", day: "numeric" };
-          const formattedDate = new Intl.DateTimeFormat(
-            "id-ID",
-            options
-          ).format(date);
 
           const cat = allStatus.listCategoryReimbursement.find(
             (itemCat) => itemCat.category_reimbursement_id === item.category
@@ -104,7 +98,7 @@ module.exports = {
                     : item.status == 4
                       ? "Ditolak"
                       : "",
-            createdDate: formattedDate,
+            createdDate: formatDateTime(item.createdAt, false, true),
             approval_by: null,
             approval_by_role: null,
             approval_date: null,
@@ -125,13 +119,7 @@ module.exports = {
           }
 
           if (!isNil(item.approval_date)) {
-            const formattedDateApproval = new Intl.DateTimeFormat("id-ID", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }).format(new Date(item.approval_date));
-
-            dataCard.approval_date = formattedDateApproval;
+            dataCard.approval_date = formatDateTime(item.approval_date, true, false);
 
             const userApproval = await User.findOne({
               where: { id: item.approval_by },
@@ -267,7 +255,7 @@ module.exports = {
                     ? "Ditolak"
                     : "",
           category_reimbursement_id: reimburse.category,
-          date: formatDateTime(reimburse.createdAt, true),
+          date: formatDateTime(reimburse.createdAt, true, true),
           approval_by: null,
           approval_by_role: null,
           approval_date: null,
@@ -292,13 +280,7 @@ module.exports = {
         }
 
         if (!isNil(reimburse.approval_date)) {
-          const formattedDateApproval = new Intl.DateTimeFormat("id-ID", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }).format(new Date(reimburse.approval_date));
-
-          returnData.approval_date = formattedDateApproval;
+          returnData.approval_date = formatDateTime(reimburse.approval_date, true, false);
 
           const userApproval = await User.findOne({
             where: { id: reimburse.approval_by },
@@ -315,15 +297,6 @@ module.exports = {
         returnData.category_reimbursement_text = cat
           ? cat.category_reimbursement_text
           : "";
-
-        const date = new Date(reimburse.createdAt);
-
-        const day = date.getUTCDate().toString().padStart(2, "0");
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
-        const year = date.getUTCFullYear().toString().slice(-2);
-
-        const formattedDateCreatedAt = `${day}/${month}/${year}`;
-        returnData.date = formattedDateCreatedAt;
 
         const reimburseImage = await ImageReimburse.findAll({
           where: {
