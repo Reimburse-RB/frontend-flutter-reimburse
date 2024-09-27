@@ -1,12 +1,13 @@
-const { isNil, isNotEmpty, isNotNil } = require("ramda");
+const { isNil, isNotEmpty, isNotNil, update } = require("ramda");
+const { Op } = require("sequelize");
+const moment = require('moment-timezone');
 const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
 const ReimburseDetail = require("../models/Reimburse-Detail");
-const allStatus = require("../utils/allStatus");
+const Notification = require("../models/Notification");
 const UserFamily = require("../models/User-Family");
 const User = require("../models/User");
-const { Op } = require("sequelize");
-const Notification = require("../models/Notification");
+const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 
 module.exports = {
@@ -265,6 +266,7 @@ module.exports = {
                     ? "Ditolak"
                     : "",
           category_reimbursement_id: reimburse.category,
+          date: reimburse.createdAt,
           approval_by: null,
           approval_by_role: null,
           approval_date: null,
@@ -520,6 +522,9 @@ module.exports = {
     } = req.body;
     const user = req.userAuth;
 
+    // Ambil waktu WIB
+    const wibTime = moment().tz("Asia/Jakarta").format('YYYY-MM-DD HH:mm:ss');
+
     try {
       if (user.status == 2) {
         return res.json({
@@ -547,6 +552,8 @@ module.exports = {
         purpose_other: purpose_other_text,
         user_id: user.id,
         category: category_reimbursement_id,
+        createdAt: wibTime,
+        updateAt: wibTime,
       });
 
       if (reimburse) {
