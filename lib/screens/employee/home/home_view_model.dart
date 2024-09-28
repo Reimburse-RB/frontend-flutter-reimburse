@@ -26,9 +26,10 @@ class HomeViewModel extends ChangeNotifier {
   HomeViewModel({
     required this.context,
   }) {
-    ProfileViewModel(context: context).getProfile();
-    getFcmToken();
-    getData();
+    ProfileViewModel(context: context).getProfile().then((value) {
+      getFcmToken();
+      getData();
+    });
   }
 
   @override
