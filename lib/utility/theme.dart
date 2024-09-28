@@ -84,7 +84,7 @@ class ThemeNotifier with ChangeNotifier {
               primarySwatch: Colors.green,
               accentColor: Constant.greenMedium,
               brightness: Brightness.dark)
-          .copyWith(background: Colors.black),
+          .copyWith(surface: Colors.black),
     ),
   ];
 

@@ -3,13 +3,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/general_response.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
-import 'package:reimburse_rb/screens/common/auth/change_password/change_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
@@ -59,19 +57,9 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
   List _listEditFamilyMemberData = [];
   List get listEditFamilyMemberData => _listEditFamilyMemberData;
 
-  // late ProfileData _backupOriginalProfile;
-  // ProfileData get backupOriginalProfile => _backupOriginalProfile;
-
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController nikController = TextEditingController();
-
-  // List<FamilyMemberOption> listFamilyStatusOption = [
-  //   FamilyMemberOption(family_status_id: 1, family_status_text: "Diri Sendiri"),
-  //   FamilyMemberOption(family_status_id: 2, family_status_text: "Suami"),
-  //   FamilyMemberOption(family_status_id: 3, family_status_text: "Istri"),
-  //   FamilyMemberOption(family_status_id: 4, family_status_text: "Anak"),
-  // ];
 
   List<Map<String, dynamic>> listFamilyStatusOptionMap = [
     {'id': 1, 'text': 'Diri Sendiri'},

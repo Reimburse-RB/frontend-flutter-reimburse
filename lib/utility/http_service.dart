@@ -67,20 +67,14 @@ class HttpService {
         Uri.parse(baseUrl + endpoint),
       );
 
-      // Add headers to the request
       request.headers.addAll(requestHeaders);
-
-      // Add text fields to the request
       request.fields.addAll(body);
 
-      // Periksa apakah 'files' adalah List atau File tunggal
       if (files is List<File>) {
-        // Jika files adalah list, tambahkan setiap file ke request
         for (File file in files) {
           var stream = http.ByteStream(file.openRead());
           var length = await file.length();
 
-          // Tentukan tipe MIME menggunakan package mime
           String? mimeType = lookupMimeType(file.path);
           if (mimeType == null ||
               !(mimeType.startsWith('image/jpeg') || mimeType.startsWith('image/png'))) {
@@ -89,7 +83,7 @@ class HttpService {
           }
 
           var multipartFile = http.MultipartFile(
-            'files', // Nama field untuk file multipart, sesuaikan jika perlu
+            'files',
             stream,
             length,
             filename: file.path.split('/').last,
@@ -101,7 +95,6 @@ class HttpService {
         var stream = http.ByteStream(files.openRead());
         var length = await files.length();
 
-        // Tentukan tipe MIME menggunakan package mime
         String? mimeType = lookupMimeType(files.path);
         if (mimeType == null ||
             !(mimeType.startsWith('image/jpeg') || mimeType.startsWith('image/png'))) {
@@ -139,79 +132,4 @@ class HttpService {
       throw Exception(e.toString());
     }
   }
-
-  // Future<dynamic> postMultipart({
-  //   required String endpoint,
-  //   Map headers = const {},
-  //   Map<String, String> body = const {},
-  //   dynamic encoding,
-  //   required dynamic files, // Ubah file menjadi dynamic agar bisa menerima List<File> atau File
-  // }) async {
-  //   Map<String, String> requestHeaders = {
-  //     // "Content-type": "application/json",
-  //     "Accept": "application/json",
-  //     "auth-token": localStorage.getItem('auth-token') ?? '',
-  //   };
-
-  //   try {
-  //     var request = http.MultipartRequest(
-  //       'POST',
-  //       Uri.parse(baseUrl + endpoint),
-  //     );
-
-  //     // Add headers to the request
-  //     request.headers.addAll(requestHeaders);
-
-  //     // Add text fields to the request
-  //     request.fields.addAll(body);
-
-  //     // Periksa apakah 'files' adalah List atau File tunggal
-  //     if (files is List<File>) {
-  //       // Jika files adalah list, tambahkan setiap file ke request
-  //       for (File file in files) {
-  //         log('tipe image list');
-  //         var stream = http.ByteStream(file.openRead());
-  //         var length = await file.length();
-  //         var multipartFile = http.MultipartFile(
-  //           'files', // Nama field untuk file multipart, sesuaikan jika perlu
-  //           stream,
-  //           length,
-  //           filename: file.path.split('/').last,
-  //         );
-  //         request.files.add(multipartFile);
-  //       }
-  //     } else if (files is File) {
-  //       log('tipe image file');
-  //       // Jika hanya ada satu file, tambahkan ke request
-  //       var stream = http.ByteStream(files.openRead());
-  //       var length = await files.length();
-  //       var multipartFile = http.MultipartFile(
-  //         'file', // Nama field untuk file multipart, sesuaikan jika perlu
-  //         stream,
-  //         length,
-  //         filename: files.path.split('/').last,
-  //       );
-  //       request.files.add(multipartFile);
-  //     } else {
-  //       throw Exception("Invalid file input. Expected File or List<File>.");
-  //     }
-
-  //     // Send the request
-  //     var response = await request.send();
-
-  //     // Read the response
-  //     var responseBody = await response.stream.bytesToString();
-
-  //     log("res ==============> ${baseUrl + endpoint} \n===> body : $body \n===> response : ${responseBody}");
-
-  //     if (response.statusCode < 200 || response.statusCode > 400) {
-  //       throw Exception(
-  //           "Error ${response.statusCode} while fetching endpoint ${baseUrl + endpoint}");
-  //     }
-
-  //     return _decoder.convert(responseBody);
-  //   } catch (e) {
-  //     throw Exception(e.toString());
-  //   }
-  // }
 }
