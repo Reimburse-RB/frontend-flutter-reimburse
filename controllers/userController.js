@@ -277,8 +277,8 @@ module.exports = {
           nik: item.identity_number,
           name: item.fullname,
           img_url:
-            user.image_url != null
-              ? `${process.env.URL}${user.image_url}`
+            item.image_url != null
+              ? `${process.env.URL}${item.image_url}`
               : null,
         });
       }
