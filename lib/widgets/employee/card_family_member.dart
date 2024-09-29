@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
+import 'package:reimburse_rb/screens/common/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/widgets/common/form_dropdown_map.dart';
 import 'package:reimburse_rb/widgets/common/form_field_text.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/notification_response.dart';
-import 'package:reimburse_rb/screens/employee/notification/notification_view_model.dart';
+import 'package:reimburse_rb/screens/common/notification/notification_view_model.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';

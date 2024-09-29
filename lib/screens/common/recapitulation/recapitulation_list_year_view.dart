@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
-import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_view_model.dart';
+import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_view_model.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/card_recapitulation_period.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
@@ -10,20 +10,20 @@ import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart'
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 import 'package:reimburse_rb/widgets/common/modal_date_range.dart';
 
-class RecapitulationListMonthScreen extends StatelessWidget {
-  const RecapitulationListMonthScreen({super.key});
+class RecapitulationListYearScreen extends StatelessWidget {
+  const RecapitulationListYearScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => RecapitulationViewModel(context: context, isPeriodListMonthScreen: true),
-      child: const RecapitulationListMonthView(),
+      create: (context) => RecapitulationViewModel(context: context, isPeriodListYearScreen: true),
+      child: const RecapitulationListYearView(),
     );
   }
 }
 
-class RecapitulationListMonthView extends StatelessWidget {
-  const RecapitulationListMonthView({super.key});
+class RecapitulationListYearView extends StatelessWidget {
+  const RecapitulationListYearView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class RecapitulationListMonthView extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBarGeneral(
         context: context,
-        title: userProvider.selectedRecapitulationYear ?? '',
+        title: 'Rekapitulasi Reimbursement',
       ),
       floatingActionButton: viewModel.listPeriod.isNotEmpty
           ? FloatingActionButtonGeneral(
@@ -82,8 +82,10 @@ class RecapitulationListMonthView extends StatelessWidget {
                       return CardRecapitulationPeriod(
                         value: item,
                         onTap: () {
-                          userProvider.setSelectedRecapitulationMonth(item);
-                          navigationProvider.navigateToRecapitulationList(context: context);
+                          navigationProvider.navigateToRecapitulationPeriodMonth(
+                            context: context,
+                            year: item,
+                          );
                         },
                       );
                     },

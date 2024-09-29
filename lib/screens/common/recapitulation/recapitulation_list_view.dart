@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
-import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_view_model.dart';
+import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_view_model.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/card_submission.dart';

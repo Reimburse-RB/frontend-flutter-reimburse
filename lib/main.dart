@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:reimburse_rb/screens/employee/notification/notification_view_model.dart';
+import 'package:reimburse_rb/screens/common/notification/notification_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

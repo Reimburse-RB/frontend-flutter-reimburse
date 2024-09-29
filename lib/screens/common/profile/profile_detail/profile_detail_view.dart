@@ -4,7 +4,7 @@ import 'package:iconify_flutter/icons/ph.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
-import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
+import 'package:reimburse_rb/screens/common/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';

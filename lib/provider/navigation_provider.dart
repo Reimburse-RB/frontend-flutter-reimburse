@@ -8,10 +8,10 @@ import 'package:reimburse_rb/screens/common/auth/onboarding/onboarding_view.dart
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signup/signup_view.dart';
 import 'package:reimburse_rb/screens/common/detail_reimbursement/detail_reimbursement_view.dart';
-import 'package:reimburse_rb/screens/employee/main_menu/main_menu_view.dart';
-import 'package:reimburse_rb/screens/employee/profile/profile_detail/profile_detail_view.dart';
-import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_month_view.dart';
-import 'package:reimburse_rb/screens/employee/recapitulation/recapitulation_list_view.dart';
+import 'package:reimburse_rb/screens/common/main_menu/main_menu_view.dart';
+import 'package:reimburse_rb/screens/common/profile/profile_detail/profile_detail_view.dart';
+import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_list_month_view.dart';
+import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_list_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 

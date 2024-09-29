@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
-import 'package:reimburse_rb/screens/employee/profile/profile_view_model.dart';
+import 'package:reimburse_rb/screens/common/profile/profile_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
