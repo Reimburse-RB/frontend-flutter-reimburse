@@ -106,8 +106,8 @@ class AccountVerificationViewModel extends ChangeNotifier {
     await http.post(endpoint: endpoint, body: body).then((res) {
       ProfileResponse response = ProfileResponse.fromJson(res);
       if (response.success) {
-        Navigator.of(context).pop();
         Helper(context: context).showToast(message: response.msg, isSuccess: true);
+        getData();
       } else {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);
       }

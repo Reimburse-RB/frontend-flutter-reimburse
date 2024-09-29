@@ -54,66 +54,71 @@ class DetailReimbursementView extends StatelessWidget {
         isLoading: viewModel.isLoading,
         child: ListView(
           children: [
-            Row(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DetailText(
-                        margin: EdgeInsets.only(top: 24),
-                        title: 'Nama Karyawan',
-                        textValue: viewModel.detailReimburseData?.name ?? '',
-                      ),
-                      DetailText(
-                        title: 'Nomor Induk karyawan',
-                        textValue: viewModel.detailReimburseData?.nik ?? '',
-                      ),
-                      DetailText(
-                        title: 'Diagnosis',
-                        textValue: viewModel.detailReimburseData?.purpose_text ?? '',
-                      ),
-                      DetailText(
-                        title: 'Total Biaya',
-                        costValue: viewModel.detailReimburseData?.totalPrice,
-                      ),
-                    ],
-                  ),
+                DetailText(
+                  margin: EdgeInsets.only(top: 24),
+                  title: 'Nama Karyawan',
+                  textValue: viewModel.detailReimburseData?.name ?? '',
+                  isHorizontal: true,
                 ),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DetailText(
-                        margin: EdgeInsets.only(top: 24),
-                        title: 'Status',
-                        textValue: viewModel.detailReimburseData?.status_text ?? '',
-                        valueColor: viewModel.statusColor ?? Colors.black,
-                      ),
-                      DetailText(
-                        title: 'Tanggal Pembaruan Status',
-                        textValue: viewModel.detailReimburseData?.approval_date ??
-                            viewModel.detailReimburseData?.status_text ??
-                            '',
-                        valueColor: (viewModel.detailReimburseData?.approval_date == null)
-                            ? viewModel.statusColor ?? Colors.black
-                            : Colors.black,
-                      ),
-                      DetailText(
-                        title: 'Penanggung Jawab',
-                        textValue: (viewModel.detailReimburseData?.approval_by != null)
-                            ? ((viewModel.detailReimburseData?.approval_by ?? '') +
-                                ' (' +
-                                (viewModel.detailReimburseData?.approval_by_role ?? '') +
-                                ')')
-                            : viewModel.detailReimburseData?.status_text ?? '',
-                        valueColor: (viewModel.detailReimburseData?.approval_by == null)
-                            ? viewModel.statusColor ?? Colors.black
-                            : Colors.black,
-                      ),
-                    ],
-                  ),
+                DetailText(
+                  title: 'Nomor Induk karyawan',
+                  textValue: viewModel.detailReimburseData?.nik ?? '',
+                  isHorizontal: true,
+                ),
+                DetailText(
+                  title: (viewModel.detailReimburseData?.category_reimbursement_id ?? 1) ==
+                          Constant.healthCategoryReimbursementId
+                      ? 'Diagnosis'
+                      : 'Tujuan',
+                  textValue: viewModel.detailReimburseData?.purpose_text ?? '',
+                  isHorizontal: true,
+                ),
+                DetailText(
+                  title: 'Total Biaya',
+                  costValue: viewModel.detailReimburseData?.totalPrice,
+                  isHorizontal: true,
+                ),
+                DetailText(
+                  margin: EdgeInsets.only(top: 24),
+                  title: 'Status',
+                  textValue: viewModel.detailReimburseData?.status_text ?? '',
+                  valueBackgroundEnabled: true,
+                  valueBackgroundColor: viewModel.statusColor ?? Colors.black,
+                  valueColor: Colors.white,
+                  isHorizontal: true,
+                ),
+                DetailText(
+                  margin: EdgeInsets.only(top: 20),
+                  title: 'Tanggal Pengajuan',
+                  textValue: viewModel.detailReimburseData?.date ?? '',
+                  valueColor: Colors.black,
+                  isHorizontal: true,
+                ),
+                DetailText(
+                  title: 'Tanggal Pembaruan Status',
+                  textValue: viewModel.detailReimburseData?.approval_date ??
+                      viewModel.detailReimburseData?.status_text ??
+                      '',
+                  valueColor: (viewModel.detailReimburseData?.approval_date == null)
+                      ? viewModel.statusColor ?? Colors.black
+                      : Colors.black,
+                  isHorizontal: true,
+                ),
+                DetailText(
+                  title: 'Penanggung Jawab',
+                  textValue: (viewModel.detailReimburseData?.approval_by != null)
+                      ? ((viewModel.detailReimburseData?.approval_by ?? '') +
+                          ' (' +
+                          (viewModel.detailReimburseData?.approval_by_role ?? '') +
+                          ')')
+                      : viewModel.detailReimburseData?.status_text ?? '',
+                  valueColor: (viewModel.detailReimburseData?.approval_by == null)
+                      ? viewModel.statusColor ?? Colors.black
+                      : Colors.black,
+                  isHorizontal: true,
                 ),
               ],
             ),
@@ -121,14 +126,20 @@ class DetailReimbursementView extends StatelessWidget {
             Divider(
               height: 20,
               thickness: 20,
-              color: Colors.grey.shade200,
+              color: Colors.grey.shade100,
             ),
             const SizedBox(height: 24),
             ListHorizontalDetailReceiptImage(
               title: 'Lampiran',
               listAttachment: viewModel.detailReimburseData?.list_attachment ?? [],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
+            Divider(
+              height: 20,
+              thickness: 20,
+              color: Colors.grey.shade100,
+            ),
+            const SizedBox(height: 24),
             ListView.builder(
               itemCount: viewModel.detailReimburseData?.detailReimburse?.length ?? 0,
               padding: const EdgeInsets.symmetric(horizontal: 24),

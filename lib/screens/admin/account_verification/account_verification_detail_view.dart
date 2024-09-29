@@ -46,13 +46,16 @@ class DetailAccountVerificationView extends StatelessWidget {
               imageUrl: viewModel.detailAccount?.img_url,
             ),
             DetailText(
-              title: 'Status Akun',
-              textValue: (viewModel.detailAccount?.is_account_verified ?? false)
-                  ? 'Akun sudah terverifikasi'
-                  : 'Akun belum terverifikasi',
-              valueColor: (viewModel.detailAccount?.is_account_verified ?? false)
+              title:
+                  'Status Akun ${(viewModel.detailAccount?.is_account_verified ?? false) ? ' ✔' : ''}',
+              valueBackgroundColor: (viewModel.detailAccount?.is_account_verified ?? false)
                   ? Constant.greenMedium
-                  : Constant.rejectedStatusColor,
+                  : Constant.grey,
+              valueBackgroundEnabled: true,
+              textValue: (viewModel.detailAccount?.is_account_verified ?? false)
+                  ? 'Akun terverifikasi '
+                  : 'Akun belum terverifikasi',
+              valueColor: Colors.white,
             ),
             DetailText(
               title: 'Nama Karyawan',
