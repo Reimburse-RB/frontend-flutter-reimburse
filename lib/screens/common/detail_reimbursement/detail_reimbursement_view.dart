@@ -69,6 +69,11 @@ class DetailReimbursementView extends StatelessWidget {
                   isHorizontal: true,
                 ),
                 DetailText(
+                  title: 'Kategori',
+                  textValue: viewModel.detailReimburseData?.category_reimbursement_text ?? '',
+                  isHorizontal: true,
+                ),
+                DetailText(
                   title: (viewModel.detailReimburseData?.category_reimbursement_id ?? 1) ==
                           Constant.healthCategoryReimbursementId
                       ? 'Diagnosis'
