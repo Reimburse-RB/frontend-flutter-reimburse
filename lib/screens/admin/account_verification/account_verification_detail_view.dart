@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/screens/admin/account_verification/account_verification_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/card_detail_family_member.dart';
@@ -44,6 +45,13 @@ class DetailAccountVerificationView extends StatelessWidget {
             ImageCircleGeneral(
               size: width / 2,
               imageUrl: viewModel.detailAccount?.img_url,
+              onTap: viewModel.detailAccount?.img_url != null
+                  ? () {
+                      Helper(context: context).viewPhoto(
+                        source: viewModel.detailAccount?.img_url,
+                      );
+                    }
+                  : null,
             ),
             DetailText(
               title:
