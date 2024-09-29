@@ -2,6 +2,7 @@ const { isNotNil } = require("ramda");
 const Notification = require("../models/Notification");
 require("dotenv").config();
 const { Op } = require("sequelize");
+const { formatDateTime } = require('../utils/utils');
 
 module.exports = {
   getListNotification: async (req, res) => {
@@ -36,7 +37,7 @@ module.exports = {
               body: item.body,
               categoryNotification: item.category_notification,
               categoryReimbursement: item.category_reimbursement,
-              date: item.date,
+              date: formatDateTime(item.date, true, true),
               reimburseId: item.reimburse_id,
             });
           } else {
@@ -45,7 +46,7 @@ module.exports = {
               body: item.body,
               categoryNotification: item.category_notification,
               categoryReimbursement: item.category_reimbursement,
-              date: item.date,
+              date: formatDateTime(item.date, true, true),
               reimburseId: item.reimburse_id,
               userId: item.user_id,
               userName: item.user,
