@@ -12,11 +12,20 @@ import 'package:reimburse_rb/screens/common/main_menu/main_menu_view.dart';
 import 'package:reimburse_rb/screens/common/profile/profile_detail/profile_detail_view.dart';
 import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_list_month_view.dart';
 import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_list_view.dart';
+import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_list_year_view.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_form/submission_form_view.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 
 class NavigationProvider extends ChangeNotifier {
   NavigationProvider() {}
+
+  void navigateToRecapitulationPeriodYear({
+    required BuildContext context,
+  }) {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const RecapitulationListYearScreen(),
+    ));
+  }
 
   void navigateToRecapitulationPeriodMonth({
     required BuildContext context,

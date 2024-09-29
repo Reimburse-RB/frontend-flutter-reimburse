@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/employee/submission/submission_home/submission_home_view_model.dart';
 import 'package:reimburse_rb/utility/constant.dart';
@@ -53,11 +54,24 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
   Widget build(BuildContext context) {
     final viewModel = context.watch<SubmissionHomeViewModel>();
     final userProvider = context.read<UserProvider>();
+    final navigationProvider = context.read<NavigationProvider>();
     return Scaffold(
       appBar: AppBarGeneral(
         context: context,
         title: 'Pengajuan Reimbursement',
         isHasCustomLeading: false,
+        actions: [
+          if (userProvider.isAdmin)
+            InkWell(
+              onTap: () {
+                navigationProvider.navigateToRecapitulationPeriodYear(context: context);
+              },
+              child: Icon(
+                Icons.print_rounded,
+                color: Colors.white,
+              ),
+            ),
+        ],
         height: 126,
         bottomWidget: TabBar(
           padding: const EdgeInsets.symmetric(horizontal: 16),
