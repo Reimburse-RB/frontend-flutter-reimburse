@@ -1,11 +1,11 @@
 function formatDateTime(dateInput, showTime = false, timeZoneOffsetActive = false) {
-    let date;
+    let date = new Date(dateInput);
 
     if (timeZoneOffsetActive) {
-        const tzoffset = dateInput.getTimezoneOffset() * 60000; // offset dalam milidetik
-        date = new Date(dateInput.getTime() + tzoffset);
+        const tzoffset = date.getTimezoneOffset() * 60000; // offset dalam milidetik
+        date = new Date(date.getTime() + tzoffset);
     } else {
-        date = new Date(dateInput);
+        date = new Date(date);
     }
 
     const optionsDate = { year: "numeric", month: "long", day: "numeric" };
