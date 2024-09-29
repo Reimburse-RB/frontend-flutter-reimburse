@@ -1,6 +1,6 @@
 const { isNil, isNotEmpty, isNotNil, update } = require("ramda");
 const { Op } = require("sequelize");
-const { formatDateTime } = require('../utils/utils');
+const { formatDateTime, formatCurrency } = require('../utils/utils');
 const moment = require('moment-timezone');
 const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
@@ -583,7 +583,7 @@ module.exports = {
         userAdmin.forEach(async (item) => {
           const categoryNotification = 'reimburse';
           const titleMessageNotification = `Reimburse oleh User ${user.fullname} telah diajukan`;
-          const bodyMessageNotification = `User ${user.fullname} telah membuat ${cat ? cat.category_reimbursement_text : ""} dengan total Rp ${totalPrice}.`;
+          const bodyMessageNotification = `${user.fullname} telah mengajukan ${cat ? cat.category_reimbursement_text : ""} dengan total ${formatCurrency(totalPrice)}.`;
 
           const message = {
             notification: {
