@@ -155,6 +155,11 @@ class CardFormDetailCost extends StatelessWidget {
                         viewModel.onChangeFamilyMember(index: detailCostIndex, newValue: newValue);
                       }
                     },
+                    note: Constant.noteFormFamilyMember,
+                    prefixIconNote: Icon(
+                      Icons.info_rounded,
+                      color: Constant.waitingStatusColor,
+                    ),
                   ),
                   const SizedBox(height: 16),
                 ],

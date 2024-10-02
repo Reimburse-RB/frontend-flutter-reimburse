@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/widgets/common/form_small_note.dart';
 
 class FormDropdownFamilyMember extends StatelessWidget {
   final FamilyMemberData? value;
@@ -8,6 +9,9 @@ class FormDropdownFamilyMember extends StatelessWidget {
   final List<FamilyMemberData> items;
   final String placeholder;
   final Function(FamilyMemberData?)? onChanged;
+  final Widget? prefixIconNote;
+  final String note;
+  final TextStyle noteStyle;
 
   const FormDropdownFamilyMember({
     Key? key,
@@ -16,6 +20,9 @@ class FormDropdownFamilyMember extends StatelessWidget {
     required this.items,
     this.onChanged,
     this.placeholder = '',
+    this.prefixIconNote,
+    this.note = '',
+    this.noteStyle = Constant.regularNoteStyle,
   }) : super(key: key);
 
   @override
@@ -89,6 +96,15 @@ class FormDropdownFamilyMember extends StatelessWidget {
           }).toList(),
           onChanged: onChanged,
         ),
+        if (note.isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: FormSmallNote(
+              note: note,
+              noteTextStyle: noteStyle,
+              prefixIcon: prefixIconNote,
+            ),
+          )
       ],
     );
   }

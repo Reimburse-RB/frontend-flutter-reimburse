@@ -116,12 +116,15 @@ class ProfileViewModel extends ChangeNotifier with ImagePickerListener {
     await http.post(endpoint: endpoint, body: body).then((res) {
       EditProfileResponse response = EditProfileResponse.fromJson(res);
       if (response.success) {
-        postEditImageProfile();
-        // _isEditing = false;
-        // _newProfileImageFile = null;
-        // _newProfileImageBase64 = null;
-        // Helper(context: context).showToast(message: response.msg, isSuccess: true);
-        // getProfile();
+        if (newProfileImageFile != null) {
+          postEditImageProfile();
+        } else {
+          _isEditing = false;
+          _newProfileImageFile = null;
+          _newProfileImageBase64 = null;
+          Helper(context: context).showToast(message: response.msg, isSuccess: true);
+          getProfile();
+        }
       } else {
         Helper(context: context).showToast(message: response.msg, isSuccess: false);
       }

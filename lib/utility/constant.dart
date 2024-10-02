@@ -80,6 +80,8 @@ class Constant {
       'Catatan : Masukkan rincian perjalanan lainnya hanya jika tidak terdapat di dalam opsi.';
   static const String noteFormDateDetailTitle =
       'Catatan : Kuitansi harus bertanggal tidak lebih dari satu bulan yang lalu.';
+  static const String noteFormFamilyMember =
+      'Catatan : Tambah anggota keluarga di halaman Profil untuk muncul di form ini.';
   static const String noteFormTotalCost = 'Catatan: Total Biaya akan terisi otomatis oleh sistem.';
   static const String warningFormIncomplete =
       'Gagal Unggah! Mohon lengkapi formulir pengajuan Anda';
