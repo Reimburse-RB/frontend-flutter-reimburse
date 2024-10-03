@@ -601,7 +601,16 @@ module.exports = {
             },
             token: item.fcm_token ?? "",
           };
-          messaging.send(message);
+
+          try {
+            await messaging.send(message);
+          } catch (error) {
+            if (error.code === 'messaging/registration-token-not-registered') {
+              console.warn(`Token tidak teregistrasi untuk user ${user.fullname}, token: ${fcmToken}`);
+            } else {
+              console.error('Error sending message:', error);
+            }
+          }
 
           await Notification.create({
             category_notification: categoryNotification,
@@ -748,7 +757,16 @@ module.exports = {
           },
           token: userReimburse.fcm_token ?? "",
         };
-        messaging.send(message);
+
+        try {
+          await messaging.send(message);
+        } catch (error) {
+          if (error.code === 'messaging/registration-token-not-registered') {
+            console.warn(`Token tidak teregistrasi untuk user ${user.fullname}, token: ${fcmToken}`);
+          } else {
+            console.error('Error sending message:', error);
+          }
+        }
 
         await Notification.create({
           category_notification: categoryNotification,
