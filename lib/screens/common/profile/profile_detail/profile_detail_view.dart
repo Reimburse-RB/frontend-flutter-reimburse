@@ -273,7 +273,7 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: ButtonGeneral(
                   onTap: () {
-                    navigationProvider.navigateToForgotPasswordScreen(context: context);
+                    navigationProvider.navigateToChangePasswordScreen(context: context);
                   },
                   text: 'Ubah Password',
                   prefixIcon: const Iconify(

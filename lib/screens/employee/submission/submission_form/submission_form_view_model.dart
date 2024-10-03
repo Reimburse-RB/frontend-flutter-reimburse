@@ -179,6 +179,8 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
             bodySubmission['purpose_other_text'] != null &&
             bodySubmission['purpose_other_text'] != '');
 
+    bool imageCondition = listAttachmentImageFile.isNotEmpty;
+
     // Cek kondisi khusus untuk detail_title_id dan detail_title_other_text
     bool detailCondition = true;
 
@@ -219,14 +221,11 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
       if (entry.key == 'detail_reimburse') {
         return true;
       }
-      if (entry.key == 'image') {
-        return entry.value.isNotEmpty;
-      }
       return entry.value != null;
     });
 
     // Mengembalikan hasil akhir
-    return allFieldsComplete && purposeCondition && detailCondition;
+    return allFieldsComplete && imageCondition && purposeCondition && detailCondition;
   }
 
   Future postUploadSubmission() async {

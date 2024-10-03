@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/admin/account_verification/account_verification_detail_view.dart';
+import 'package:reimburse_rb/screens/common/auth/change_password/change_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/forgot_password/forgot_password_view.dart';
 import 'package:reimburse_rb/screens/common/auth/onboarding/onboarding_view.dart';
 import 'package:reimburse_rb/screens/common/auth/signin/signin_view.dart';
@@ -178,6 +179,12 @@ class NavigationProvider extends ChangeNotifier {
   void navigateToForgotPasswordScreen({required BuildContext context}) {
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => const ForgotPasswordScreen(),
+    ));
+  }
+
+  void navigateToChangePasswordScreen({required BuildContext context}) {
+    Navigator.of(context).push(CupertinoPageRoute(
+      builder: (context) => const ChangePasswordScreen(),
     ));
   }
 
