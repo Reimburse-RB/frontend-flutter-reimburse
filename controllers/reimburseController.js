@@ -605,11 +605,7 @@ module.exports = {
           try {
             await messaging.send(message);
           } catch (error) {
-            if (error.code === 'messaging/registration-token-not-registered') {
-              console.warn(`Token tidak teregistrasi untuk user ${user.fullname}, token: ${fcmToken}`);
-            } else {
-              console.error('Error sending message:', error);
-            }
+            console.error('Error sending message:', error);
           }
 
           await Notification.create({
@@ -761,11 +757,7 @@ module.exports = {
         try {
           await messaging.send(message);
         } catch (error) {
-          if (error.code === 'messaging/registration-token-not-registered') {
-            console.warn(`Token tidak teregistrasi untuk user ${user.fullname}, token: ${fcmToken}`);
-          } else {
-            console.error('Error sending message:', error);
-          }
+          console.error('Error sending message:', error);
         }
 
         await Notification.create({
