@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
 const path = require("path");
-const { isNil, isNotNil } = require("ramda");
+const { isNil, isNotNil, dec } = require("ramda");
 const UserFamily = require("../models/User-Family");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
@@ -13,6 +13,18 @@ const crypto = require("crypto");
 const { title } = require("process");
 const { Op } = require("sequelize");
 const Notification = require("../models/Notification");
+
+function decrypt(encrypted) {
+  const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
+  const iv = Buffer.from(process.env.IV_KEY, "hex");
+
+  const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
+
+  let decrypted = decipher.update(encrypted, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+
+  return decrypted;
+}
 
 module.exports = {
   userRegister: async (req, res, messaging) => {
@@ -39,12 +51,19 @@ module.exports = {
       const iv = Buffer.from(process.env.IV_KEY, "hex");
 
       const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+
       let encryptedPassword = cipher.update(password, "utf8", "hex");
       encryptedPassword += cipher.final("hex");
 
-      // const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
-      // let decryptedPassword = decipher.update(encryptedPassword, "hex", "utf8");
-      // decryptedPassword += decipher.final("utf8");
+      let encryptedName = cipher.update(name, "utf8", "hex");
+      encryptedName += cipher.final("hex");
+
+      let encryptedIdentityNumber = cipher.update(
+        identity_number,
+        "utf8",
+        "hex"
+      );
+      encryptedIdentityNumber += cipher.final("hex");
 
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(encryptedPassword, salt);
@@ -52,7 +71,7 @@ module.exports = {
       const token = jwt.sign({ email: email }, process.env.SECRET_KEY);
 
       const user = await User.create({
-        fullname: name,
+        fullname: encryptedName,
         email,
         password: hashPassword,
         identity_number,
@@ -79,9 +98,9 @@ module.exports = {
       });
 
       userAdmin.forEach(async (item) => {
-        const categoryNotification = 'account_verification';
-        const titleMessageNotification = `Pengguna Baru ${user.fullname} Menunggu Verifikasi`;
-        const bodyMessageNotification = `Pengguna ${user.fullname} dengan Nomor Induk Karyawan ${user.identity_number} telah mendaftar dan membutuhkan verifikasi.`;
+        const categoryNotification = "account_verification";
+        const titleMessageNotification = `Pengguna Baru ${name} Menunggu Verifikasi`;
+        const bodyMessageNotification = `Pengguna ${name} dengan Nomor Induk Karyawan ${identity_number} telah mendaftar dan membutuhkan verifikasi.`;
 
         const message = {
           notification: {
@@ -93,13 +112,13 @@ module.exports = {
             userId: `${user.id}`,
             date: `${formattedCreatedDate}`,
           },
-          token: item.fcm_token ?? '',
+          token: item.fcm_token ?? "",
         };
 
         try {
           await messaging.send(message);
         } catch (error) {
-          console.error('Error sending message:', error);
+          console.error("Error sending message:", error);
         }
 
         await Notification.create({
@@ -108,7 +127,7 @@ module.exports = {
           body: bodyMessageNotification,
           user_id: user.id,
           category: 1, //admin/hrd
-          token_target: item.fcm_token ?? '',
+          token_target: item.fcm_token ?? "",
           date: formattedCreatedDate,
         });
       });
@@ -277,10 +296,13 @@ module.exports = {
 
       const returnData = [];
       for (const item of allUser) {
+        const userFullname = decrypt(item.fullname);
+        const userIdentityNumber = decrypt(item.identity_number);
+
         returnData.push({
           id: item.id,
-          nik: item.identity_number,
-          name: item.fullname,
+          nik: userIdentityNumber,
+          name: userFullname,
           img_url:
             item.image_url != null
               ? `${process.env.URL}${item.image_url}`
@@ -335,7 +357,7 @@ module.exports = {
           .toTimeString()
           .slice(0, 8)}`;
 
-        const categoryNotification = 'verified_account';
+        const categoryNotification = "verified_account";
         const titleMessageNotification = "Akun Anda Telah Diverifikasi";
         const bodyMessageNotification = `Akun Anda telah diverifikasi oleh Admin. Kini Anda dapat mulai menggunakan seluruh fitur yang tersedia di aplikasi.`;
 
@@ -348,25 +370,28 @@ module.exports = {
             categoryNotification: `${categoryNotification}`,
             date: `${formattedCreatedDate}`,
           },
-          token: userDetail.fcm_token ?? '',
+          token: userDetail.fcm_token ?? "",
         };
 
         try {
           await messaging.send(message);
         } catch (error) {
-          console.error('Error sending message:', error);
+          console.error("Error sending message:", error);
         }
+
+        const userFullname = decrypt(userDetail.fullname);
+        const userIdentityNumber = decrypt(userDetail.identity_number);
 
         await Notification.create({
           category_notification: categoryNotification,
           title: titleMessageNotification,
           body: bodyMessageNotification,
           date: formattedCreatedDate,
-          user: userDetail.fullname,
+          user: userFullname,
           user_id: userDetail.id,
-          identity_number: userDetail.identity_number,
+          identity_number: userIdentityNumber,
           category: 3, //general
-          token_target: userDetail.fcm_token ?? '',
+          token_target: userDetail.fcm_token ?? "",
         });
 
         return res.json({
@@ -392,9 +417,12 @@ module.exports = {
         (itemRole) => itemRole.role_id === user.role
       );
 
+      const userFullname = decrypt(user.fullname);
+      const userIdentityNumber = decrypt(user.identity_number);
+
       const returnData = {
-        nik: user.identity_number,
-        name: user.fullname,
+        nik: userIdentityNumber,
+        name: userFullname,
         email: user.email,
         role_id: user.role,
         role_text: roleUser ? roleUser.role_text : "",
@@ -414,13 +442,14 @@ module.exports = {
             (itemFamStat) => itemFamStat.family_status_id === item.status
           );
 
+          const userFullname = decrypt(item.fullname);
           detailFamily.push({
             id: item.id,
             family_status_id: item.status,
             family_status_text: familyStatus
               ? familyStatus.family_status_text
               : "",
-            name: item.fullname,
+            name: userFullname,
           });
         }
       }
@@ -468,9 +497,12 @@ module.exports = {
           (itemRole) => itemRole.role_id === detailUser.role
         );
 
+        const userFullname = decrypt(detailUser.fullname);
+        const userIdentityNumber = decrypt(detailUser.identity_number);
+
         returnData = {
-          nik: detailUser.identity_number,
-          name: detailUser.fullname,
+          nik: userIdentityNumber,
+          name: userFullname,
           email: detailUser.email,
           role_id: detailUser.role,
           role_text: roleUser ? roleUser.role_text : "",
@@ -491,13 +523,15 @@ module.exports = {
               (itemFamStat) => itemFamStat.family_status_id === item.status
             );
 
+            const familyFullname = decrypt(item.fullname);
+
             detailFamily.push({
               id: item.id,
               family_status_id: item.status,
               family_status_text: familyStatus
                 ? familyStatus.family_status_text
                 : "",
-              name: item.fullname,
+              name: familyFullname,
             });
           }
         }
@@ -538,9 +572,25 @@ module.exports = {
       //   }
       // }
 
-      user.fullname = name;
+      // AES Encryption
+      const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
+      const iv = Buffer.from(process.env.IV_KEY, "hex");
+
+      const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+
+      let encryptedName = cipher.update(name, "utf8", "hex");
+      encryptedName += cipher.final("hex");
+
+      let encryptedIdentityNumber = cipher.update(
+        identity_number,
+        "utf8",
+        "hex"
+      );
+      encryptedIdentityNumber += cipher.final("hex");
+
+      user.fullname = encryptedName;
       user.email = email;
-      user.identity_number = identity_number;
+      user.identity_number = encryptedIdentityNumber;
 
       const family = await UserFamily.findAll({ where: { user_id: user.id } });
       if (!isNil(family_member_data)) {
@@ -562,11 +612,18 @@ module.exports = {
               where: { id: item.id },
             });
             familyDetail.status = item.family_status_id;
-            familyDetail.fullname = item.name;
+
+            let encryptedNameFamily = cipher.update(item.name, "utf8", "hex");
+            encryptedNameFamily += cipher.final("hex");
+            familyDetail.fullname = encryptedNameFamily;
+
             familyDetail.save();
           } else {
+            let encryptedNameFamily = cipher.update(item.name, "utf8", "hex");
+            encryptedNameFamily += cipher.final("hex");
+
             arrayFamilyCreate.push({
-              fullname: item.name,
+              fullname: encryptedNameFamily,
               status: item.family_status_id,
               user_id: user.id,
             });
@@ -620,6 +677,5 @@ module.exports = {
         msg: e.message,
       });
     }
-  }
-
+  },
 };

@@ -1,7 +1,7 @@
-const { isNil, isNotEmpty, isNotNil, update } = require("ramda");
+const { isNil, isNotEmpty, isNotNil, update, dec } = require("ramda");
 const { Op } = require("sequelize");
-const { formatDateTime, formatCurrency } = require('../utils/utils');
-const moment = require('moment-timezone');
+const { formatDateTime, formatCurrency } = require("../utils/utils");
+const moment = require("moment-timezone");
 const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
 const ReimburseDetail = require("../models/Reimburse-Detail");
@@ -11,9 +11,28 @@ const User = require("../models/User");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 
+function decrypt(encrypted) {
+  const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
+  const iv = Buffer.from(process.env.IV_KEY, "hex");
+
+  const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
+
+  let decrypted = decipher.update(encrypted, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+
+  return decrypted;
+}
+
 module.exports = {
   getUserReimburse: async (req, res) => {
-    const { dateReimburse, status, isAdmin, startDate, endDate, isSortByLatest = true } = req.body;
+    const {
+      dateReimburse,
+      status,
+      isAdmin,
+      startDate,
+      endDate,
+      isSortByLatest = true,
+    } = req.body;
     const user = req.userAuth;
 
     try {
@@ -37,7 +56,9 @@ module.exports = {
         };
       }
 
-      const order = isSortByLatest ? [['createdAt', 'DESC']] : [['createdAt', 'ASC']];
+      const order = isSortByLatest
+        ? [["createdAt", "DESC"]]
+        : [["createdAt", "ASC"]];
 
       const reimburse = await Reimburse.findAll({
         where: whereParam,
@@ -79,7 +100,6 @@ module.exports = {
         }
 
         for (const item of filteredData) {
-
           const cat = allStatus.listCategoryReimbursement.find(
             (itemCat) => itemCat.category_reimbursement_id === item.category
           );
@@ -92,12 +112,12 @@ module.exports = {
               item.status == 1
                 ? "Menunggu Diproses"
                 : item.status == 2
-                  ? "Diproses"
-                  : item.status == 3
-                    ? "Diterima"
-                    : item.status == 4
-                      ? "Ditolak"
-                      : "",
+                ? "Diproses"
+                : item.status == 3
+                ? "Diterima"
+                : item.status == 4
+                ? "Ditolak"
+                : "",
             createdDate: formatDateTime(item.createdAt, false, true),
             approval_by: null,
             approval_by_role: null,
@@ -119,13 +139,19 @@ module.exports = {
           }
 
           if (!isNil(item.approval_date)) {
-            dataCard.approval_date = formatDateTime(item.approval_date, true, false);
+            dataCard.approval_date = formatDateTime(
+              item.approval_date,
+              true,
+              false
+            );
 
             const userApproval = await User.findOne({
               where: { id: item.approval_by },
             });
 
-            dataCard.approval_by = userApproval.fullname;
+            const approvalName = decrypt(userApproval.fullname);
+
+            dataCard.approval_by = approvalName;
 
             const roleUser = allStatus.role.find(
               (itemRole) => itemRole.role_id === userApproval.role
@@ -139,9 +165,12 @@ module.exports = {
                 where: { id: item.user_id },
               });
 
+              const userReimburseName = decrypt(userReimburse.fullname);
+              const userReimburseNik = decrypt(userReimburse.identity_number);
+
               if (userReimburse) {
-                dataCard.name = userReimburse.fullname;
-                dataCard.nik = userReimburse.identity_number;
+                dataCard.name = userReimburseName;
+                dataCard.nik = userReimburseNik;
               }
             }
           }
@@ -239,21 +268,24 @@ module.exports = {
           where: { id: reimburse.user_id },
         });
 
+        const userReimburseName = decrypt(userReimburse.fullname);
+        const userReimburseNik = decrypt(userReimburse.identity_number);
+
         const returnData = {
-          name: userReimburse.fullname,
+          name: userReimburseName,
           email: userReimburse.email,
-          nik: userReimburse.identity_number,
+          nik: userReimburseNik,
           status_id: reimburse.status,
           status_text:
             reimburse.status == 1
               ? "Menunggu Diproses"
               : reimburse.status == 2
-                ? "Diproses"
-                : reimburse.status == 3
-                  ? "Diterima"
-                  : reimburse.status == 4
-                    ? "Ditolak"
-                    : "",
+              ? "Diproses"
+              : reimburse.status == 3
+              ? "Diterima"
+              : reimburse.status == 4
+              ? "Ditolak"
+              : "",
           category_reimbursement_id: reimburse.category,
           date: formatDateTime(reimburse.createdAt, true, true),
           approval_by: null,
@@ -276,17 +308,24 @@ module.exports = {
             : null;
         } else {
           returnData.purposeId = null;
-          returnData.purpose_text = reimburse.purpose_other ?? reimburse.purposeText;
+          returnData.purpose_text =
+            reimburse.purpose_other ?? reimburse.purposeText;
         }
 
         if (!isNil(reimburse.approval_date)) {
-          returnData.approval_date = formatDateTime(reimburse.approval_date, true, false);
+          returnData.approval_date = formatDateTime(
+            reimburse.approval_date,
+            true,
+            false
+          );
 
           const userApproval = await User.findOne({
             where: { id: reimburse.approval_by },
           });
 
-          returnData.approval_by = userApproval.fullname;
+          const userApprovalName = decrypt(userApproval.fullname);
+
+          returnData.approval_by = userApprovalName;
 
           const roleUser = allStatus.role.find(
             (itemRole) => itemRole.role_id === userApproval.role
@@ -343,9 +382,16 @@ module.exports = {
             const detailTitleText =
               detail.id != 0
                 ? allStatus.titleId.find(
-                  (itemTitle) => itemTitle.detail_title_id === detail.title_id
-                )
+                    (itemTitle) => itemTitle.detail_title_id === detail.title_id
+                  )
                 : null;
+
+            var familyFullname = "";
+            if (!isNil(family)) {
+              if (!isNil(family.fullname)) {
+                familyFullname = decrypt(family.fullname);
+              }
+            }
 
             const temp = {
               detail_id: detail.id,
@@ -355,7 +401,7 @@ module.exports = {
                   ? detailTitleText.detail_title_text
                   : detail.title_other ?? detailTitleText.detail_title_text,
               detail_family_id: detail.intended_for,
-              detail_family_name: family ? family.fullname : "",
+              detail_family_name: familyFullname,
               detail_cost: detail.price,
               detail_date: formattedDate,
               detail_desc: detail.description,
@@ -496,7 +542,6 @@ module.exports = {
     } = req.body;
     const user = req.userAuth;
 
-
     try {
       if (user.status == 2) {
         return res.json({
@@ -580,10 +625,15 @@ module.exports = {
           },
         });
 
+        const userFullname = decrypt(user.fullname);
+        const userIdentityNumber = decrypt(user.identity_number);
+
         userAdmin.forEach(async (item) => {
-          const categoryNotification = 'reimburse';
-          const titleMessageNotification = `Reimburse oleh User ${user.fullname} telah diajukan`;
-          const bodyMessageNotification = `${user.fullname} telah mengajukan ${cat ? cat.category_reimbursement_text : ""} dengan total ${formatCurrency(totalPrice)}.`;
+          const categoryNotification = "reimburse";
+          const titleMessageNotification = `Reimburse oleh User ${userFullname} telah diajukan`;
+          const bodyMessageNotification = `${userFullname} telah mengajukan ${
+            cat ? cat.category_reimbursement_text : ""
+          } dengan total ${formatCurrency(totalPrice)}.`;
 
           const message = {
             notification: {
@@ -594,8 +644,8 @@ module.exports = {
               categoryNotification: `${categoryNotification}`,
               reimburseId: `${reimburse.id}`,
               categoryReimbursement: cat ? cat.category_reimbursement_text : "",
-              user: `${user.fullname}`,
-              identityNumber: `${user.identity_number}`,
+              user: `${userFullname}`,
+              identityNumber: `${userIdentityNumber}`,
               price: `${totalPrice}`,
               date: `${formattedCreatedDate}`,
             },
@@ -605,7 +655,7 @@ module.exports = {
           try {
             await messaging.send(message);
           } catch (error) {
-            console.error('Error sending message:', error);
+            console.error("Error sending message:", error);
           }
 
           await Notification.create({
@@ -615,8 +665,8 @@ module.exports = {
             reimburse_id: reimburse.id,
             category_reimbursement: cat ? cat.category_reimbursement_text : "",
             user_id: user.id,
-            user: user.fullname,
-            identity_number: user.identity_number,
+            user: userFullname,
+            identity_number: userIdentityNumber,
             price: totalPrice,
             date: formattedCreatedDate,
             category: 1, // admin/hrd
@@ -655,7 +705,7 @@ module.exports = {
       if (!reimburse_id) {
         return res.status(400).json({
           success: false,
-          msg: 'reimburse_id is required',
+          msg: "reimburse_id is required",
         });
       }
 
@@ -672,13 +722,13 @@ module.exports = {
 
         return res.status(200).json({
           success: true,
-          msg: 'success create data',
-          data: req.files.map(file => file.filename), // Mengembalikan nama file yang diunggah
+          msg: "success create data",
+          data: req.files.map((file) => file.filename), // Mengembalikan nama file yang diunggah
         });
       } else {
         return res.status(400).json({
           success: false,
-          msg: 'No files uploaded',
+          msg: "No files uploaded",
         });
       }
     } catch (e) {
@@ -729,16 +779,27 @@ module.exports = {
           .toTimeString()
           .slice(0, 8)}`;
 
-        const categoryNotification = 'reimburse';
-        const titleMessageNotification = change_status_id == 2
-          ? "Pengajuan Diproses" :
-          change_status_id == 3
+        const categoryNotification = "reimburse";
+        const titleMessageNotification =
+          change_status_id == 2
+            ? "Pengajuan Diproses"
+            : change_status_id == 3
             ? "Pengajuan Berhasil"
             : change_status_id == 4
-              ? "Pengajuan Gagal!"
-              : "";
+            ? "Pengajuan Gagal!"
+            : "";
 
-        const bodyMessageNotification = `Pengajuan ${cat ? cat.category_reimbursement_text : ""} Anda ${change_status_id == 2 ? "sedang diproses" : change_status_id == 3 ? "berhasil" : change_status_id == 4 ? "gagal" : ""}.`;
+        const bodyMessageNotification = `Pengajuan ${
+          cat ? cat.category_reimbursement_text : ""
+        } Anda ${
+          change_status_id == 2
+            ? "sedang diproses"
+            : change_status_id == 3
+            ? "berhasil"
+            : change_status_id == 4
+            ? "gagal"
+            : ""
+        }.`;
 
         const message = {
           notification: {
@@ -748,7 +809,9 @@ module.exports = {
           data: {
             categoryNotification: `${categoryNotification}`,
             reimburseId: `${reimburse.id}`,
-            categoryReimbursement: `${cat ? cat.category_reimbursement_text : ""}`,
+            categoryReimbursement: `${
+              cat ? cat.category_reimbursement_text : ""
+            }`,
             date: `${formattedCreatedDate}`,
           },
           token: userReimburse.fcm_token ?? "",
@@ -757,7 +820,7 @@ module.exports = {
         try {
           await messaging.send(message);
         } catch (error) {
-          console.error('Error sending message:', error);
+          console.error("Error sending message:", error);
         }
 
         await Notification.create({
@@ -844,10 +907,15 @@ module.exports = {
       let allPurpose;
 
       if (category_reimbursement_id === 1) {
-        allPurpose = [...allStatus.purposeId.slice(1, 10), allStatus.purposeId[0]];
+        allPurpose = [
+          ...allStatus.purposeId.slice(1, 10),
+          allStatus.purposeId[0],
+        ];
       } else if (category_reimbursement_id === 2) {
-        allPurpose = [...allStatus.purposeId.slice(10, 20), allStatus.purposeId[0]];
-
+        allPurpose = [
+          ...allStatus.purposeId.slice(10, 20),
+          allStatus.purposeId[0],
+        ];
       } else {
         return res.json({
           success: false,
@@ -892,5 +960,4 @@ module.exports = {
       return res.json({ msg: e.message });
     }
   },
-
 };
