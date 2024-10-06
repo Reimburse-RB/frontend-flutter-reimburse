@@ -57,60 +57,74 @@ module.exports = {
         fcm_token,
       });
 
-      const now = new Date();
-      const day = now.getDate().toString().padStart(2, "0"); // Pastikan dua digit
-      const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
-      const year = now.getFullYear();
-      const formattedCreatedDate = `${year}-${month}-${day} ${now
-        .toTimeString()
-        .slice(0, 8)}`;
+      if (user) {
+        const createFamily = await UserFamily.create({
+          fullname: encryptedName,
+          status: 1,
+          user_id: user.id,
+        });
 
-      const userAdmin = await User.findAll({
-        where: {
-          role: {
-            [Op.in]: [2, 3],
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, "0"); // Pastikan dua digit
+        const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
+        const year = now.getFullYear();
+        const formattedCreatedDate = `${year}-${month}-${day} ${now
+          .toTimeString()
+          .slice(0, 8)}`;
+
+        const userAdmin = await User.findAll({
+          where: {
+            role: {
+              [Op.in]: [2, 3],
+            },
           },
-        },
-      });
+        });
 
-      userAdmin.forEach(async (item) => {
-        const categoryNotification = "account_verification";
-        const titleMessageNotification = `Pengguna Baru ${name} Menunggu Verifikasi`;
-        const bodyMessageNotification = `Pengguna ${name} dengan Nomor Induk Karyawan ${identity_number} telah mendaftar dan membutuhkan verifikasi.`;
+        userAdmin.forEach(async (item) => {
+          const categoryNotification = "account_verification";
+          const titleMessageNotification = `Pengguna Baru ${name} Menunggu Verifikasi`;
+          const bodyMessageNotification = `Pengguna ${name} dengan Nomor Induk Karyawan ${identity_number} telah mendaftar dan membutuhkan verifikasi.`;
 
-        const message = {
-          notification: {
+          const message = {
+            notification: {
+              title: titleMessageNotification,
+              body: bodyMessageNotification,
+            },
+            data: {
+              categoryNotification: `${categoryNotification}`,
+              userId: `${user.id}`,
+              date: `${formattedCreatedDate}`,
+            },
+            token: item.fcm_token ?? "",
+          };
+
+          try {
+            await messaging.send(message);
+          } catch (error) {
+            console.error("Error sending message:", error);
+          }
+
+          await Notification.create({
+            category_notification: categoryNotification,
             title: titleMessageNotification,
             body: bodyMessageNotification,
-          },
-          data: {
-            categoryNotification: `${categoryNotification}`,
-            userId: `${user.id}`,
-            date: `${formattedCreatedDate}`,
-          },
-          token: item.fcm_token ?? "",
-        };
-
-        try {
-          await messaging.send(message);
-        } catch (error) {
-          console.error("Error sending message:", error);
-        }
-
-        await Notification.create({
-          category_notification: categoryNotification,
-          title: titleMessageNotification,
-          body: bodyMessageNotification,
-          user_id: user.id,
-          category: 1, //admin/hrd
-          token_target: item.fcm_token ?? "",
-          date: formattedCreatedDate,
+            user_id: user.id,
+            category: 1, //admin/hrd
+            token_target: item.fcm_token ?? "",
+            date: formattedCreatedDate,
+          });
         });
-      });
+
+        return res.json({
+          success: true,
+          msg: "success create data",
+          data: user,
+        });
+      }
 
       return res.json({
-        success: true,
-        msg: "success create data",
+        success: false,
+        msg: "failed create data",
         data: user,
       });
     } catch (e) {
