@@ -131,7 +131,7 @@ module.exports = {
             dataCard.approval_date = formatDateTime(
               item.approval_date,
               true,
-              false
+              true
             );
 
             const userApproval = await User.findOne({
@@ -305,7 +305,7 @@ module.exports = {
           returnData.approval_date = formatDateTime(
             reimburse.approval_date,
             true,
-            false
+            true
           );
 
           const userApproval = await User.findOne({
