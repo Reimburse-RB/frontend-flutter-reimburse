@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const bcrypt = require("bcryptjs");
 
 function encryptAES(text) {
     const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
@@ -23,4 +24,16 @@ function decryptAES(encrypted) {
     return decrypted;
 }
 
-module.exports = { encryptAES, decryptAES };
+async function hashBcrypt(text) {
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(text, salt);
+
+    return hashed;
+}
+
+async function compareBcrypt(string, hash) {
+    const result = await bcrypt.compare(string, hash);
+    return result;
+}
+
+module.exports = { encryptAES, decryptAES, hashBcrypt, compareBcrypt };

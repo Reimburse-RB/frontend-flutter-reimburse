@@ -1,6 +1,5 @@
 const express = require("express");
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
 const path = require("path");
@@ -9,7 +8,7 @@ const UserFamily = require("../models/User-Family");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 const fs = require("fs");
-const { encryptAES, decryptAES } = require("../utils/cryptography");
+const { encryptAES, decryptAES, hashBcrypt, compareBcrypt } = require("../utils/cryptography");
 const { title } = require("process");
 const { Op } = require("sequelize");
 const Notification = require("../models/Notification");
@@ -38,8 +37,7 @@ module.exports = {
       const encryptedName = encryptAES(name);
       const encryptedIdentityNumber = encryptAES(identity_number);
 
-      const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(encryptedPassword, salt);
+      const hashPassword = await hashBcrypt(encryptedPassword);
 
       const token = jwt.sign({ email: email }, process.env.SECRET_KEY);
 
@@ -123,10 +121,8 @@ module.exports = {
       if (user) {
         const encryptedPassword = encryptAES(password);
 
-        const validpass = await bcrypt.compare(
-          encryptedPassword,
-          user.password
-        );
+        const validpass = await compareBcrypt(encryptedPassword, user.password);
+
         if (!validpass) {
           return res.json({
             success: false,
@@ -172,10 +168,8 @@ module.exports = {
       }
       const encryptedPassword = encryptAES(oldPassword);
 
-      const isPasswordValid = await bcrypt.compare(
-        encryptedPassword,
-        user.password
-      );
+      const isPasswordValid = await compareBcrypt(encryptedPassword, user.password);
+
       if (!isPasswordValid) {
         return res.json({
           success: false,
@@ -192,8 +186,7 @@ module.exports = {
 
       const encryptedPasswordNew = encryptAES(newPassword);
 
-      const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(encryptedPasswordNew, salt);
+      const hashPassword = await hashBcrypt(encryptedPasswordNew);
 
       user.password = hashPassword;
       user.save();
