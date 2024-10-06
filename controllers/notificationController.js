@@ -1,9 +1,9 @@
 const { isNotNil } = require("ramda");
 const Notification = require("../models/Notification");
-require("dotenv").config();
 const { Op } = require("sequelize");
 const { formatDateTime } = require("../utils/utils");
 const { decryptAES } = require("../utils/cryptography");
+require("dotenv").config();
 
 
 module.exports = {
