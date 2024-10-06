@@ -13,6 +13,7 @@ const {
   decryptAES,
   hashBcrypt,
   compareBcrypt,
+  formatPlainUserData,
 } = require("../utils/cryptography");
 const { title } = require("process");
 const { Op } = require("sequelize");
@@ -123,9 +124,9 @@ module.exports = {
       }
 
       return res.json({
-        success: false,
-        msg: "failed create data",
-        data: user,
+        success: true,
+        msg: "success create data",
+        data: formatPlainUserData(user),
       });
     } catch (e) {
       return res.json({ msg: e.message });
@@ -370,7 +371,7 @@ module.exports = {
         return res.json({
           success: true,
           msg: "success verification user",
-          data: userDetail,
+          data: formatPlainUserData(userDetail),
         });
       }
 
@@ -583,7 +584,7 @@ module.exports = {
       return res.json({
         success: true,
         msg: "Success update data",
-        data: user,
+        data: formatPlainUserData(user),
       });
     } catch (e) {
       return res.json({
@@ -614,7 +615,7 @@ module.exports = {
       return res.json({
         success: true,
         msg: "Success update data",
-        data: user,
+        data: formatPlainUserData(user),
       });
     } catch (e) {
       return res.json({
