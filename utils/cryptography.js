@@ -42,8 +42,8 @@ async function compareBcrypt(string, hash) {
 function formatPlainUserData(user) {
     const plainUserData = user.get({ plain: true });
 
-    plainUserData.fullname = decryptAES(userData.fullname);
-    plainUserData.identity_number = decryptAES(userData.identity_number);
+    plainUserData.fullname = decryptAES(plainUserData.fullname);
+    plainUserData.identity_number = decryptAES(plainUserData.identity_number);
 
     return plainUserData
 }

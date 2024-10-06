@@ -561,15 +561,6 @@ module.exports = {
       });
 
       if (reimburse) {
-        // if (isNotNil(req.fileName)) {
-        //   for (let i = 0; i < req.fileName.length; i++) {
-        //     const imageSave = await ImageReimburse.create({
-        //       reimburse_id: reimburse.id,
-        //       image: `images/upload/${req.fileName[i]}`,
-        //     });
-        //   }
-        // }
-
         var totalPrice = 0;
         if (isNotNil(detail_reimburse) && isNotEmpty(detail_reimburse)) {
           detail_reimburse.forEach(async (item) => {
