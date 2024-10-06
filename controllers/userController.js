@@ -8,7 +8,12 @@ const UserFamily = require("../models/User-Family");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 const fs = require("fs");
-const { encryptAES, decryptAES, hashBcrypt, compareBcrypt } = require("../utils/cryptography");
+const {
+  encryptAES,
+  decryptAES,
+  hashBcrypt,
+  compareBcrypt,
+} = require("../utils/cryptography");
 const { title } = require("process");
 const { Op } = require("sequelize");
 const Notification = require("../models/Notification");
@@ -45,7 +50,7 @@ module.exports = {
         fullname: encryptedName,
         email,
         password: hashPassword,
-        encryptedIdentityNumber,
+        identity_number: encryptedIdentityNumber,
         status: 2,
         role,
         token,
@@ -168,7 +173,10 @@ module.exports = {
       }
       const encryptedPassword = encryptAES(oldPassword);
 
-      const isPasswordValid = await compareBcrypt(encryptedPassword, user.password);
+      const isPasswordValid = await compareBcrypt(
+        encryptedPassword,
+        user.password
+      );
 
       if (!isPasswordValid) {
         return res.json({
