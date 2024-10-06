@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/auth_response.dart';
-import 'package:reimburse_rb/models/common/profile_response.dart';
 import 'package:reimburse_rb/models/common/role_data.dart';
 import 'package:reimburse_rb/provider/navigation_provider.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
@@ -139,8 +138,6 @@ class SignUpViewModel extends ChangeNotifier {
         localStorage.setItem('role', response.data?.role?.toString() ?? '');
         localStorage.setItem('is-admin-or-hrd', isAdmin.toString());
 
-        postEditProfile(response);
-
         context.read<UserProvider>().setIsAdmin(isAdmin);
         context.read<NavigationProvider>().navigateToMainMenuPage(context: context);
       } else {
@@ -152,40 +149,6 @@ class SignUpViewModel extends ChangeNotifier {
 
       log('===> error $endpoint $err');
       Helper(context: context).showToast(message: err.toString(), isSuccess: false);
-    });
-
-    stopLoading();
-    notifyListeners();
-    return Future.value(true);
-  }
-
-  Future postEditProfile(SignUpResponse signUpResponse) async {
-    String endpoint = 'user/edit-profile';
-    Map body = {
-      'identity_number': signUpResponse.data?.identity_number,
-      'name': signUpResponse.data?.fullname,
-      'email': signUpResponse.data?.email,
-      'family_member_data': [
-        {
-          'id': null,
-          'family_status_id': Constant.selfStatusId,
-          'name': signUpResponse.data?.fullname,
-        }
-      ]
-    };
-
-    await http.post(endpoint: endpoint, body: body).then((res) {
-      EditProfileResponse response = EditProfileResponse.fromJson(res);
-      if (response.success) {
-      } else {
-        Helper(context: context).showToast(message: response.msg, isSuccess: false);
-      }
-    }).catchError((err) {
-      log('===> error $endpoint $err');
-      Helper(context: context).showToast(message: err.toString(), isSuccess: false);
-
-      stopLoading();
-      notifyListeners();
     });
 
     stopLoading();
