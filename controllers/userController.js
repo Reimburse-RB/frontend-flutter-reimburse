@@ -9,22 +9,10 @@ const UserFamily = require("../models/User-Family");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 const fs = require("fs");
-const crypto = require("crypto");
+const { encryptAES, decryptAES } = require("../utils/cryptography");
 const { title } = require("process");
 const { Op } = require("sequelize");
 const Notification = require("../models/Notification");
-
-function decrypt(encrypted) {
-  const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
-  const iv = Buffer.from(process.env.IV_KEY, "hex");
-
-  const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
-
-  let decrypted = decipher.update(encrypted, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-
-  return decrypted;
-}
 
 module.exports = {
   userRegister: async (req, res, messaging) => {
@@ -46,24 +34,9 @@ module.exports = {
         });
       }
 
-      // AES Encryption
-      const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
-      const iv = Buffer.from(process.env.IV_KEY, "hex");
-
-      const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
-
-      let encryptedPassword = cipher.update(password, "utf8", "hex");
-      encryptedPassword += cipher.final("hex");
-
-      let encryptedName = cipher.update(name, "utf8", "hex");
-      encryptedName += cipher.final("hex");
-
-      let encryptedIdentityNumber = cipher.update(
-        identity_number,
-        "utf8",
-        "hex"
-      );
-      encryptedIdentityNumber += cipher.final("hex");
+      const encryptedPassword = encryptAES(password);
+      const encryptedName = encryptAES(name);
+      const encryptedIdentityNumber = encryptAES(identity_number);
 
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(encryptedPassword, salt);
@@ -74,7 +47,7 @@ module.exports = {
         fullname: encryptedName,
         email,
         password: hashPassword,
-        identity_number,
+        encryptedIdentityNumber,
         status: 2,
         role,
         token,
@@ -148,13 +121,7 @@ module.exports = {
       const user = await User.findOne({ where: { email: email } });
 
       if (user) {
-        // AES Encryption
-        const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
-        const iv = Buffer.from(process.env.IV_KEY, "hex");
-
-        const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
-        let encryptedPassword = cipher.update(password, "utf8", "hex");
-        encryptedPassword += cipher.final("hex");
+        const encryptedPassword = encryptAES(password);
 
         const validpass = await bcrypt.compare(
           encryptedPassword,
@@ -203,14 +170,7 @@ module.exports = {
           msg: "All fields are required!!",
         });
       }
-
-      // AES Encryption
-      const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
-      const iv = Buffer.from(process.env.IV_KEY, "hex");
-
-      const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
-      let encryptedPassword = cipher.update(oldPassword, "utf8", "hex");
-      encryptedPassword += cipher.final("hex");
+      const encryptedPassword = encryptAES(oldPassword);
 
       const isPasswordValid = await bcrypt.compare(
         encryptedPassword,
@@ -230,9 +190,7 @@ module.exports = {
         });
       }
 
-      const cipherNew = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
-      let encryptedPasswordNew = cipherNew.update(newPassword, "utf8", "hex");
-      encryptedPasswordNew += cipherNew.final("hex");
+      const encryptedPasswordNew = encryptAES(newPassword);
 
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(encryptedPasswordNew, salt);
@@ -296,8 +254,8 @@ module.exports = {
 
       const returnData = [];
       for (const item of allUser) {
-        const userFullname = decrypt(item.fullname);
-        const userIdentityNumber = decrypt(item.identity_number);
+        const userFullname = decryptAES(item.fullname);
+        const userIdentityNumber = decryptAES(item.identity_number);
 
         returnData.push({
           id: item.id,
@@ -379,8 +337,8 @@ module.exports = {
           console.error("Error sending message:", error);
         }
 
-        const userFullname = decrypt(userDetail.fullname);
-        const userIdentityNumber = decrypt(userDetail.identity_number);
+        const userFullname = decryptAES(userDetail.fullname);
+        const userIdentityNumber = decryptAES(userDetail.identity_number);
 
         await Notification.create({
           category_notification: categoryNotification,
@@ -417,8 +375,8 @@ module.exports = {
         (itemRole) => itemRole.role_id === user.role
       );
 
-      const userFullname = decrypt(user.fullname);
-      const userIdentityNumber = decrypt(user.identity_number);
+      const userFullname = decryptAES(user.fullname);
+      const userIdentityNumber = decryptAES(user.identity_number);
 
       const returnData = {
         nik: userIdentityNumber,
@@ -442,7 +400,7 @@ module.exports = {
             (itemFamStat) => itemFamStat.family_status_id === item.status
           );
 
-          const userFullname = decrypt(item.fullname);
+          const userFullname = decryptAES(item.fullname);
           detailFamily.push({
             id: item.id,
             family_status_id: item.status,
@@ -497,8 +455,8 @@ module.exports = {
           (itemRole) => itemRole.role_id === detailUser.role
         );
 
-        const userFullname = decrypt(detailUser.fullname);
-        const userIdentityNumber = decrypt(detailUser.identity_number);
+        const userFullname = decryptAES(detailUser.fullname);
+        const userIdentityNumber = decryptAES(detailUser.identity_number);
 
         returnData = {
           nik: userIdentityNumber,
@@ -523,7 +481,7 @@ module.exports = {
               (itemFamStat) => itemFamStat.family_status_id === item.status
             );
 
-            const familyFullname = decrypt(item.fullname);
+            const familyFullname = decryptAES(item.fullname);
 
             detailFamily.push({
               id: item.id,
@@ -559,34 +517,8 @@ module.exports = {
       const { email, name, identity_number, family_member_data } = req.body;
       const user = req.userAuth;
 
-      // if (req.fileName !== undefined) {
-      //   if (
-      //     user.image_url == undefined ||
-      //     user.image_url == null ||
-      //     user.image_url == ""
-      //   ) {
-      //     user.image_url = `images/upload/${req.fileName}`;
-      //   } else {
-      //     await fs.promises.unlink(path.join(`public/${user.image_url}`));
-      //     user.image_url = `images/upload/${req.fileName}`;
-      //   }
-      // }
-
-      // AES Encryption
-      const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
-      const iv = Buffer.from(process.env.IV_KEY, "hex");
-
-      const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
-
-      let encryptedName = cipher.update(name, "utf8", "hex");
-      encryptedName += cipher.final("hex");
-
-      let encryptedIdentityNumber = cipher.update(
-        identity_number,
-        "utf8",
-        "hex"
-      );
-      encryptedIdentityNumber += cipher.final("hex");
+      const encryptedName = encryptAES(name);
+      const encryptedIdentityNumber = encryptAES(identity_number);
 
       user.fullname = encryptedName;
       user.email = email;
@@ -613,14 +545,12 @@ module.exports = {
             });
             familyDetail.status = item.family_status_id;
 
-            let encryptedNameFamily = cipher.update(item.name, "utf8", "hex");
-            encryptedNameFamily += cipher.final("hex");
+            const encryptedNameFamily = encryptAES(item.name);
             familyDetail.fullname = encryptedNameFamily;
 
             familyDetail.save();
           } else {
-            let encryptedNameFamily = cipher.update(item.name, "utf8", "hex");
-            encryptedNameFamily += cipher.final("hex");
+            const encryptedNameFamily = encryptAES(item.name);
 
             arrayFamilyCreate.push({
               fullname: encryptedNameFamily,

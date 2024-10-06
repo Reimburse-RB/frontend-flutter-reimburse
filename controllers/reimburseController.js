@@ -1,7 +1,7 @@
 const { isNil, isNotEmpty, isNotNil, update, dec } = require("ramda");
 const { Op } = require("sequelize");
 const { formatDateTime, formatCurrency } = require("../utils/utils");
-const moment = require("moment-timezone");
+const { decryptAES } = require("../utils/cryptography");
 const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
 const ReimburseDetail = require("../models/Reimburse-Detail");
@@ -11,17 +11,6 @@ const User = require("../models/User");
 const allStatus = require("../utils/allStatus");
 require("dotenv").config();
 
-function decrypt(encrypted) {
-  const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
-  const iv = Buffer.from(process.env.IV_KEY, "hex");
-
-  const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
-
-  let decrypted = decipher.update(encrypted, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-
-  return decrypted;
-}
 
 module.exports = {
   getUserReimburse: async (req, res) => {
@@ -112,12 +101,12 @@ module.exports = {
               item.status == 1
                 ? "Menunggu Diproses"
                 : item.status == 2
-                ? "Diproses"
-                : item.status == 3
-                ? "Diterima"
-                : item.status == 4
-                ? "Ditolak"
-                : "",
+                  ? "Diproses"
+                  : item.status == 3
+                    ? "Diterima"
+                    : item.status == 4
+                      ? "Ditolak"
+                      : "",
             createdDate: formatDateTime(item.createdAt, false, true),
             approval_by: null,
             approval_by_role: null,
@@ -149,7 +138,7 @@ module.exports = {
               where: { id: item.approval_by },
             });
 
-            const approvalName = decrypt(userApproval.fullname);
+            const approvalName = decryptAES(userApproval.fullname);
 
             dataCard.approval_by = approvalName;
 
@@ -165,8 +154,8 @@ module.exports = {
                 where: { id: item.user_id },
               });
 
-              const userReimburseName = decrypt(userReimburse.fullname);
-              const userReimburseNik = decrypt(userReimburse.identity_number);
+              const userReimburseName = decryptAES(userReimburse.fullname);
+              const userReimburseNik = decryptAES(userReimburse.identity_number);
 
               if (userReimburse) {
                 dataCard.name = userReimburseName;
@@ -268,8 +257,8 @@ module.exports = {
           where: { id: reimburse.user_id },
         });
 
-        const userReimburseName = decrypt(userReimburse.fullname);
-        const userReimburseNik = decrypt(userReimburse.identity_number);
+        const userReimburseName = decryptAES(userReimburse.fullname);
+        const userReimburseNik = decryptAES(userReimburse.identity_number);
 
         const returnData = {
           name: userReimburseName,
@@ -280,12 +269,12 @@ module.exports = {
             reimburse.status == 1
               ? "Menunggu Diproses"
               : reimburse.status == 2
-              ? "Diproses"
-              : reimburse.status == 3
-              ? "Diterima"
-              : reimburse.status == 4
-              ? "Ditolak"
-              : "",
+                ? "Diproses"
+                : reimburse.status == 3
+                  ? "Diterima"
+                  : reimburse.status == 4
+                    ? "Ditolak"
+                    : "",
           category_reimbursement_id: reimburse.category,
           date: formatDateTime(reimburse.createdAt, true, true),
           approval_by: null,
@@ -323,7 +312,7 @@ module.exports = {
             where: { id: reimburse.approval_by },
           });
 
-          const userApprovalName = decrypt(userApproval.fullname);
+          const userApprovalName = decryptAES(userApproval.fullname);
 
           returnData.approval_by = userApprovalName;
 
@@ -382,14 +371,14 @@ module.exports = {
             const detailTitleText =
               detail.id != 0
                 ? allStatus.titleId.find(
-                    (itemTitle) => itemTitle.detail_title_id === detail.title_id
-                  )
+                  (itemTitle) => itemTitle.detail_title_id === detail.title_id
+                )
                 : null;
 
             var familyFullname = "";
             if (!isNil(family)) {
               if (!isNil(family.fullname)) {
-                familyFullname = decrypt(family.fullname);
+                familyFullname = decryptAES(family.fullname);
               }
             }
 
@@ -625,15 +614,14 @@ module.exports = {
           },
         });
 
-        const userFullname = decrypt(user.fullname);
-        const userIdentityNumber = decrypt(user.identity_number);
+        const userFullname = decryptAES(user.fullname);
+        const userIdentityNumber = decryptAES(user.identity_number);
 
         userAdmin.forEach(async (item) => {
           const categoryNotification = "reimburse";
           const titleMessageNotification = `Reimburse oleh User ${userFullname} telah diajukan`;
-          const bodyMessageNotification = `${userFullname} telah mengajukan ${
-            cat ? cat.category_reimbursement_text : ""
-          } dengan total ${formatCurrency(totalPrice)}.`;
+          const bodyMessageNotification = `${userFullname} telah mengajukan ${cat ? cat.category_reimbursement_text : ""
+            } dengan total ${formatCurrency(totalPrice)}.`;
 
           const message = {
             notification: {
@@ -784,22 +772,20 @@ module.exports = {
           change_status_id == 2
             ? "Pengajuan Diproses"
             : change_status_id == 3
-            ? "Pengajuan Berhasil"
-            : change_status_id == 4
-            ? "Pengajuan Gagal!"
-            : "";
+              ? "Pengajuan Berhasil"
+              : change_status_id == 4
+                ? "Pengajuan Gagal!"
+                : "";
 
-        const bodyMessageNotification = `Pengajuan ${
-          cat ? cat.category_reimbursement_text : ""
-        } Anda ${
-          change_status_id == 2
+        const bodyMessageNotification = `Pengajuan ${cat ? cat.category_reimbursement_text : ""
+          } Anda ${change_status_id == 2
             ? "sedang diproses"
             : change_status_id == 3
-            ? "berhasil"
-            : change_status_id == 4
-            ? "gagal"
-            : ""
-        }.`;
+              ? "berhasil"
+              : change_status_id == 4
+                ? "gagal"
+                : ""
+          }.`;
 
         const message = {
           notification: {
@@ -809,9 +795,8 @@ module.exports = {
           data: {
             categoryNotification: `${categoryNotification}`,
             reimburseId: `${reimburse.id}`,
-            categoryReimbursement: `${
-              cat ? cat.category_reimbursement_text : ""
-            }`,
+            categoryReimbursement: `${cat ? cat.category_reimbursement_text : ""
+              }`,
             date: `${formattedCreatedDate}`,
           },
           token: userReimburse.fcm_token ?? "",

@@ -3,18 +3,8 @@ const Notification = require("../models/Notification");
 require("dotenv").config();
 const { Op } = require("sequelize");
 const { formatDateTime } = require("../utils/utils");
+const { decryptAES } = require("../utils/cryptography");
 
-function decrypt(encrypted) {
-  const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
-  const iv = Buffer.from(process.env.IV_KEY, "hex");
-
-  const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
-
-  let decrypted = decipher.update(encrypted, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-
-  return decrypted;
-}
 
 module.exports = {
   getListNotification: async (req, res) => {
@@ -53,8 +43,8 @@ module.exports = {
               reimburseId: item.reimburse_id,
             });
           } else {
-            const userIdentityNumber = decrypt(item.identity_number);
-            const userFullname = decrypt(item.user);
+            const userIdentityNumber = decryptAES(item.identity_number);
+            const userFullname = decryptAES(item.user);
 
             returnData.push({
               title: item.title,
