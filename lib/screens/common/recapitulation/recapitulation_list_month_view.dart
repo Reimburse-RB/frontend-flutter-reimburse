@@ -8,7 +8,7 @@ import 'package:reimburse_rb/widgets/common/card_recapitulation_period.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
 import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
-import 'package:reimburse_rb/widgets/common/modal_date_range.dart';
+import 'package:reimburse_rb/widgets/common/modal_recapitulation_print.dart';
 
 class RecapitulationListMonthScreen extends StatelessWidget {
   const RecapitulationListMonthScreen({super.key});
@@ -39,9 +39,9 @@ class RecapitulationListMonthView extends StatelessWidget {
       floatingActionButton: viewModel.listPeriod.isNotEmpty
           ? FloatingActionButtonGeneral(
               onPressed: () async {
-                ModalDateRange(
+                ModalRecapitulationPrint(
                   context: context,
-                  title: 'Pilih Periode',
+                  title: 'Cetak Rekapitulasi',
                   onTapContinue: (startValue, endValue) {
                     Navigator.of(context).pop();
 

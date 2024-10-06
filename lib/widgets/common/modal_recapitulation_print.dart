@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
 import 'package:reimburse_rb/widgets/common/form_date_picker.dart';
 
-class ModalDateRange {
+class ModalRecapitulationPrint {
   final BuildContext context;
   final String title;
   final Function(String, String) onTapContinue;
 
-  ModalDateRange({
+  ModalRecapitulationPrint({
     required this.context,
     required this.title,
     required this.onTapContinue,
@@ -17,6 +18,7 @@ class ModalDateRange {
 
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
+  List<ReimbursementCategoryData> listSelectedReimbursementCategory = [];
 
   DateTime firstDate = DateTime(2000);
   DateTime lastDate = DateTime.now();
@@ -63,6 +65,7 @@ class ModalDateRange {
                 FormDatePicker(
                   hintText: 'Tanggal Awal',
                   controller: startDateController,
+                  placeholder: "Pilih Periode",
                   onTap: () async {
                     final DateTime? pickedDate = await Helper(context: context).onChangeDate(
                       context: context,

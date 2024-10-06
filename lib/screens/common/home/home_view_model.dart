@@ -82,7 +82,7 @@ class HomeViewModel extends ChangeNotifier {
         ),
         MenuItemData(
           assetImage: 'assets/menu/icon-menu-verif-akun.png',
-          title: 'Verifikasi Perubahan dan Akun Baru',
+          title: 'Verifikasi Akun Baru',
           page: const AccountVerificationListScreen(),
           isAccountMustVerified: true,
         ),

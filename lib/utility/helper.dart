@@ -21,24 +21,31 @@ class Helper {
   showToast({
     bool isSuccess = true,
     required String? message,
-    Color backgroundColor = Constant.acceptedStatusIconColor,
     Color messageColor = Colors.white,
-    Color borderColor = Colors.white,
     int seconds = 3,
     EdgeInsets margin = const EdgeInsets.fromLTRB(24, 24, 24, 72),
-    Widget? icon,
+    Widget? customIcon,
+    bool enableIcon = true,
   }) {
     Flushbar(
-      icon: icon,
+      icon: isSuccess
+          ? Icon(
+              Icons.check_circle_rounded,
+              color: Constant.acceptedStatusIconColor,
+            )
+          : Icon(
+              Icons.cancel_rounded,
+              color: Colors.red.shade400,
+            ),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       margin: margin,
       flushbarPosition: FlushbarPosition.TOP,
-      borderColor: borderColor,
+      borderColor: isSuccess ? Constant.greenLight : Colors.red.shade400,
       borderRadius: BorderRadius.circular(20),
       message: message ?? Constant.defaultErrorMessage,
       messageColor: messageColor,
       duration: Duration(seconds: seconds),
-      backgroundColor: isSuccess ? backgroundColor : Constant.rejectedStatusColor,
+      backgroundColor: Colors.grey.shade800,
     ).show(context);
   }
 
