@@ -7,6 +7,7 @@ function encryptAES(text) {
   const iv = Buffer.from(process.env.IV_KEY, "hex");
 
   const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+  cipher.setAutoPadding(true);
 
   let encrypted = cipher.update(text, "utf8", "hex");
   encrypted += cipher.final("hex");
@@ -18,6 +19,7 @@ function decryptAES(encrypted) {
   const iv = Buffer.from(process.env.IV_KEY, "hex");
 
   const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
+  decipher.setAutoPadding(true);
 
   let decrypted = decipher.update(encrypted, "hex", "utf8");
   decrypted += decipher.final("utf8");
