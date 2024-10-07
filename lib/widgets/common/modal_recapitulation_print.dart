@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/button_general.dart';
@@ -25,7 +24,10 @@ class ModalRecapitulationPrint {
     {"id_option": 1, "text_option": "Kategori Kesehatan"},
     {"id_option": 2, "text_option": "Transportasi"},
   ];
-  List<String> listOptionFieldDocumentType = ['PDF', 'Excel'];
+  List<String> listOptionFieldDocumentType = [
+    Constant.categoryDocumentPdf,
+    Constant.categoryDocumentExcel,
+  ];
 
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();

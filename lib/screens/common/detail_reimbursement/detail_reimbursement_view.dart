@@ -40,7 +40,7 @@ class DetailReimbursementView extends StatelessWidget {
           if (viewModel.detailReimburseData != null)
             InkWell(
               onTap: () {
-                Helper(context: context).generateAndOpenPdfFormatDetail(
+                Helper(context: context).generateAndOpenDocumentFormatDetail(
                     detailReimburseData: viewModel.detailReimburseData!);
               },
               child: Icon(

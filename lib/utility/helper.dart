@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
+import 'package:reimburse_rb/utility/document_generator/excel/excel_recapitulation_api.dart';
 import 'package:reimburse_rb/utility/document_generator/pdf/pdf_api.dart';
 import 'package:reimburse_rb/utility/document_generator/pdf/pdf_recapitulation_api.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -340,33 +341,62 @@ class Helper {
     return pickedDate;
   }
 
-  Future<void> generateAndOpenPdfFormatAll({
+  Future<void> generateAndOpenDocumentFormatAll({
     required List<ItemUserReimburseData> listRecapitulation,
+    String typeDocument = Constant.categoryDocumentPdf,
     required bool isRangePicked,
   }) async {
-    try {
-      final pdfFile = await PdfRecapitulationApi(context: context).generatePdfAllRecap(
-        listRecapitulation: listRecapitulation,
-        isRangePicked: isRangePicked,
-      );
-      log('Generated PDF: $pdfFile');
-      await PdfApi.openFile(pdfFile);
-    } catch (e) {
-      log('Error generating PDF: $e');
+    if (typeDocument == Constant.categoryDocumentPdf) {
+      try {
+        final pdfFile = await PdfRecapitulationApi(context: context).generatePdfAllRecap(
+          listRecapitulation: listRecapitulation,
+          isRangePicked: isRangePicked,
+        );
+        log('Generated PDF: $pdfFile');
+        await PdfApi.openFile(pdfFile);
+      } catch (e) {
+        log('Error generating PDF: $e');
+      }
+    }
+    if (typeDocument == Constant.categoryDocumentExcel) {
+      try {
+        final excelFile = await ExcelRecapitulationApi(context: context).generateExcelAllRecap(
+          listRecapitulation: listRecapitulation,
+          isRangePicked: isRangePicked,
+        );
+        log('Generated Excel: $excelFile');
+        await PdfApi.openFile(excelFile);
+      } catch (e) {
+        log('Error generating Excel: $e');
+      }
     }
   }
 
-  Future<void> generateAndOpenPdfFormatDetail({
+  Future<void> generateAndOpenDocumentFormatDetail({
     required DetailReimburseData detailReimburseData,
+    String typeDocument = Constant.categoryDocumentPdf,
   }) async {
-    try {
-      final pdfFile = await PdfRecapitulationApi(context: context).generatePdfDetail(
-        detailReimburseData: detailReimburseData,
-      );
-      log('Generated PDF: $pdfFile');
-      await PdfApi.openFile(pdfFile);
-    } catch (e) {
-      log('Error generating PDF: $e');
+    if (typeDocument == Constant.categoryDocumentPdf) {
+      try {
+        final pdfFile = await PdfRecapitulationApi(context: context).generatePdfDetail(
+          detailReimburseData: detailReimburseData,
+        );
+        log('Generated PDF: $pdfFile');
+        await PdfApi.openFile(pdfFile);
+      } catch (e) {
+        log('Error generating PDF: $e');
+      }
+    }
+    if (typeDocument == Constant.categoryDocumentExcel) {
+      try {
+        final excelFile = await ExcelRecapitulationApi(context: context).generateExcelDetail(
+          detailReimburseData: detailReimburseData,
+        );
+        log('Generated Excel: $excelFile');
+        await PdfApi.openFile(excelFile);
+      } catch (e) {
+        log('Error generating Excel: $e');
+      }
     }
   }
 }

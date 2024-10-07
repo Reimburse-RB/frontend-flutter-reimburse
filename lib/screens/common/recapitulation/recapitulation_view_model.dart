@@ -120,7 +120,8 @@ class RecapitulationViewModel extends ChangeNotifier {
             );
             return;
           }
-          Helper(context: context).generateAndOpenPdfFormatAll(
+          Helper(context: context).generateAndOpenDocumentFormatAll(
+            typeDocument: selectedDocumentType ?? Constant.categoryDocumentPdf,
             listRecapitulation: listRecapitulation,
             isRangePicked: isRangePicked,
           );

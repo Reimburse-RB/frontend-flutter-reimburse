@@ -93,6 +93,9 @@ class Constant {
   static const String warningUnverifiedAdminAccount =
       'Akun Anda belum diverifikasi oleh Admin. Mohon tunggu sebelum Anda dapat mengelola permintaan';
 
+  static const String categoryDocumentPdf = 'PDF';
+  static const String categoryDocumentExcel = 'Excel';
+
   static const String categoryNotificationReimburse = 'reimburse';
   static const String categoryNotificationAccountVerif = 'account_verification';
   static const String categoryNotificationVerifiedAccount = 'verified_account';

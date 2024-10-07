@@ -38,7 +38,7 @@ class RecapitulationListView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButtonGeneral(
         onPressed: () {
-          Helper(context: context).generateAndOpenPdfFormatAll(
+          Helper(context: context).generateAndOpenDocumentFormatAll(
             listRecapitulation: viewModel.listRecapitulation,
             isRangePicked: false,
           );
