@@ -22,20 +22,38 @@ function encryptAES(text) {
 
 function decryptAES(encrypted) {
     if (isNil(encrypted)) {
+        console.error('Error: Encrypted data cannot be null');
         return null;
     }
 
     const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Konversi dari hex ke buffer
     const iv = Buffer.from(process.env.IV_KEY, "hex");
 
+    if (aesKey.length !== 32) { // Pastikan panjang kunci sesuai untuk aes-256
+        console.error('Error: Invalid AES key length. Must be 32 bytes.');
+        return null;
+    }
+
+    if (iv.length !== 16) { // Pastikan panjang IV sesuai untuk AES
+        console.error('Error: Invalid IV length. Must be 16 bytes.');
+        return null;
+    }
+
     const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
     decipher.setAutoPadding(true);
 
-    let decrypted = decipher.update(encrypted, "hex", "utf8");
-    decrypted += decipher.final("utf8");
+    let decrypted;
+    try {
+        decrypted = decipher.update(encrypted, "hex", "utf8");
+        decrypted += decipher.final("utf8");
+    } catch (error) {
+        console.error('Decryption error:', error.message);
+        return null; // Mengembalikan null jika terjadi error
+    }
 
     return decrypted;
 }
+
 
 async function hashBcrypt(text) {
     const salt = await bcrypt.genSalt(10);
