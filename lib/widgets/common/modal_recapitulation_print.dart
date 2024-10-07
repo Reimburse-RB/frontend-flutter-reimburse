@@ -12,12 +12,18 @@ import 'package:reimburse_rb/widgets/common/form_dialog_string.dart';
 class ModalRecapitulationPrint {
   final BuildContext context;
   final String title;
+  final bool showRangeDatePicker;
+  final bool showCategoryOptionChecker;
+  final double initialModalSize;
   final Function(List, String, String, String) onTapContinue;
 
   ModalRecapitulationPrint({
     required this.context,
     required this.title,
     required this.onTapContinue,
+    this.showRangeDatePicker = true,
+    this.showCategoryOptionChecker = true,
+    this.initialModalSize = 0.8,
   });
 
   List<Map<String, dynamic>> listOptionFieldCheckCategory = [
@@ -53,7 +59,7 @@ class ModalRecapitulationPrint {
       ),
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.8,
+          initialChildSize: initialModalSize,
           expand: false,
           builder: (context, scrollController) {
             return Padding(
@@ -82,15 +88,17 @@ class ModalRecapitulationPrint {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    FormCheckMap(
-                      placeholder: "Kategori",
-                      options: listOptionFieldCheckCategory,
-                      onChanged: (selectedOptionsIds) {
-                        print("Selected options: $selectedOptionsIds");
-                        selectedReimbursementCategoryIds = List.from(selectedOptionsIds);
-                      },
-                    ),
+                    if (showCategoryOptionChecker) ...[
+                      const SizedBox(height: 16),
+                      FormCheckMap(
+                        placeholder: "Kategori",
+                        options: listOptionFieldCheckCategory,
+                        onChanged: (selectedOptionsIds) {
+                          print("Selected options: $selectedOptionsIds");
+                          selectedReimbursementCategoryIds = List.from(selectedOptionsIds);
+                        },
+                      ),
+                    ],
                     const SizedBox(height: 16),
                     FormDialogString(
                       placeholder: "Tipe Dokumen",
@@ -101,47 +109,46 @@ class ModalRecapitulationPrint {
                         selectedDocumentType = selectedOption;
                       },
                     ),
-                    const SizedBox(height: 16),
-                    FormDatePicker(
-                      hintText: 'Tanggal Awal',
-                      controller: startDateController,
-                      placeholder: "Pilih Periode",
-                      onTap: () async {
-                        final DateTime? pickedDate = await Helper(context: context).onChangeDate(
-                          context: context,
-                          firstDate: firstDate,
-                          lastDate: lastDate,
-                          initialDate: lastDate,
-                        );
-                        if (pickedDate != null) {
-                          startDateController.text = DateFormat('yyyy/MM/dd').format(pickedDate);
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    FormDatePicker(
-                      hintText: 'Tanggal Akhir',
-                      controller: endDateController,
-                      onTap: () async {
-                        final DateTime? pickedDate = await Helper(context: context).onChangeDate(
-                          context: context,
-                          firstDate: firstDate,
-                          lastDate: lastDate,
-                          initialDate: lastDate,
-                        );
-                        if (pickedDate != null) {
-                          endDateController.text = DateFormat('yyyy/MM/dd').format(pickedDate);
-                        }
-                      },
-                    ),
+                    if (showRangeDatePicker) ...[
+                      const SizedBox(height: 16),
+                      FormDatePicker(
+                        hintText: 'Tanggal Awal',
+                        controller: startDateController,
+                        placeholder: "Pilih Periode",
+                        onTap: () async {
+                          final DateTime? pickedDate = await Helper(context: context).onChangeDate(
+                            context: context,
+                            firstDate: firstDate,
+                            lastDate: lastDate,
+                            initialDate: lastDate,
+                          );
+                          if (pickedDate != null) {
+                            startDateController.text = DateFormat('yyyy/MM/dd').format(pickedDate);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      FormDatePicker(
+                        hintText: 'Tanggal Akhir',
+                        controller: endDateController,
+                        onTap: () async {
+                          final DateTime? pickedDate = await Helper(context: context).onChangeDate(
+                            context: context,
+                            firstDate: firstDate,
+                            lastDate: lastDate,
+                            initialDate: lastDate,
+                          );
+                          if (pickedDate != null) {
+                            endDateController.text = DateFormat('yyyy/MM/dd').format(pickedDate);
+                          }
+                        },
+                      ),
+                    ],
                     const SizedBox(height: 32),
                     ButtonGeneral(
                       onTap: () {
                         log('${startDateController.text} ${endDateController.text} ${selectedReimbursementCategoryIds} ${selectedDocumentType}');
-                        if (startDateController.text.isEmpty ||
-                            endDateController.text.isEmpty ||
-                            selectedReimbursementCategoryIds.isEmpty ||
-                            selectedDocumentType.isEmpty) {
+                        if (!checkFormCompleteness()) {
                           Helper(context: context).showToast(
                               message: Constant.warningFormIncompleteGeneral, isSuccess: false);
                           return;
@@ -165,5 +172,15 @@ class ModalRecapitulationPrint {
         );
       },
     );
+  }
+
+  bool checkFormCompleteness() {
+    if ((showRangeDatePicker &&
+            (startDateController.text.isEmpty || endDateController.text.isEmpty)) ||
+        (showCategoryOptionChecker && selectedReimbursementCategoryIds.isEmpty) ||
+        selectedDocumentType.isEmpty) {
+      return false;
+    }
+    return true;
   }
 }

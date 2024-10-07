@@ -11,6 +11,7 @@ import 'package:reimburse_rb/widgets/common/card_detail_cost.dart';
 import 'package:reimburse_rb/widgets/common/detail_text.dart';
 import 'package:reimburse_rb/widgets/common/list_horizontal_detail_receipt_image.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
+import 'package:reimburse_rb/widgets/common/modal_recapitulation_print.dart';
 
 class DetailReimbursementScreen extends StatelessWidget {
   const DetailReimbursementScreen({super.key});
@@ -39,9 +40,23 @@ class DetailReimbursementView extends StatelessWidget {
         actions: [
           if (viewModel.detailReimburseData != null)
             InkWell(
-              onTap: () {
-                Helper(context: context).generateAndOpenDocumentFormatDetail(
-                    detailReimburseData: viewModel.detailReimburseData!);
+              onTap: () async {
+                ModalRecapitulationPrint(
+                  context: context,
+                  title: 'Cetak Detail Reimbursement',
+                  showRangeDatePicker: false,
+                  showCategoryOptionChecker: false,
+                  initialModalSize: 0.4,
+                  onTapContinue: (selectedReimbursementCategoryIds, selectedDocumentType,
+                      startValue, endValue) {
+                    Navigator.of(context).pop();
+
+                    Helper(context: context).generateAndOpenDocumentFormatDetail(
+                      detailReimburseData: viewModel.detailReimburseData!,
+                      typeDocument: selectedDocumentType,
+                    );
+                  },
+                ).show();
               },
               child: Icon(
                 Icons.print_rounded,

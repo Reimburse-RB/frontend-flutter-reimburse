@@ -204,8 +204,8 @@ class PdfRecapitulationApi {
           if (userProvider.isAdmin) item.name ?? '-',
           item.typeReimburse ?? '-',
           item.status ?? '-',
-          item.purpose_text, // As Tujuan/Diagnosis is not present in the data, it’s set to '-'
-          item.approval_by ?? item.status ?? '-', // Assuming the admin is static in this context
+          item.purpose_text ?? '-',
+          item.approval_by ?? item.status ?? '-',
           Helper(context: context).formatCurrency(amount: item.totalPrice ?? 0),
         ];
       }).toList(),

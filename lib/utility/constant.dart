@@ -8,6 +8,7 @@ class Constant {
   static String imageEmptyProfileAsset = 'assets/empty_state/img-empty-profile.png';
 
   static String imageRbCompany = 'assets/other/icon-rb-group.png';
+  static String companyName = 'RB Group';
   static String addressRbCompany =
       'Wirausaha Building 5th floor\nJl. HR. Rasuna Said Kav. C5 Jakarta 12940 Indonesia\nTelp. : +62 21 521 3590, Fax. : +62 21 521 3591 \nwww.rbgroup-jkt.com';
 

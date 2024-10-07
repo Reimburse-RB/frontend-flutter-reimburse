@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/screens/common/recapitulation/recapitulation_view_model.dart';
-import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/widgets/common/appbar_general.dart';
 import 'package:reimburse_rb/widgets/common/card_submission.dart';
 import 'package:reimburse_rb/widgets/common/floating_action_button_general.dart';
 import 'package:reimburse_rb/widgets/common/loading_overlay.dart';
 import 'package:reimburse_rb/widgets/common/empty_state_general.dart';
+import 'package:reimburse_rb/widgets/common/modal_recapitulation_print.dart';
 
 class RecapitulationListScreen extends StatelessWidget {
   const RecapitulationListScreen({super.key});
@@ -36,15 +36,30 @@ class RecapitulationListView extends StatelessWidget {
         context: context,
         title: userProvider.selectedRecapitulationMonth ?? '',
       ),
-      floatingActionButton: FloatingActionButtonGeneral(
-        onPressed: () {
-          Helper(context: context).generateAndOpenDocumentFormatAll(
-            listRecapitulation: viewModel.listRecapitulation,
-            isRangePicked: false,
-          );
-        },
-        icon: const Icon(Icons.print_rounded),
-      ),
+      floatingActionButton: viewModel.listRecapitulation.isNotEmpty
+          ? FloatingActionButtonGeneral(
+              onPressed: () async {
+                ModalRecapitulationPrint(
+                  context: context,
+                  title: 'Cetak Rekapitulasi',
+                  showRangeDatePicker: false,
+                  initialModalSize: 0.6,
+                  onTapContinue: (selectedReimbursementCategoryIds, selectedDocumentType,
+                      startValue, endValue) {
+                    Navigator.of(context).pop();
+
+                    viewModel.getRecapitulationList(
+                      selectedReimbursementCategoryIds: selectedReimbursementCategoryIds,
+                      selectedDocumentType: selectedDocumentType,
+                      isShowPrint: true,
+                      isRangePicked: false,
+                    );
+                  },
+                ).show();
+              },
+              icon: const Icon(Icons.print_rounded),
+            )
+          : null,
       body: LoadingFallback(
         isLoading: viewModel.isLoading,
         child: viewModel.listRecapitulation.isEmpty
