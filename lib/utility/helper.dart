@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
 import 'package:reimburse_rb/utility/constant.dart';
-import 'package:reimburse_rb/utility/pdf_generator/api/pdf_api.dart';
-import 'package:reimburse_rb/utility/pdf_generator/api/pdf_recapitulation_api.dart';
+import 'package:reimburse_rb/utility/document_generator/pdf/pdf_api.dart';
+import 'package:reimburse_rb/utility/document_generator/pdf/pdf_recapitulation_api.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Helper {

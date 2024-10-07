@@ -42,13 +42,16 @@ class RecapitulationListMonthView extends StatelessWidget {
                 ModalRecapitulationPrint(
                   context: context,
                   title: 'Cetak Rekapitulasi',
-                  onTapContinue: (startValue, endValue) {
+                  onTapContinue: (selectedReimbursementCategoryIds, selectedDocumentType,
+                      startValue, endValue) {
                     Navigator.of(context).pop();
 
                     userProvider.setSelectedStartDateRangeRecap(startValue);
                     userProvider.setSelectedEndDateRangeRecap(endValue);
 
                     viewModel.getRecapitulationList(
+                      selectedReimbursementCategoryIds: selectedReimbursementCategoryIds,
+                      selectedDocumentType: selectedDocumentType,
                       isShowPrint: true,
                       isRangePicked: true,
                       startDate: startValue,

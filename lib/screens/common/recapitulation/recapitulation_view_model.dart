@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:reimburse_rb/models/common/recapitulation_response.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
 import 'package:reimburse_rb/provider/user_provider.dart';
+import 'package:reimburse_rb/utility/constant.dart';
 import 'package:reimburse_rb/utility/helper.dart';
 import 'package:reimburse_rb/utility/http_service.dart';
 
@@ -87,15 +88,19 @@ class RecapitulationViewModel extends ChangeNotifier {
   Future getRecapitulationList({
     bool isRangePicked = false,
     bool isShowPrint = false,
+    List? selectedReimbursementCategoryIds,
+    String? selectedDocumentType,
     String? startDate,
     String? endDate,
   }) async {
     startLoading();
     notifyListeners();
+    log('===> rekapitulasi reimburse $selectedReimbursementCategoryIds $selectedDocumentType');
 
     final userProvider = context.read<UserProvider>();
     String endpoint = 'reimburse/get-user-reimburse';
     Map body = {
+      'list_selected_category': selectedReimbursementCategoryIds,
       'isAdmin': userProvider.isAdmin,
       'dateReimburse': isRangePicked ? null : userProvider.selectedRecapitulationMonth,
       'startDate': startDate,
@@ -108,6 +113,13 @@ class RecapitulationViewModel extends ChangeNotifier {
         _listRecapitulation = response.data ?? [];
         notifyListeners();
         if (isShowPrint) {
+          if (listRecapitulation.isEmpty) {
+            Helper(context: context).showToast(
+              message: Constant.warningEmptyDataRecap,
+              isSuccess: false,
+            );
+            return;
+          }
           Helper(context: context).generateAndOpenPdfFormatAll(
             listRecapitulation: listRecapitulation,
             isRangePicked: isRangePicked,

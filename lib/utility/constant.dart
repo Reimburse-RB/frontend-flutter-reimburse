@@ -83,8 +83,11 @@ class Constant {
   static const String noteFormFamilyMember =
       'Catatan : Tambah anggota keluarga di halaman Profil untuk muncul di form ini.';
   static const String noteFormTotalCost = 'Catatan: Total Biaya akan terisi otomatis oleh sistem.';
+
   static const String warningFormIncomplete =
       'Gagal Unggah! Mohon lengkapi formulir pengajuan Anda';
+  static const String warningFormIncompleteGeneral = 'Mohon lengkapi semua field';
+  static const String warningEmptyDataRecap = 'Tidak ada data yang bisa diproses';
   static const String warningUnverifiedEmployeeAccount =
       'Akun Anda belum diverifikasi oleh Admin. Mohon tunggu sebelum Anda dapat melakukan pengajuan';
   static const String warningUnverifiedAdminAccount =
