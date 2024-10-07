@@ -3,8 +3,8 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 function encryptAES(text) {
-    if (typeof text !== "string" && !Buffer.isBuffer(text)) {
-        console.error('Error: The "data" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received:', text);
+    if (text == null || (typeof text !== "string" && !Buffer.isBuffer(text))) {
+        console.error('Error: The "text" argument must be of type string or an instance of Buffer. Received:', text);
         return null;
     }
 
@@ -20,8 +20,7 @@ function encryptAES(text) {
 }
 
 function decryptAES(encrypted) {
-    if (typeof encrypted !== "string" && !Buffer.isBuffer(encrypted)) {
-        console.error('Error: The "data" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received:', encrypted);
+    if (isNil(encrypted)) {
         return null;
     }
 
