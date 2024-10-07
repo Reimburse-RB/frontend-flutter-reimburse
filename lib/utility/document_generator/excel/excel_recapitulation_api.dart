@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
+import 'package:excel/excel.dart' as excel;
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:reimburse_rb/models/common/reimbursement_response.dart';
@@ -13,6 +14,12 @@ class ExcelRecapitulationApi {
   late BuildContext context;
 
   late int maxColumnIndex;
+  late int initialRowIndexTable;
+
+  excel.Border border = excel.Border(
+    borderColorHex: "#FF000000".excelColor,
+    borderStyle: excel.BorderStyle.Thin,
+  );
 
   Future<File> generateExcelAllRecap({
     required List<ItemUserReimburseData> listRecapitulation,
@@ -20,6 +27,7 @@ class ExcelRecapitulationApi {
   }) async {
     final userProvider = context.read<UserProvider>();
     maxColumnIndex = userProvider.isAdmin ? 7 : 6;
+    initialRowIndexTable = userProvider.isAdmin ? 10 : 12;
 
     var excel = Excel.createExcel(); // Membuat dokumen Excel baru
 
@@ -39,10 +47,11 @@ class ExcelRecapitulationApi {
     required DetailReimburseData detailReimburseData,
   }) async {
     maxColumnIndex = 5;
+    initialRowIndexTable = 19;
 
     var excel = Excel.createExcel(); // Membuat dokumen Excel baru
 
-    Sheet sheet = excel['Detail']; // Membuat sheet baru dengan nama 'Detail'
+    Sheet sheet = excel['Pengajuan Reimbursement']; // Membuat sheet baru dengan nama 'Detail'
     excel.delete('Sheet1');
 
     buildTitle(sheet, "Pengajuan Reimbursement");
@@ -152,6 +161,7 @@ class ExcelRecapitulationApi {
       TextCellValue('Penanggung Jawab'),
       TextCellValue('Total Biaya'),
     ]);
+    addBorderToHeaderTable(sheet);
 
     // Mengisi data ke dalam sheet
     for (int i = 0; i < listRecapitulation.length; i++) {
@@ -166,11 +176,11 @@ class ExcelRecapitulationApi {
         TextCellValue(item.approval_by ?? item.status ?? '-'),
         TextCellValue(Helper(context: context).formatCurrency(amount: item.totalPrice ?? 0)),
       ]);
+      addBorderToContentTable(sheet, i);
     }
   }
 
   void buildDetailOnly(Sheet sheet, DetailReimburseData detailReimburseData) {
-    final userProvider = context.read<UserProvider>();
     int currentRowIndex = 6; // Baris awal di mana pengisian dimulai
 
     List<String> mergeData = [
@@ -215,6 +225,8 @@ class ExcelRecapitulationApi {
       TextCellValue('Biaya'),
     ]);
 
+    addBorderToHeaderTable(sheet);
+
     // Mengisi data ke dalam sheet
     for (int i = 0; i < detailReimburseData.detailReimburse!.length; i++) {
       final item = detailReimburseData.detailReimburse![i];
@@ -226,6 +238,35 @@ class ExcelRecapitulationApi {
         TextCellValue(item.detail_desc ?? '-'),
         TextCellValue(item.detail_cost.toString()),
       ]);
+      addBorderToContentTable(sheet, i);
+    }
+  }
+
+  void addBorderToHeaderTable(Sheet sheet) {
+    for (int j = 0; j <= maxColumnIndex; j++) {
+      var cell = sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: j, rowIndex: initialRowIndexTable - 1));
+      cell.cellStyle = CellStyle(
+        topBorder: border,
+        bottomBorder: border,
+        leftBorder: border,
+        rightBorder: border,
+        diagonalBorder: border,
+      );
+    }
+  }
+
+  void addBorderToContentTable(Sheet sheet, int indexContent) {
+    for (int j = 0; j <= maxColumnIndex; j++) {
+      final rowIndex = initialRowIndexTable + indexContent;
+      var cell = sheet.cell(CellIndex.indexByColumnRow(columnIndex: j, rowIndex: rowIndex));
+      cell.cellStyle = CellStyle(
+        topBorder: border,
+        bottomBorder: border,
+        leftBorder: border,
+        rightBorder: border,
+        diagonalBorder: border,
+      );
     }
   }
 }
