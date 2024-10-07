@@ -47,8 +47,11 @@ module.exports = {
       }
 
       if (isNotNil(startDate) && isNotNil(endDate)) {
+        const adjustedEndDate = new Date(endDate);
+        adjustedEndDate.setHours(23, 59, 59);
+
         whereParam.createdAt = {
-          [Op.between]: [startDate, endDate],
+          [Op.between]: [startDate, adjustedEndDate],
         };
       }
 
