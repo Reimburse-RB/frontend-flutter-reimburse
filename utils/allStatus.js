@@ -87,44 +87,40 @@ module.exports = {
     },
     {
       purpose_id: 11,
-      purpose_text: "Kunjungan bisnis"
+      purpose_text: "Meeting dengan Client"
     },
     {
       purpose_id: 12,
-      purpose_text: "Inspeksi lokasi"
+      purpose_text: "Kantor Pelayanan Pajak"
     },
     {
       purpose_id: 13,
-      purpose_text: "Negosiasi"
+      purpose_text: "Kantor Wilayah DJP"
     },
     {
       purpose_id: 14,
-      purpose_text: "Pelatihan"
+      purpose_text: "Pengadilan Pajak"
     },
     {
       purpose_id: 15,
-      purpose_text: "Menghadiri konferensi"
+      purpose_text: "Kunjungan Bisnis"
     },
     {
       purpose_id: 16,
-      purpose_text: "Kunjungan cabang"
+      purpose_text: "Survey Pasar"
     },
     {
       purpose_id: 17,
-      purpose_text: "Rapat dengan mitra"
+      purpose_text: "Kegiatan Promosi"
     },
     {
       purpose_id: 18,
-      purpose_text: "Pertemuan dengan regulator"
+      purpose_text: "Event"
     },
     {
       purpose_id: 19,
-      purpose_text: "Survei pasar"
+      purpose_text: "Pelatihan"
     },
-    {
-      purpose_id: 20,
-      purpose_text: "Kegiatan promosi"
-    }
   ],
 
   titleId: [
@@ -174,7 +170,7 @@ module.exports = {
     },
     {
       detail_title_id: 12,
-      detail_title_text: "Biaya Akomodasi"
+      detail_title_text: "Tol"
     },
     {
       detail_title_id: 13,
@@ -182,7 +178,7 @@ module.exports = {
     },
     {
       detail_title_id: 14,
-      detail_title_text: "Tol"
+      detail_title_text: "Transportasi Online"
     },
     {
       detail_title_id: 15,
@@ -190,7 +186,7 @@ module.exports = {
     },
     {
       detail_title_id: 16,
-      detail_title_text: "Penginapan"
+      detail_title_text: "Taksi"
     },
     {
       detail_title_id: 17,
@@ -202,7 +198,7 @@ module.exports = {
     },
     {
       detail_title_id: 19,
-      detail_title_text: "Taksi/Transportasi Online"
+      detail_title_text: "Biaya Akomodasi"
     },
     {
       detail_title_id: 20,

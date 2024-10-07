@@ -15,6 +15,7 @@ require("dotenv").config();
 module.exports = {
   getUserReimburse: async (req, res) => {
     const {
+      list_selected_category,
       dateReimburse,
       status,
       isAdmin,
@@ -31,6 +32,12 @@ module.exports = {
         if (isAdmin == false) {
           whereParam.user_id = user.id;
         }
+      }
+
+      if (isNotNil(list_selected_category)) {
+        whereParam.category = {
+          [Op.in]: list_selected_category,
+        };
       }
 
       if (isNotNil(status)) {
@@ -889,7 +896,7 @@ module.exports = {
         ];
       } else if (category_reimbursement_id === 2) {
         allPurpose = [
-          ...allStatus.purposeId.slice(10, 20),
+          ...allStatus.purposeId.slice(10, 19),
           allStatus.purposeId[0],
         ];
       } else {
