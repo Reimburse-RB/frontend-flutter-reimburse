@@ -44,6 +44,12 @@ class SignUpViewModel extends ChangeNotifier {
   bool _isPasswordMatch = true;
   bool get isPasswordMatch => _isPasswordMatch;
 
+  bool _isPasswordLengthMatch = false;
+  bool get isPasswordLengthMatch => _isPasswordLengthMatch;
+
+  bool _isPasswordMixed = false;
+  bool get isPasswordMixed => _isPasswordMixed;
+
   bool _isReadyToSubmit = false;
   bool get isReadyToSubmit => _isReadyToSubmit;
 
@@ -59,7 +65,9 @@ class SignUpViewModel extends ChangeNotifier {
         passwordController.text.isNotEmpty &&
         selectedRole != null &&
         nikController.text.isNotEmpty &&
-        isPasswordMatch;
+        isPasswordMatch &&
+        isPasswordMixed &&
+        isPasswordLengthMatch;
 
     notifyListeners();
   }
@@ -71,6 +79,21 @@ class SignUpViewModel extends ChangeNotifier {
 
   void checkIsPasswordMatch() {
     _isPasswordMatch = passwordController.text == confirmPasswordController.text;
+    notifyListeners();
+  }
+
+  void checkIsPasswordMixedCharacter() {
+    bool hasLetter = passwordController.text.contains(RegExp(r'[a-zA-Z]'));
+    bool hasNumber = passwordController.text.contains(RegExp(r'[0-9]'));
+
+    _isPasswordMixed = hasLetter && hasNumber;
+    notifyListeners();
+  }
+
+  void checkIsPasswordLengthMatch() {
+    int inputPasswordLength = passwordController.text.length;
+
+    _isPasswordLengthMatch = inputPasswordLength >= 8 && inputPasswordLength <= 18;
     notifyListeners();
   }
 

@@ -68,7 +68,11 @@ class Constant {
   static const String defaultErrorMessage = 'Terjadi kesahalan!';
   static const String confirmUnsavedAlertClose =
       'Apakah Anda yakin akan keluar dari halaman ini? Perubahan tidak akan disimpan.';
-  static const String warningPasswordMatchString = 'Password tidak cocok';
+  static const String warningPasswordMinMaxCharacter =
+      'Password harus terdiri dari 8 hingga 18 karakter';
+  static const String warningPasswordMixedCharacter =
+      'Password harus mengandung kombinasi huruf dan angka';
+  static const String warningPasswordMatchString = 'Password tidak sama';
   static const String infoFormDetailCostHealth =
       'Mohon inputkan biaya penggantian sesuai dengan detail perawatan yang tertera pada kuitansi.';
   static const String infoFormDetailCostTransport =
@@ -103,6 +107,12 @@ class Constant {
 
   static const TextStyle regularNoteStyle = TextStyle(
     color: greenDark,
+    fontWeight: lightWeightText,
+    fontSize: 12,
+    fontStyle: FontStyle.italic,
+  );
+  static const TextStyle greyNoteStyle = TextStyle(
+    color: Colors.black54,
     fontWeight: lightWeightText,
     fontSize: 12,
     fontStyle: FontStyle.italic,

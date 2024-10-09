@@ -127,10 +127,35 @@ class SignUpView extends StatelessWidget {
                       ),
                       onChanged: (newPassword) {
                         viewModel.checkIsPasswordMatch();
+                        viewModel.checkIsPasswordMixedCharacter();
+                        viewModel.checkIsPasswordLengthMatch();
                         viewModel.checkAllField();
                       },
-                      // note: viewModel.isPasswordMatch ? '' : Constant.warningPasswordMatchString,
-                      // noteStyle: Constant.warningNoteStyle,
+                      note: Constant.warningPasswordMinMaxCharacter,
+                      prefixIconNote: viewModel.isPasswordLengthMatch
+                          ? Icon(
+                              Icons.check_circle_outline_rounded,
+                              color: Constant.green,
+                              size: 20,
+                            )
+                          : Icon(
+                              Icons.circle_outlined,
+                              color: Constant.grey,
+                              size: 20,
+                            ),
+                      secondNote: Constant.warningPasswordMixedCharacter,
+                      prefixIconSecondNote: viewModel.isPasswordMixed
+                          ? Icon(
+                              Icons.check_circle_outline_rounded,
+                              color: Constant.green,
+                              size: 20,
+                            )
+                          : Icon(
+                              Icons.circle_outlined,
+                              color: Constant.grey,
+                              size: 20,
+                            ),
+                      noteStyle: Constant.greyNoteStyle,
                     ),
                     const SizedBox(
                       height: 16,

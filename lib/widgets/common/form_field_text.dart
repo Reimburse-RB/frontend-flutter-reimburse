@@ -24,8 +24,10 @@ class FormFieldText extends StatefulWidget {
     this.onChanged,
     this.onEditingComplete,
     this.onFocusLost,
-    this.prefixIconNote,
     this.note = '',
+    this.secondNote = '',
+    this.prefixIconNote,
+    this.prefixIconSecondNote,
     this.noteStyle = Constant.regularNoteStyle,
   }) : super(key: key);
 
@@ -47,7 +49,9 @@ class FormFieldText extends StatefulWidget {
   final Color borderColor;
 
   final Widget? prefixIconNote;
+  final Widget? prefixIconSecondNote;
   final String note;
+  final String secondNote;
   final TextStyle noteStyle;
 
   final void Function()? onTap;
@@ -180,6 +184,15 @@ class _FormFieldTextState extends State<FormFieldText> {
               note: widget.note,
               noteTextStyle: widget.noteStyle,
               prefixIcon: widget.prefixIconNote,
+            ),
+          ),
+        if (widget.secondNote.isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            child: FormSmallNote(
+              note: widget.secondNote,
+              noteTextStyle: widget.noteStyle,
+              prefixIcon: widget.prefixIconSecondNote,
             ),
           )
       ],
