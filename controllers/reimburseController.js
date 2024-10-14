@@ -9,6 +9,7 @@ const Notification = require("../models/Notification");
 const UserFamily = require("../models/User-Family");
 const User = require("../models/User");
 const allStatus = require("../utils/allStatus");
+const fs = require('fs');
 require("dotenv").config();
 
 
@@ -349,12 +350,15 @@ module.exports = {
             const decryptedImagePath = `images/upload/decrypted_images/${item.id}.png`; // Tentukan folder untuk menyimpan file yang didekripsi
 
             // Mendekripsi gambar yang disimpan di database
-            const decryptedImage = decryptImageAES(item.image, decryptedImagePath);
+            const decryptedImage = decryptImageAES(item.image.toString('hex')); // Menggunakan hex string untuk dekripsi
 
             if (decryptedImage) {
+              // Menyimpan gambar yang didekripsi ke file
+              fs.writeFileSync(decryptedImagePath, decryptedImage);
+
               imageFinal.push({
                 id: item.id,
-                image: `${process.env.URL}${decryptedImage}`, // URL gambar yang sudah didekripsi
+                image: `${process.env.URL}${decryptedImagePath}`, // URL gambar yang sudah didekripsi
               });
             } else {
               console.error(`Failed to decrypt image for item ${item.id}`);
@@ -363,6 +367,7 @@ module.exports = {
         }
 
         returnData.list_attachment = imageFinal;
+
 
         const reimburseDetail = await ReimburseDetail.findAll({
           where: {
@@ -717,10 +722,7 @@ module.exports = {
         for (let i = 0; i < req.files.length; i++) {
           // Enkripsi gambar yang diunggah
           const encryptedImage = encryptImageAES(req.files[i].path); // Enkripsi gambar dengan path asli
-          if (encryptedImage.length > 255) { // Cek jika lebih dari panjang yang diizinkan
-            console.error('Encrypted image is too long:', encryptedImage.length);
-            // Anda bisa mengurangi data atau menyesuaikan kolom di database
-          }
+
           if (!encryptedImage) {
             return res.status(500).json({
               success: false,
@@ -728,10 +730,10 @@ module.exports = {
             });
           }
 
-          // Simpan hasil enkripsi ke database
+          // Simpan hasil enkripsi ke database sebagai Buffer
           const imageSave = await ImageReimburse.create({
             reimburse_id: reimburseIdInt,
-            image: encryptedImage, // Simpan hasil enkripsi sebagai string hex di kolom 'image'
+            image: Buffer.from(encryptedImage, 'hex'), // Simpan sebagai BYTEA
           });
 
           encryptedFiles.push(req.files[i].filename); // Simpan nama file asli ke dalam array
@@ -752,6 +754,7 @@ module.exports = {
       return res.json({ msg: e.message });
     }
   },
+
 
   changeStatusReimburse: async (req, res, messaging) => {
     const { id, change_status_id } = req.body;

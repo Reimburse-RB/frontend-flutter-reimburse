@@ -57,42 +57,41 @@ function decryptAES(encrypted) {
 
 function encryptImageAES(filePath) {
     try {
-        const imageBuffer = fs.readFileSync(filePath); // Membaca gambar dari path file
-        const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Kunci AES dari environment
-        const iv = Buffer.from(process.env.IV_KEY, "hex"); // IV dari environment
+        const imageBuffer = fs.readFileSync(imagePath);
+
+        const aesKey = Buffer.from(process.env.AES_KEY, "hex");
+        const iv = Buffer.from(process.env.IV_KEY, "hex");
 
         const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
         cipher.setAutoPadding(true);
 
-        let encrypted = cipher.update(imageBuffer); // Mengenkripsi buffer gambar
-        encrypted = Buffer.concat([encrypted, cipher.final()]);
+        let encrypted = cipher.update(imageBuffer, "binary", "hex");
+        encrypted += cipher.final("hex");
 
-        // Hasil enkripsi dikembalikan dalam format hex
-        return encrypted.toString('hex');
+        return encrypted;
     } catch (error) {
         console.error('Error encrypting image:', error.message);
         return null;
     }
 }
 
-function decryptImageAES(encryptedHex, outputFilePath) {
+function decryptImageAES(encryptedData) {
+    const aesKey = Buffer.from(process.env.AES_KEY, "hex");
+    const iv = Buffer.from(process.env.IV_KEY, "hex");
+
+    const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
+    decipher.setAutoPadding(true);
+
+    let decrypted;
     try {
-        const encryptedBuffer = Buffer.from(encryptedHex, 'hex'); // Mengonversi hex ke buffer
-        const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Kunci AES dari environment
-        const iv = Buffer.from(process.env.IV_KEY, "hex"); // IV dari environment
+        decrypted = decipher.update(encryptedData, "hex", "binary");
+        decrypted += decipher.final("binary");
 
-        const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
-        decipher.setAutoPadding(true);
-
-        let decrypted = decipher.update(encryptedBuffer); // Mendekripsi buffer
-        decrypted = Buffer.concat([decrypted, decipher.final()]);
-
-        // Menyimpan hasil dekripsi ke file
-        fs.writeFileSync(outputFilePath, decrypted);
-        return outputFilePath; // Mengembalikan path file yang didekripsi
+        // Mengembalikan buffer dari data yang didekripsi
+        return Buffer.from(decrypted, "binary");
     } catch (error) {
-        console.error('Error decrypting image:', error.message);
-        return null;
+        console.error("Decryption error:", error.message);
+        return null; // Mengembalikan null jika terjadi error
     }
 }
 
