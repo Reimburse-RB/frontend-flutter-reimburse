@@ -347,16 +347,17 @@ module.exports = {
         if (isNotNil(reimburseImage)) {
           for (const item of reimburseImage) {
             // Path file hasil dekripsi
-            const decryptedImagePath = `public/images/upload/decrypted_images/${item.id}.png`; // Tentukan folder untuk menyimpan file yang didekripsi
+            const urlDecryptedImagePath = `images/upload/decrypted_images/${item.id}.png`; // Tentukan folder untuk menyimpan file yang didekripsi
+            const storedecryptedImagePath = `public/${urlDecryptedImagePath}`; // Tentukan folder untuk menyimpan file yang didekripsi
 
             // Mendekripsi gambar yang disimpan di database
-            const decryptedImage = decryptImageAES(item.image.toString('hex'), decryptedImagePath); // Menggunakan hex string untuk dekripsi
+            const decryptedImage = decryptImageAES(item.image.toString('hex'), storedecryptedImagePath); // Menggunakan hex string untuk dekripsi
 
             console.log(`decryptedImage ${decryptedImage}`);
             if (decryptedImage) {
               imageFinal.push({
                 id: item.id,
-                image: `${process.env.URL}${decryptedImagePath}`, // URL gambar yang sudah didekripsi
+                image: `${process.env.URL}${urlDecryptedImagePath}`, // URL gambar yang sudah didekripsi
               });
             } else {
               console.error(`Failed to decrypt image for item ${item.id}`);
