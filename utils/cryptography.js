@@ -1,6 +1,7 @@
 const { isNil, isNotEmpty, isNotNil, update, dec } = require("ramda");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const fs = require('fs');
 require("dotenv").config();
 
 function encryptAES(text) {
