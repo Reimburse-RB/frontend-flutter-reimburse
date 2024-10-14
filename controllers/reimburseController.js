@@ -1,7 +1,7 @@
 const { isNil, isNotEmpty, isNotNil, update, dec } = require("ramda");
 const { Op } = require("sequelize");
 const { formatDateTime, formatCurrency } = require("../utils/utils");
-const { decryptAES } = require("../utils/cryptography");
+const { decryptAES, encryptImageAES, decryptImageAES } = require("../utils/cryptography");
 const Reimburse = require("../models/Reimburse");
 const ImageReimburse = require("../models/Reimburse-Image");
 const ReimburseDetail = require("../models/Reimburse-Detail");
@@ -345,10 +345,20 @@ module.exports = {
         const imageFinal = [];
         if (isNotNil(reimburseImage)) {
           for (const item of reimburseImage) {
-            imageFinal.push({
-              id: item.id,
-              image: `${process.env.URL}${item.image}`,
-            });
+            // Path file hasil dekripsi
+            const decryptedImagePath = `images/upload/decrypted_images/${item.id}.png`; // Tentukan folder untuk menyimpan file yang didekripsi
+
+            // Mendekripsi gambar yang disimpan di database
+            const decryptedImage = decryptImageAES(item.image, decryptedImagePath);
+
+            if (decryptedImage) {
+              imageFinal.push({
+                id: item.id,
+                image: `${process.env.URL}${decryptedImage}`, // URL gambar yang sudah didekripsi
+              });
+            } else {
+              console.error(`Failed to decrypt image for item ${item.id}`);
+            }
           }
         }
 
@@ -702,17 +712,31 @@ module.exports = {
 
       // Pastikan ada file yang diunggah
       if (req.files && req.files.length > 0) {
+        const encryptedFiles = [];
+
         for (let i = 0; i < req.files.length; i++) {
+          // Enkripsi gambar yang diunggah
+          const encryptedImage = encryptImageAES(req.files[i].path); // Enkripsi gambar dengan path asli
+          if (!encryptedImage) {
+            return res.status(500).json({
+              success: false,
+              msg: "Failed to encrypt image",
+            });
+          }
+
+          // Simpan hasil enkripsi ke database
           const imageSave = await ImageReimburse.create({
             reimburse_id: reimburseIdInt,
-            image: `images/upload/${req.files[i].filename}`, // Sesuaikan dengan path penyimpanan gambar
+            image: encryptedImage, // Simpan hasil enkripsi sebagai string hex di kolom 'image'
           });
+
+          encryptedFiles.push(req.files[i].filename); // Simpan nama file asli ke dalam array
         }
 
         return res.status(200).json({
           success: true,
-          msg: "success create data",
-          data: req.files.map((file) => file.filename), // Mengembalikan nama file yang diunggah
+          msg: "Success create data",
+          data: encryptedFiles, // Mengembalikan nama file asli
         });
       } else {
         return res.status(400).json({

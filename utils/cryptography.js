@@ -54,6 +54,47 @@ function decryptAES(encrypted) {
     return decrypted;
 }
 
+function encryptImageAES(filePath) {
+    try {
+        const imageBuffer = fs.readFileSync(filePath); // Membaca gambar dari path file
+        const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Kunci AES dari environment
+        const iv = Buffer.from(process.env.IV_KEY, "hex"); // IV dari environment
+
+        const cipher = crypto.createCipheriv("aes-256-cbc", aesKey, iv);
+        cipher.setAutoPadding(true);
+
+        let encrypted = cipher.update(imageBuffer); // Mengenkripsi buffer gambar
+        encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+        // Hasil enkripsi dikembalikan dalam format hex
+        return encrypted.toString('hex');
+    } catch (error) {
+        console.error('Error encrypting image:', error.message);
+        return null;
+    }
+}
+
+function decryptImageAES(encryptedHex, outputFilePath) {
+    try {
+        const encryptedBuffer = Buffer.from(encryptedHex, 'hex'); // Mengonversi hex ke buffer
+        const aesKey = Buffer.from(process.env.AES_KEY, "hex"); // Kunci AES dari environment
+        const iv = Buffer.from(process.env.IV_KEY, "hex"); // IV dari environment
+
+        const decipher = crypto.createDecipheriv("aes-256-cbc", aesKey, iv);
+        decipher.setAutoPadding(true);
+
+        let decrypted = decipher.update(encryptedBuffer); // Mendekripsi buffer
+        decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+        // Menyimpan hasil dekripsi ke file
+        fs.writeFileSync(outputFilePath, decrypted);
+        return outputFilePath; // Mengembalikan path file yang didekripsi
+    } catch (error) {
+        console.error('Error decrypting image:', error.message);
+        return null;
+    }
+}
+
 
 async function hashBcrypt(text) {
     const salt = await bcrypt.genSalt(10);
@@ -76,4 +117,4 @@ function formatPlainUserData(user) {
     return plainUserData
 }
 
-module.exports = { encryptAES, decryptAES, hashBcrypt, compareBcrypt, formatPlainUserData };
+module.exports = { encryptAES, decryptAES, encryptImageAES, decryptImageAES, hashBcrypt, compareBcrypt, formatPlainUserData };
