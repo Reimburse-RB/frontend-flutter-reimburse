@@ -122,11 +122,6 @@ class CardFormDetailCost extends StatelessWidget {
                             Constant.healthCategoryReimbursementId
                         ? 'Masukkan Rincian Perawatan Lain'
                         : 'Masukkan Rincian Perjalanan Lain',
-                    // note: Constant.noteFormDetailTitle,
-                    // prefixIconNote: Icon(
-                    //   Icons.info_rounded,
-                    //   color: Constant.waitingStatusColor,
-                    // ),
                     onChanged: (String? newValue) {
                       if (newValue != null) {
                         viewModel.onChangeOtherDetailTitle(

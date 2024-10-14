@@ -147,7 +147,6 @@ class _MyAppState extends State<MyApp> {
   bool notificationsEnabled = false;
   RemoteMessage? notificationDetail;
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-  // final storage = const FlutterSecureStorage();
 
   Future<void> _isAndroidPermissionGranted() async {
     if (Platform.isAndroid) {
@@ -323,7 +322,6 @@ class _MyAppState extends State<MyApp> {
           );
       }
     }
-    // Navigator.of(navigatorKey.currentContext!).pushNamed('/notification');
   }
 
   Map<String, Widget Function(BuildContext)> routes = {

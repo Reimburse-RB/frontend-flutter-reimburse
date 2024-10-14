@@ -46,35 +46,6 @@ class _CardSummaryAdminHrdState extends State<CardSummaryAdminHrd> {
               detailTitle: 'Reimburse Transportasi Diproses',
               detailValue: viewModel.adminSummaryData?.totalTrasnportDiproses.toString() ?? '0',
             ),
-            // const SizedBox(height: 8),
-            // DetailSummary(
-            //   iconAsset: 'assets/status/icon-status-failed.png',
-            //   detailTitle: 'Reimburse Ditolak',
-            //   detailValue: viewModel.employeeSummaryData?.rejected.toString() ?? '0',
-            // ),
-            // const SizedBox(height: 8),
-            // DetailSummary(
-            //   iconAsset: '',
-            //   iconAlternative: const Icon(
-            //     IconlyBold.graph,
-            //     size: 24,
-            //     color: Constant.limitColor,
-            //   ),
-            //   detailTitle: 'Total Tahun Ini',
-            //   detailValue: Helper(context: context).formatCurrency(
-            //     amount: viewModel.employeeSummaryData?.total_reimburse_this_year.toDouble() ?? 0,
-            //   ),
-            // ),
-            // const SizedBox(height: 8),
-            // Container(
-            //   margin: const EdgeInsets.only(left: 32),
-            //   child: LinearProgressIndicator(
-            //     borderRadius: const BorderRadius.all(Radius.circular(10)),
-            //     color: Constant.limitColor,
-            //     value: 0.15,
-            //     backgroundColor: Colors.grey.shade300,
-            //   ),
-            // )
           ],
         ),
       ),

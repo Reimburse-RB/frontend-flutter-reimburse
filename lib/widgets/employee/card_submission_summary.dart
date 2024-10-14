@@ -32,13 +32,6 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
         ),
         child: Column(
           children: [
-            // DetailSummary(
-            //   iconAsset: 'assets/status/icon-status-waiting.png',
-            //   detailTitle: 'Reimburse Menunggu Diproses',
-            //   detailValue: '1',
-            // ),
-            // const SizedBox(height: 8),
-
             DetailSummary(
               iconAsset: 'assets/status/icon-status-process.png',
               detailTitle: 'Reimburse Diproses',
@@ -69,16 +62,6 @@ class _CardSubmissionSummaryState extends State<CardSubmissionSummary> {
                 amount: viewModel.employeeSummaryData?.total_reimburse_this_year.toDouble() ?? 0,
               ),
             ),
-            // const SizedBox(height: 8),
-            // Container(
-            //   margin: const EdgeInsets.only(left: 32),
-            //   child: LinearProgressIndicator(
-            //     borderRadius: const BorderRadius.all(Radius.circular(10)),
-            //     color: Constant.limitColor,
-            //     value: 0.15,
-            //     backgroundColor: Colors.grey.shade300,
-            //   ),
-            // )
           ],
         ),
       ),

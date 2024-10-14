@@ -234,11 +234,8 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
 
     if (bodySubmission['purpose_other_text'] != null &&
         bodySubmission['purpose_other_text'] != '') {
-      // default value when other purpose field is filled
       _bodySubmission['purpose_id'] = 1;
     }
-
-    // _bodySubmission['image'] = listAttachmentImageBase64;
 
     _bodySubmission['detail_reimburse'] = listBodyDetailCost;
 

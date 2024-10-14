@@ -134,13 +134,6 @@ class _SubmissionHomeViewState extends State<SubmissionHomeView>
           }).toList(),
         ),
       ),
-      // const Column(
-      //   children: [
-      //     Spacer(),
-      //     EmptyStateGeneral(),
-      //     Spacer(),
-      //   ],
-      // )
     );
   }
 }

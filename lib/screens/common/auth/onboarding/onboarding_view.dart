@@ -96,32 +96,6 @@ class OnboardingBottomButton extends StatelessWidget {
               },
               text: 'Mulai Sekarang',
             ),
-
-          // if (viewModel.currentPage == viewModel.onboardDataList.length - 1)
-          //   Container(
-          //     decoration: BoxDecoration(
-          //       color: Constant.green,
-          //       borderRadius: BorderRadius.circular(32),
-          //     ),
-          //     clipBehavior: Clip.hardEdge,
-          //     child: InkWell(
-          //       onTap: () {
-          //         viewModel.onTapNextPage(context: context);
-          //       },
-          //       borderRadius: BorderRadius.circular(32),
-          //       child: const Padding(
-          //         padding: EdgeInsets.symmetric(horizontal: 36, vertical: 16),
-          //         child: Text(
-          //           "Mulai Sekarang",
-          //           style: TextStyle(
-          //             fontSize: 16,
-          //             color: Colors.white,
-          //             fontWeight: FontWeight.w600,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
         ],
       ),
     );

@@ -125,14 +125,6 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
                                       Constant.healthCategoryReimbursementId
                                   ? 'Masukkan Diagnosis Lain'
                                   : 'Masukkan Tujuan Lain',
-                          // note: userProvider.selectedReimbursementCategory?.categoryReimbursementId ==
-                          //         Constant.healthCategoryReimbursementId
-                          //     ? Constant.noteFormPurposeHealth
-                          //     : Constant.noteFormPurposeTransport,
-                          // prefixIconNote: Icon(
-                          //   Icons.info_rounded,
-                          //   color: Constant.waitingStatusColor,
-                          // ),
                         ),
                       ],
                       const SizedBox(height: 16),
