@@ -55,7 +55,7 @@ function decryptAES(encrypted) {
     return decrypted;
 }
 
-function encryptImageAES(filePath) {
+function encryptImageAES(imagePath) {
     try {
         const imageBuffer = fs.readFileSync(imagePath);
 
