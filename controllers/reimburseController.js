@@ -717,6 +717,10 @@ module.exports = {
         for (let i = 0; i < req.files.length; i++) {
           // Enkripsi gambar yang diunggah
           const encryptedImage = encryptImageAES(req.files[i].path); // Enkripsi gambar dengan path asli
+          if (encryptedImage.length > 255) { // Cek jika lebih dari panjang yang diizinkan
+            console.error('Encrypted image is too long:', encryptedImage.length);
+            // Anda bisa mengurangi data atau menyesuaikan kolom di database
+          }
           if (!encryptedImage) {
             return res.status(500).json({
               success: false,
