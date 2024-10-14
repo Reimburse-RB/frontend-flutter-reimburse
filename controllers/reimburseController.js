@@ -347,7 +347,7 @@ module.exports = {
         if (isNotNil(reimburseImage)) {
           for (const item of reimburseImage) {
             // Path file hasil dekripsi
-            const decryptedImagePath = `images/upload/decrypted_images/${item.id}.png`; // Tentukan folder untuk menyimpan file yang didekripsi
+            const decryptedImagePath = `public/images/upload/decrypted_images/${item.id}.png`; // Tentukan folder untuk menyimpan file yang didekripsi
 
             // Mendekripsi gambar yang disimpan di database
             const decryptedImage = decryptImageAES(item.image.toString('hex'), decryptedImagePath); // Menggunakan hex string untuk dekripsi
