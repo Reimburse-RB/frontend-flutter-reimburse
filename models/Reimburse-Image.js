@@ -5,7 +5,7 @@ const ImageReimburse = sequelize.define(
   "image_reimburse",
   {
     image: {
-      type: DataTypes.STRING,
+      type: DataTypes.BLOB,
       allowNull: false,
     },
     reimburse_id: {
