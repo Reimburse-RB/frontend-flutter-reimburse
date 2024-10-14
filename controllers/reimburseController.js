@@ -350,12 +350,10 @@ module.exports = {
             const decryptedImagePath = `images/upload/decrypted_images/${item.id}.png`; // Tentukan folder untuk menyimpan file yang didekripsi
 
             // Mendekripsi gambar yang disimpan di database
-            const decryptedImage = decryptImageAES(item.image.toString('hex')); // Menggunakan hex string untuk dekripsi
+            const decryptedImage = decryptImageAES(item.image.toString('hex'), decryptedImagePath); // Menggunakan hex string untuk dekripsi
 
+            console.log(`decryptedImage ${decryptedImage}`);
             if (decryptedImage) {
-              // Menyimpan gambar yang didekripsi ke file
-              fs.writeFileSync(decryptedImagePath, decryptedImage);
-
               imageFinal.push({
                 id: item.id,
                 image: `${process.env.URL}${decryptedImagePath}`, // URL gambar yang sudah didekripsi

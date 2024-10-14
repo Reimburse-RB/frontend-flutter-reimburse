@@ -2,6 +2,7 @@ const { isNil, isNotEmpty, isNotNil, update, dec } = require("ramda");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const fs = require('fs');
+const path = require('path');
 require("dotenv").config();
 
 function encryptAES(text) {
@@ -75,7 +76,7 @@ function encryptImageAES(imagePath) {
     }
 }
 
-function decryptImageAES(encryptedData) {
+function decryptImageAES(encryptedData, outputFilePath) {
     const aesKey = Buffer.from(process.env.AES_KEY, "hex");
     const iv = Buffer.from(process.env.IV_KEY, "hex");
 
@@ -87,8 +88,17 @@ function decryptImageAES(encryptedData) {
         decrypted = decipher.update(encryptedData, "hex", "binary");
         decrypted += decipher.final("binary");
 
-        // Mengembalikan buffer dari data yang didekripsi
-        return Buffer.from(decrypted, "binary");
+        // Mengubah buffer dari data yang didekripsi menjadi Buffer
+        const imageBuffer = Buffer.from(decrypted, "binary");
+
+        // Pastikan direktori ada sebelum menyimpan file
+        ensureDirectoryExists(path.dirname(outputFilePath));
+
+        // Simpan buffer ke file
+        fs.writeFileSync(outputFilePath, imageBuffer);
+
+        // Kembalikan path file gambar yang didekripsi
+        return outputFilePath;
     } catch (error) {
         console.error("Decryption error:", error.message);
         return null; // Mengembalikan null jika terjadi error
@@ -115,6 +125,13 @@ function formatPlainUserData(user) {
     plainUserData.identity_number = decryptAES(plainUserData.identity_number);
 
     return plainUserData
+}
+
+function ensureDirectoryExists(dirPath) {
+    console.log(`dirpath ${dirPath}`);
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true }); // Buat direktori jika tidak ada
+    }
 }
 
 module.exports = { encryptAES, decryptAES, encryptImageAES, decryptImageAES, hashBcrypt, compareBcrypt, formatPlainUserData };
