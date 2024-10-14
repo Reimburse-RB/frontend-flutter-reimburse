@@ -64,11 +64,13 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: returnData,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 };

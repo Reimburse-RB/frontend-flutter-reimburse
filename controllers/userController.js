@@ -101,7 +101,7 @@ module.exports = {
 
           try {
             await messaging.send(message);
-          } catch (error) {
+          } catch (e) {
             console.error("Error sending message:", error);
           }
 
@@ -118,18 +118,19 @@ module.exports = {
 
         return res.json({
           success: true,
-          msg: "success create data",
+          msg: "Berhasil membuat data",
           data: user,
         });
       }
 
       return res.json({
         success: true,
-        msg: "success create data",
+        msg: "Berhasil membuat data",
         data: formatPlainUserData(user),
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -171,8 +172,9 @@ module.exports = {
         success: false,
         msg: "Anda Belum Terdaftar!!",
       });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -183,7 +185,7 @@ module.exports = {
       if (isNil(oldPassword) || isNil(newPassword)) {
         return res.json({
           success: false,
-          msg: "All fields are required!!",
+          msg: "Gagal memperbarui data!",
         });
       }
       const encryptedPassword = encryptAES(oldPassword);
@@ -196,14 +198,14 @@ module.exports = {
       if (!isPasswordValid) {
         return res.json({
           success: false,
-          msg: "Old Password not match!!",
+          msg: "Gagal! Password lama salah",
         });
       }
 
       if (newPassword === oldPassword) {
         return res.json({
           success: false,
-          msg: "New password cannot be the same as old password!",
+          msg: "Gagal! Password baru harus berbeda dari password lama",
         });
       }
 
@@ -218,8 +220,9 @@ module.exports = {
         success: true,
         msg: "Anda Berhasil Mengubah Password",
       });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -230,7 +233,7 @@ module.exports = {
       if (isNil(fcmToken)) {
         return res.json({
           success: false,
-          msg: "All fields are required!!",
+          msg: "Gagal memperbarui data!",
         });
       }
 
@@ -246,8 +249,9 @@ module.exports = {
         success: true,
         msg: "Anda Berhasil Mengubah FCM Token",
       });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -258,7 +262,7 @@ module.exports = {
       if (user.role != 2 && user.role != 3) {
         return res.json({
           success: false,
-          msg: "you're not using admin account",
+          msg: "Gagal mendapatkan data! Anda bukan Admin atau HRD",
         });
       }
 
@@ -289,8 +293,9 @@ module.exports = {
         msg: "Success getting data user verification!",
         data: returnData,
       });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -302,14 +307,14 @@ module.exports = {
       if (isNil(userId)) {
         return res.json({
           success: false,
-          msg: "Input user id",
+          msg: "Gagal! User tidak ditemukan",
         });
       }
 
       if (user.role != 2 && user.role != 3) {
         return res.json({
           success: false,
-          msg: "you're not using admin account",
+          msg: "Gagal! Anda bukan Admin atau HRD",
         });
       }
 
@@ -349,7 +354,7 @@ module.exports = {
 
         try {
           await messaging.send(message);
-        } catch (error) {
+        } catch (e) {
           console.error("Error sending message:", error);
         }
 
@@ -370,17 +375,18 @@ module.exports = {
 
         return res.json({
           success: true,
-          msg: "success verification user",
+          msg: "Berhasil memverifikasi user",
           data: formatPlainUserData(userDetail),
         });
       }
 
       return res.json({
         success: false,
-        msg: "failed verification user",
+        msg: "Gagal memverifikasi user",
       });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -432,11 +438,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "Success getting data profile!",
+        msg: "Berhasil mendapatkan data",
         data: returnData,
       });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -447,14 +454,14 @@ module.exports = {
       if (isNil(userId)) {
         return res.json({
           success: false,
-          msg: "Input user id",
+          msg: "Gagal mendapatkan data!",
         });
       }
 
       if (user.role != 2 && user.role != 3) {
         return res.json({
           success: false,
-          msg: "you're not using admin account",
+          msg: "Gagal mendapatkan data! Anda bukan Admin atau HRD",
         });
       }
 
@@ -514,17 +521,18 @@ module.exports = {
 
         return res.json({
           success: true,
-          msg: "success getting detail user verification",
+          msg: "Berhasil mendapatkan data",
           data: returnData,
         });
       }
 
       return res.json({
         success: false,
-        msg: "failed getting detail user verification",
+        msg: "Gagal mendapatkan data",
       });
-    } catch (error) {
-      return res.json({ msg: error.message });
+    } catch (e) {
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -583,14 +591,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "Success update data",
+        msg: "Berhasil memperbarui data",
         data: formatPlainUserData(user),
       });
     } catch (e) {
-      return res.json({
-        success: false,
-        msg: e.message,
-      });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -598,7 +604,6 @@ module.exports = {
     try {
       const user = req.userAuth;
 
-      // Memeriksa apakah ada file yang diunggah
       if (req.file) {
         // Jika pengguna sudah memiliki gambar, hapus gambar yang lama
         if (user.image_url) {
@@ -614,14 +619,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "Success update data",
+        msg: "Berhasil memperbarui gambar profil",
         data: formatPlainUserData(user),
       });
     } catch (e) {
-      return res.json({
-        success: false,
-        msg: e.message,
-      });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 };

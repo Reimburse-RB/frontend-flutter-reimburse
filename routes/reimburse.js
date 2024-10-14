@@ -10,10 +10,6 @@ const reimburseRoutes = (messaging) => {
     reimburseController.addReimburse(req, res, messaging)
   );
 
-  // router.post("/add-reimburse", authLogin, uploadMulter.array('files', 10), (req, res) =>
-  //   reimburseController.addReimburse(req, res, messaging)
-  // );
-
   router.post("/add-image-reimburse", authLogin, uploadMulter.array('files', 10), (req, res) =>
     reimburseController.addImageReimburse(req, res)
   );

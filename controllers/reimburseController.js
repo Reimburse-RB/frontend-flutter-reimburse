@@ -196,11 +196,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: returnData,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -211,7 +212,7 @@ module.exports = {
       if (user.role == 1) {
         return res.json({
           success: false,
-          msg: "you're not using admin or hr account",
+          msg: "Gagal mendapatkan data! Anda bukan Admin atau HRD",
         });
       }
 
@@ -237,11 +238,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: returnData,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -253,7 +255,7 @@ module.exports = {
       if (isNil(reimburseId)) {
         return res.json({
           success: false,
-          msg: "missing value id",
+          msg: "Gagal mendapatkan data! Reimbursement tidak ditemukan",
         });
       }
 
@@ -429,12 +431,13 @@ module.exports = {
 
         return res.json({
           success: true,
-          msg: "success getting data",
+          msg: "Berhasil mendapatkan data",
           data: returnData,
         });
       }
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -497,11 +500,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: returnValue,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -538,11 +542,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: yearReturn,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -559,21 +564,21 @@ module.exports = {
       if (user.status == 2) {
         return res.json({
           success: false,
-          msg: "User not verified",
+          msg: "Gagal! User belum terverifikasi",
         });
       }
 
       if (isNil(purpose_id)) {
         return res.json({
           success: false,
-          msg: "diagnosiss or destination must be filled",
+          msg: "Gagal! Diagnosis atau Tujuan harus diisi",
         });
       }
 
       if (purpose_id == 1 && purpose_other_text == null) {
         return res.json({
           success: false,
-          msg: "other diagnosiss or destination must be filled",
+          msg: "Gagal! Diagnosis atau Tujuan harus diisi",
         });
       }
 
@@ -657,7 +662,7 @@ module.exports = {
 
           try {
             await messaging.send(message);
-          } catch (error) {
+          } catch (e) {
             console.error("Error sending message:", error);
           }
 
@@ -679,17 +684,18 @@ module.exports = {
 
         return res.json({
           success: true,
-          msg: "success create data",
+          msg: "Berhasil membuat pengajuan reimbursement",
           data: reimburse,
         });
       }
 
       return res.json({
         success: false,
-        msg: "failed create data",
+        msg: "Gagal membuat pengajuan reimbursement!",
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -701,14 +707,14 @@ module.exports = {
       if (user.status == 2) {
         return res.json({
           success: false,
-          msg: "User not verified",
+          msg: "Gagal! User belum terverifikasi",
         });
       }
 
       if (!reimburse_id) {
         return res.status(400).json({
           success: false,
-          msg: "reimburse_id is required",
+          msg: "Gagal! Reimbursement tidak ditemukan",
         });
       }
 
@@ -725,7 +731,7 @@ module.exports = {
           if (!encryptedImage) {
             return res.status(500).json({
               success: false,
-              msg: "Failed to encrypt image",
+              msg: "Gagal mengenkripsi gambar!",
             });
           }
 
@@ -740,17 +746,18 @@ module.exports = {
 
         return res.status(200).json({
           success: true,
-          msg: "Success create data",
+          msg: "Berhasil mengunggah lampiran",
           data: encryptedFiles, // Mengembalikan nama file asli
         });
       } else {
         return res.status(400).json({
           success: false,
-          msg: "No files uploaded",
+          msg: "Gagal mengunggah lampiran!",
         });
       }
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -763,14 +770,14 @@ module.exports = {
       if (isNil(id)) {
         return res.json({
           success: false,
-          msg: "please insert id of reimburse",
+          msg: "Gagal! Reimbursement tidak ditemukan",
         });
       }
 
       if (isNil(change_status_id)) {
         return res.json({
           success: false,
-          msg: "please insert status id of reimburse",
+          msg: "Gagal! Status tidak ditemukan",
         });
       }
 
@@ -835,7 +842,7 @@ module.exports = {
 
         try {
           await messaging.send(message);
-        } catch (error) {
+        } catch (e) {
           console.error("Error sending message:", error);
         }
 
@@ -852,17 +859,18 @@ module.exports = {
 
         return res.json({
           success: true,
-          msg: "success edit data",
+          msg: "Berhasil memperbarui status pengajuan!",
           data: reimburse,
         });
       }
 
       return res.json({
         success: false,
-        msg: "failed edit data",
+        msg: "Gagal memperbarui status pengajuan!",
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -907,11 +915,12 @@ module.exports = {
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: returnData,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -935,17 +944,18 @@ module.exports = {
       } else {
         return res.json({
           success: false,
-          msg: "Invalid category_reimbursement_id",
+          msg: "Gagal mendapatkan data! Kategori reimbursement tidak valid",
         });
       }
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: allPurpose,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 
@@ -963,17 +973,18 @@ module.exports = {
       } else {
         return res.json({
           success: false,
-          msg: "Invalid category_reimbursement_id",
+          msg: "Gagal mendapatkan data! Kategori reimbursement tidak valid",
         });
       }
 
       return res.json({
         success: true,
-        msg: "success getting data",
+        msg: "Berhasil mendapatkan data",
         data: allTitle,
       });
     } catch (e) {
-      return res.json({ msg: e.message });
+      console.error(`error: ${e.message}`);
+      return res.json({ success: false, msg: "Terjadi Kesalahan!" });
     }
   },
 };

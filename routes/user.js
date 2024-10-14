@@ -9,25 +9,12 @@ const userRoutes = (messaging) => {
   router.post("/login", userController.userLogin);
   router.post("/get-profile", authLogin, userController.getProfile);
   router.post("/edit-profile", authLogin, uploadImage, userController.editUser);
-  // router.post("/edit-profile", authLogin, uploadMulter.single('file'), userController.editUser);
   router.post("/edit-image-profile", authLogin, uploadMulter.single('file'), userController.editImageUser);
   router.post("/change-password", authLogin, userController.changePassword);
   router.post("/change-fcm-token", authLogin, userController.updateFcmToken);
-  router.post(
-    "/get-user-verification",
-    authLogin,
-    userController.getVerificationAccount
-  );
-  router.post(
-    "/verification-account",
-    authLogin,
-    (req, res) => userController.verificationAccount(req, res, messaging)
-  );
-  router.post(
-    "/get-detail-user-verification",
-    authLogin,
-    userController.getDetailVerificationUser
-  );
+  router.post("/get-user-verification", authLogin, userController.getVerificationAccount);
+  router.post("/verification-account", authLogin, (req, res) => userController.verificationAccount(req, res, messaging));
+  router.post("/get-detail-user-verification", authLogin, userController.getDetailVerificationUser);
 
   return router;
 }
