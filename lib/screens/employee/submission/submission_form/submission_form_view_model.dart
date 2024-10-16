@@ -362,6 +362,11 @@ class SubmissionFormViewModel extends ChangeNotifier with ImagePickerListener {
   Future removeDetailCost({required int index}) {
     _listControllerDetailCost.removeAt(index);
     _listBodyDetailCost.removeAt(index);
+
+    _totalCost = 0;
+    listControllerDetailCost.forEach((element) {
+      _totalCost = totalCost + (double.tryParse((element.costController?.text) ?? '0') ?? 0);
+    });
     notifyListeners();
 
     return Future.value(true);
