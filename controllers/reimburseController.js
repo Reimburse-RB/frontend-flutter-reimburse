@@ -851,6 +851,7 @@ module.exports = {
           title: titleMessageNotification,
           body: bodyMessageNotification,
           reimburse_id: reimburse.id,
+          user_id: userReimburse.id,
           category_reimbursement: cat ? cat.category_reimbursement_text : "",
           date: formattedCreatedDate,
           category: 2, //karyawan
