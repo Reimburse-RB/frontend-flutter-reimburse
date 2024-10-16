@@ -2,7 +2,7 @@ function formatDateTime(dateInput, showTime = false, timeZoneOffsetActive = fals
     let date = new Date(dateInput);
 
     if (timeZoneOffsetActive) {
-        const tzoffset = 7 * 20 & 60000; // +7 WIB
+        const tzoffset = 7 * 60 * 60000; // +7 WIB
         date = new Date(date.getTime() + tzoffset);
         console.log(`timezone offset ${tzoffset}`);
     } else {
