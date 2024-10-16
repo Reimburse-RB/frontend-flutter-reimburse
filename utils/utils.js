@@ -4,9 +4,12 @@ function formatDateTime(dateInput, showTime = false, timeZoneOffsetActive = fals
     // if (timeZoneOffsetActive) {
     //     const tzoffset = date.getTimezoneOffset() * 60000; // offset dalam milidetik
     //     date = new Date(date.getTime() + tzoffset);
+    //     console.log(`timezone offset ${tzoffset}`);
     // } else {
     //     date = new Date(date);
     // }
+    const tzoffset = date.getTimezoneOffset() * 60000; // offset dalam milidetik
+    console.log(`timezone offset ${tzoffset}`);
 
     const optionsDate = { year: "numeric", month: "long", day: "numeric" };
     const formattedDate = new Intl.DateTimeFormat("id-ID", optionsDate).format(date);
