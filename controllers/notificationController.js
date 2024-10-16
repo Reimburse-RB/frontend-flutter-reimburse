@@ -30,7 +30,7 @@ module.exports = {
 
       if (isNotNil(notification)) {
         notification.forEach((item) => {
-          if (item.category == 3 && item.user_id != user.id) {
+          if ((item.category == 3 && item.user_id != user.id)) {
             return;
           }
           if (user.role == 1) {
@@ -43,6 +43,9 @@ module.exports = {
               reimburseId: item.reimburse_id,
             });
           } else {
+            if ((item.user_id != user.id)) {
+              return;
+            }
             const userIdentityNumber = decryptAES(item.identity_number);
             const userFullname = decryptAES(item.user);
 
