@@ -30,7 +30,7 @@ module.exports = {
 
       if (isNotNil(notification)) {
         notification.forEach((item) => {
-          if ((item.category == 3 && item.user_id != user.id)) {
+          if (item.category == 3 && item.user_id != user.id) {
             return;
           }
           if (user.role == 1) {
