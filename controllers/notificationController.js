@@ -34,6 +34,9 @@ module.exports = {
             return;
           }
           if (user.role == 1) {
+            if ((item.user_id != user.id)) {
+              return;
+            }
             returnData.push({
               title: item.title,
               body: item.body,
@@ -43,9 +46,6 @@ module.exports = {
               reimburseId: item.reimburse_id,
             });
           } else {
-            if ((item.user_id != user.id)) {
-              return;
-            }
             const userIdentityNumber = decryptAES(item.identity_number);
             const userFullname = decryptAES(item.user);
 
