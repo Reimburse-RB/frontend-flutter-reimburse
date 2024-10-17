@@ -20,12 +20,25 @@ class ChangePasswordViewModel extends ChangeNotifier {
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
 
+  bool isObscured1 = true;
+  bool isObscured2 = true;
+
   bool _isButtonEnabled = false;
   bool get isButtonEnabled => _isButtonEnabled;
 
   void checkAllField() {
     _isButtonEnabled =
         oldPasswordController.text.isNotEmpty && newPasswordController.text.isNotEmpty;
+    notifyListeners();
+  }
+
+  void changeIsObscuredText1() {
+    isObscured1 = !isObscured1;
+    notifyListeners();
+  }
+
+  void changeIsObscuredText2() {
+    isObscured2 = !isObscured2;
     notifyListeners();
   }
 

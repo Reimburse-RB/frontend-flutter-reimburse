@@ -49,10 +49,17 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     controllerName: viewModel.oldPasswordController,
                     placeholder: "Password Lama",
                     hintText: "Masukkan password lama",
+                    keyboardType: TextInputType.text,
+                    isObsecure: viewModel.isObscured1,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        viewModel.changeIsObscuredText1();
+                      },
+                      child: Icon(viewModel.isObscured1 ? Icons.visibility : Icons.visibility_off),
+                    ),
                     onChanged: (value) {
                       viewModel.checkAllField();
                     },
-                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(
                     height: 20,
@@ -61,7 +68,14 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     controllerName: viewModel.newPasswordController,
                     placeholder: "Password Baru",
                     hintText: "Masukkan password baru",
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.text,
+                    isObsecure: viewModel.isObscured2,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        viewModel.changeIsObscuredText2();
+                      },
+                      child: Icon(viewModel.isObscured2 ? Icons.visibility : Icons.visibility_off),
+                    ),
                     onChanged: (value) {
                       viewModel.checkAllField();
                     },
