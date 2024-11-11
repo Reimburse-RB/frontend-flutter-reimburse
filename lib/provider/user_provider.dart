@@ -14,7 +14,7 @@ class UserProvider extends ChangeNotifier {
     clearSelectedDetailAccountVerificationId();
     clearSelectedDetailReimbursementId();
     clearSelectedEndDateRangeRecap();
-    clearSelectedMainMenuindex();
+    // clearSelectedMainMenuindex();
     clearSelectedRecapitulationMonth();
     clearSelectedRecapitulationYear();
     clearSelectedReimbursementCategoryId();

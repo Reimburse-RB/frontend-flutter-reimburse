@@ -126,15 +126,18 @@ class _ProfileDetailViewState extends State<ProfileDetailView> with TickerProvid
 
     return PopScope(
       canPop: !viewModel.isEditing,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) result;
-        final bool shouldPop =
-            await Helper(context: context).showCustomDialog(context: context) ?? false;
+      onPopInvokedWithResult: !viewModel.isEditing
+          ? null
+          : (didPop, result) async {
+              if (didPop) return;
 
-        if (context.mounted && shouldPop) {
-          Navigator.pop(context);
-        }
-      },
+              final bool shouldPop =
+                  await Helper(context: context).showCustomDialog(context: context) ?? false;
+
+              if (context.mounted && shouldPop) {
+                Navigator.pop(context);
+              }
+            },
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBarGeneral(

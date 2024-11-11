@@ -169,17 +169,19 @@ class TermConditionView extends StatelessWidget {
     final userProvider = context.read<UserProvider>();
     return PopScope(
       canPop: !viewModel.isEditing,
-      onPopInvokedWithResult: (viewModel.isEditing)
-          ? (didPop, result) async {
-              if (didPop) result;
-              final bool shouldPop =
-                  await Helper(context: context).showCustomDialog(context: context) ?? false;
+      onPopInvokedWithResult: !viewModel.isEditing
+          ? null
+          : (viewModel.isEditing)
+              ? (didPop, result) async {
+                  if (didPop) return;
+                  final bool shouldPop =
+                      await Helper(context: context).showCustomDialog(context: context) ?? false;
 
-              if (context.mounted && shouldPop) {
-                Navigator.pop(context);
-              }
-            }
-          : null,
+                  if (context.mounted && shouldPop) {
+                    Navigator.pop(context);
+                  }
+                }
+              : null,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBarGeneral(

@@ -56,7 +56,7 @@ class _SubmissionFormViewState extends State<SubmissionFormView> with TickerProv
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
-        if (didPop) result;
+        if (didPop) return;
         final bool shouldPop =
             await Helper(context: context).showCustomDialog(context: context) ?? false;
 

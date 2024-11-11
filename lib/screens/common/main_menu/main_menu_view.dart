@@ -44,8 +44,6 @@ class _MainMenuViewState extends State<MainMenuView> {
       const SubmissionHomeScreen(),
       const NotificationScreen(),
       const ProfileScreen(),
-      // DetectionHomePage(moveToAnotherTab: viewModel.onItemTapped),
-      // const MainProfileScreen(),
     ];
 
     return PopScope(
