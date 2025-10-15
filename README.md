@@ -119,5 +119,3 @@ Dokumentasi lengkap mengenai desain antarmuka, struktur proyek, alur aplikasi, s
 * ✅ **Logout**
 
 ---
-
-Apakah kamu ingin saya bantu lanjutkan dengan bagian **📦 Installation & Setup** (cara menjalankan proyek Flutter dan Node.js-nya di lokal)? Itu akan melengkapi README agar siap publik di GitHub.
