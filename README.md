@@ -1,5 +1,3 @@
----
-
 ### 📱 REIMBURSERB – MOBILE REIMBURSEMENT APPLICATION
 
 **ReimburseRB** adalah aplikasi mobile berbasis **Flutter** yang dikembangkan menggunakan arsitektur **MVVM** serta menerapkan **state management Provider**.
