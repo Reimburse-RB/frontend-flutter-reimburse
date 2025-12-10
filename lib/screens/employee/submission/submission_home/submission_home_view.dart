@@ -33,20 +33,18 @@ class SubmissionHomeView extends StatefulWidget {
 
 class _SubmissionHomeViewState extends State<SubmissionHomeView>
     with SingleTickerProviderStateMixin {
+  late final SubmissionHomeViewModel _viewModel;
+
   @override
   void initState() {
-    final viewModel = context.read<SubmissionHomeViewModel>();
-
-    viewModel.initTabController(this, viewModel.listStatusTab.length);
-
+    _viewModel = context.read<SubmissionHomeViewModel>();
+    _viewModel.initTabController(this, _viewModel.listStatusTab.length);
     super.initState();
   }
 
   @override
   void dispose() {
-    final viewModel = context.read<SubmissionHomeViewModel>();
-
-    viewModel.dispose();
+    _viewModel.dispose();
     super.dispose();
   }
 

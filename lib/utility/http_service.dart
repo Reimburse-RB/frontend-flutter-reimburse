@@ -5,6 +5,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
+import 'package:flutter/foundation.dart';
 
 class HttpService {
   static HttpService instance = HttpService.internal();
@@ -15,7 +16,24 @@ class HttpService {
   final JsonDecoder _decoder = const JsonDecoder();
 
   // static const String baseUrl = 'https://reimburse-server.koyeb.app/';
-  static const String baseUrl = 'http://103.174.114.172:3000/';
+  static final String baseUrl = _computeBaseUrl();
+
+  static String _computeBaseUrl() {
+    // Production server (sesuaikan jika pakai HTTPS)
+    const prod = 'http://103.174.114.172:3000/';
+
+    if (kReleaseMode) {
+      return prod;
+    }
+
+    // Development targets
+    if (kIsWeb) return 'http://localhost:3000/';
+    if (Platform.isAndroid) return 'http://10.0.2.2:3000/';
+    if (Platform.isIOS) return 'http://127.0.0.1:3000/';
+
+    // Fallback untuk desktop dev
+    return 'http://localhost:3000/';
+  }
 
   Future<dynamic> post({
     required String endpoint,
